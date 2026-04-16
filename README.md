@@ -19,12 +19,8 @@
 ---
 
 <div align="center">
-  <img src="public/demo.gif" alt="Readlyn Demo" width="100%" />
+  <img src="public/Readlyn.png" alt="Readlyn" width="100%" />
 </div>
-
-> ⚠️ **Note:** Add a screen recording GIF named `demo.gif` in the `/public` folder.
-> Record using ScreenToGif (Windows) or Kap (Mac). Show the core feature in 5–10 seconds.
-> If GIF not yet added, use a screenshot instead: `public/screenshot.png`
 
 ---
 
