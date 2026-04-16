@@ -1,0 +1,19 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background, no border radius  matches the sharp industrial theme -->
+  <rect width="32" height="32" fill="#0A0A0A"/>
+  <!-- Yellow accent bar top-left -->
+  <rect x="6" y="6" width="4" height="4" fill="#FFD600"/>
+  <!-- Bold pixel "R" glyph -->
+  <!-- Vertical stem -->
+  <rect x="6" y="10" width="4" height="16" fill="#F5F5F0"/>
+  <!-- Top horizontal bar -->
+  <rect x="10" y="10" width="8" height="4" fill="#F5F5F0"/>
+  <!-- Right side of bowl -->
+  <rect x="18" y="10" width="4" height="4" fill="#F5F5F0"/>
+  <!-- Middle bar -->
+  <rect x="10" y="18" width="8" height="4" fill="#F5F5F0"/>
+  <rect x="18" y="14" width="4" height="4" fill="#F5F5F0"/>
+  <!-- Leg diagonal -->
+  <rect x="18" y="22" width="4" height="4" fill="#FFD600"/>
+  <rect x="14" y="22" width="4" height="4" fill="#F5F5F0"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" fill="#0A0A0A"/>
+  <!-- Yellow accent -->
+  <rect x="34" y="34" width="22" height="22" fill="#FFD600"/>
+  <!-- Vertical stem -->
+  <rect x="34" y="56" width="22" height="90" fill="#F5F5F0"/>
+  <!-- Top bar -->
+  <rect x="56" y="56" width="45" height="22" fill="#F5F5F0"/>
+  <!-- Bowl right top -->
+  <rect x="101" y="56" width="22" height="22" fill="#F5F5F0"/>
+  <!-- Bowl right bottom -->
+  <rect x="101" y="78" width="22" height="22" fill="#F5F5F0"/>
+  <!-- Middle bar -->
+  <rect x="56" y="100" width="45" height="22" fill="#F5F5F0"/>
+  <!-- Leg upper -->
+  <rect x="79" y="122" width="22" height="22" fill="#F5F5F0"/>
+  <!-- Leg lower yellow -->
+  <rect x="101" y="122" width="22" height="22" fill="#FFD600"/>
+  <rect x="101" y="144" width="22" height="6" fill="#FFD600"/>
+</svg>

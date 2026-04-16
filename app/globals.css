@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
+}
+
+:root {
+  /* Legacy tokens kept for compatibility */
+  --yellow: #f5c518;
+  --orange: #ff6b35;
+  --bg-primary: #080808;
+  --text-light: #e2e2e2;
+  --text-gray: #a3a3a3;
+  --text-muted: #666666;
+  --text-dim: #444444;
+  --border-dark: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+
+  /* Design tokens */
+  --bg-base: #080808;
+  --bg-subtle: #0f0f0f;
+  --bg-elevated: #161616;
+  --bg-overlay: #1c1c1c;
+
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-subtle-val: rgba(255, 255, 255, 0.05);
+  --border-strong: rgba(255, 255, 255, 0.15);
+
+  --accent: #f5c518;
+  --accent-dim: #c9a010;
+  --accent-glow: rgba(245, 197, 24, 0.15);
+  --accent-text: #f5c518;
+
+  --text-primary: #ffffff;
+  --text-secondary: #e2e2e2;
+  --text-body: #a3a3a3;
+  --text-muted-val: #666666;
+
+  --success: #22c55e;
+  --error: #ef4444;
+
+  /* App editor tokens */
+  --bg-app: #080808;
+  --bg-panel: #0f0f0f;
+  --bg-hover: #1c1c1c;
+  --bg-active: #222222;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(245, 197, 24, 0.4);
+  --accent-hover: #c9a010;
+  --accent-subtle: rgba(245, 197, 24, 0.09);
+  --destructive: #ef4444;
+  --destructive-subtle: rgba(239, 68, 68, 0.07);
+}
+
+@utility font-grotesk {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+}
+
+@utility font-ibm-mono {
+  font-family: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
+}
+
+/* ── Noise texture overlay ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ── Animation keyframes ── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+  50% {
+    box-shadow:
+      0 0 40px var(--accent-glow),
+      0 0 80px rgba(245, 197, 24, 0.08);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.6s ease forwards;
+  opacity: 0;
+}
+.animate-fade-in {
+  animation: fade-in 0.5s ease forwards;
+  opacity: 0;
+}
+.animate-delay-100 {
+  animation-delay: 0.1s;
+}
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+.animate-delay-400 {
+  animation-delay: 0.4s;
+}
+.animate-delay-500 {
+  animation-delay: 0.5s;
+}
+
+/* ── Scroll behavior ── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Selection color ── */
+::selection {
+  background-color: rgba(245, 197, 24, 0.2);
+  color: #ffffff;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060606;
+}
+::-webkit-scrollbar-thumb {
+  background: #222222;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+
+/* ── Scrollbar hide utility ── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── JSON Syntax Highlighting ── */
+.json-textarea {
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background: linear-gradient(
+    to bottom,
+    rgba(245, 197, 24, 0.02),
+    rgba(245, 197, 24, 0.01)
+  );
+}
+
+.json-textarea::placeholder {
+  color: #555555;
+}
+
+@layer base {
+  * {
+    border-color: rgba(255, 255, 255, 0.07);
+  }
+
+  body {
+    background-color: #060606;
+    color: #e2e2e2;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  input::placeholder {
+    color: #555555;
+  }
+}
