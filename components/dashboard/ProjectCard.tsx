@@ -1,7 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { Pin, MoreHorizontal } from "lucide-react";
+import {
+  Pin,
+  MoreHorizontal,
+  FileText,
+  Sparkles,
+  Calendar,
+  ListOrdered,
+  BarChart3,
+  Clock,
+  Scale,
+  List,
+  Triangle,
+  TrendingDown,
+  RefreshCw,
+  Wand2,
+} from "lucide-react";
+import { useState } from "react";
 
 export interface ProjectItem {
   id: string;
@@ -17,33 +33,164 @@ interface ProjectCardProps {
   project: ProjectItem;
 }
 
+const THEME_COLORS: Record<string, string> = {
+  violet: "#7c3aed",
+  ocean: "#0284c7",
+  ember: "#ea580c",
+  forest: "#15803d",
+  slate: "#475569",
+};
+
+const ARCHETYPE_ICONS: Record<
+  string,
+  React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+> = {
+  steps: ListOrdered,
+  stats: BarChart3,
+  timeline: Clock,
+  compare: Scale,
+  list: List,
+  pyramid: Triangle,
+  funnel: TrendingDown,
+  cycle: RefreshCw,
+  auto: Wand2,
+};
+
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const [imageError, setImageError] = useState(false);
   const title = project.title?.trim() || "Untitled Project";
-  const subtitle = `${(project.archetype || "AUTO").toUpperCase()} · ${(project.theme || "VIOLET").toUpperCase()}`;
+  const theme = (project.theme || "violet").toLowerCase();
+  const archetype = (project.archetype || "auto").toLowerCase();
+  const themeColor = THEME_COLORS[theme] || "#7c3aed";
+  const ArchetypeIcon = ARCHETYPE_ICONS[archetype] || Wand2;
+
+  const formatDate = (dateStr?: string | null) => {
+    if (!dateStr) return "Just now";
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
   return (
     <Link
       href={`/editor/${project.id}`}
-      className="group overflow-hidden rounded-lg border border-white/[0.07] bg-[#0f0f0f] transition-all duration-200 hover:scale-[1.02] hover:border-white/[0.12] hover:shadow-[0_18px_50px_rgba(0,0,0,0.45)]"
+      className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[#0f0f0f] transition-all duration-300 hover:scale-[1.02] hover:border-white/[0.15] hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(245,197,24,0.1)]"
     >
-      <div className="h-1 w-full bg-transparent group-hover:bg-[#F5C518]" />
-      <div className="relative aspect-[4/3] bg-gradient-to-br from-[#161616] via-[#131313] to-[#0f0f0f]">
-        {project.thumbnail_url ? (
-          <img src={project.thumbnail_url} alt={title} className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]" />
+      {/* Top accent line */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${themeColor}, transparent)`,
+        }}
+      />
+
+      {/* Thumbnail */}
+      <div className="relative aspect-[4/3] bg-gradient-to-br from-[#161616] via-[#131313] to-[#0f0f0f] overflow-hidden">
+        {project.thumbnail_url && !imageError ? (
+          <img
+            src={project.thumbnail_url}
+            alt={title}
+            onError={() => setImageError(true)}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
         ) : (
-          <div className="flex h-full items-center justify-center text-xs text-white/45">
-            No preview yet
+          <div className="flex h-full flex-col items-center justify-center gap-3 p-6">
+            <div
+              className="flex h-16 w-16 items-center justify-center rounded-2xl border transition-all duration-300 group-hover:scale-110"
+              style={{
+                borderColor: `${themeColor}40`,
+                background: `${themeColor}15`,
+              }}
+            >
+              <ArchetypeIcon
+                className="h-8 w-8"
+                style={{ color: themeColor }}
+              />
+            </div>
+            <div className="text-center">
+              <p className="text-xs font-medium text-white/60">
+                No preview yet
+              </p>
+              <p className="text-[10px] text-white/30 mt-1">Click to edit</p>
+            </div>
           </div>
         )}
-        <div className="absolute right-2 top-2 flex gap-1">
-          {project.is_pinned ? <Pin className="h-4 w-4 text-[#F5C518]" /> : null}
-          <MoreHorizontal className="h-4 w-4 text-white/70" />
+
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+        {/* Top right badges */}
+        <div className="absolute right-2 top-2 flex gap-1.5">
+          {project.is_pinned && (
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm border border-[#F5C518]/30">
+              <Pin className="h-3.5 w-3.5 text-[#F5C518] fill-[#F5C518]" />
+            </div>
+          )}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              // TODO: Add context menu
+            }}
+            className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
+          >
+            <MoreHorizontal className="h-3.5 w-3.5 text-white/70" />
+          </button>
+        </div>
+
+        {/* Bottom left theme badge */}
+        <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div
+            className="h-2 w-2 rounded-full"
+            style={{ background: themeColor }}
+          />
+          <span className="text-[10px] font-medium text-white/80 uppercase tracking-wider">
+            {theme}
+          </span>
         </div>
       </div>
-      <div className="space-y-1 p-3">
-        <p className="truncate text-sm font-semibold tracking-tight text-white">{title}</p>
-        <p className="text-xs font-mono uppercase text-white/50">{subtitle}</p>
+
+      {/* Content */}
+      <div className="p-3.5">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-white group-hover:text-[#F5C518] transition-colors">
+            {title}
+          </h3>
+          <Sparkles className="h-3.5 w-3.5 text-[#F5C518] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+        </div>
+
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <ArchetypeIcon className="h-3.5 w-3.5 text-white/50" />
+            <span className="text-[11px] font-medium text-white/50 uppercase tracking-wide">
+              {archetype}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <Calendar className="h-3 w-3 text-white/30" />
+            <span className="text-[10px] text-white/40">
+              {formatDate(project.updated_at)}
+            </span>
+          </div>
+        </div>
       </div>
+
+      {/* Hover glow effect */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{
+          background: `radial-gradient(circle at 50% 0%, ${themeColor}08, transparent 70%)`,
+        }}
+      />
     </Link>
   );
 }
-
