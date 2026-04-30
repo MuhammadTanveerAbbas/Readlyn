@@ -20,9 +20,11 @@ import { useState } from "react";
 
 interface SidebarProps {
   onNewProject: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export default function Sidebar({ onNewProject }: SidebarProps) {
+export default function Sidebar({ onNewProject, isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -66,11 +68,15 @@ export default function Sidebar({ onNewProject }: SidebarProps) {
   const handleSignOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push("/");
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[#0a0a0a] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <aside className={`
+      fixed md:sticky left-0 top-0 z-40 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[#0a0a0a] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+      transform transition-transform duration-200 ease-in-out
+      ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+    `}>
       {/* Header */}
       <div className="border-b border-white/[0.06] p-5">
         <div className="flex items-center justify-between mb-4">

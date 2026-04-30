@@ -195,6 +195,11 @@ html {
     border-color: rgba(255, 255, 255, 0.07);
   }
 
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
   body {
     background-color: #060606;
     color: #e2e2e2;
@@ -204,5 +209,10 @@ html {
 
   input::placeholder {
     color: #555555;
+  }
+
+  img, video, svg {
+    max-width: 100%;
+    height: auto;
   }
 }

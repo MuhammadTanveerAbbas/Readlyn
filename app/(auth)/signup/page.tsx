@@ -1,13 +1,37 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState, useEffect } from "react";
 import AuthCard from "@/components/auth/AuthCard";
 import AuthInput from "@/components/auth/AuthInput";
 import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
+  const router = useRouter();
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        router.replace("/dashboard");
+      } else {
+        setIsChecking(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  if (isChecking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#060606]">
+        <div className="w-8 h-8 border-2 border-[#F5C518] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

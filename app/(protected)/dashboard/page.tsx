@@ -75,6 +75,8 @@ export default function DashboardPage() {
     return base;
   }, [projects, search, sort]);
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const pinned = filtered.filter((project) => project.is_pinned);
   const recent = filtered.slice(0, 6);
 
@@ -86,8 +88,34 @@ export default function DashboardPage() {
           "radial-gradient(circle at 20% 10%, rgba(245,197,24,0.08), transparent 35%), radial-gradient(circle at 80% 60%, rgba(124,58,237,0.06), transparent 40%)",
       }}
     >
-      <Sidebar onNewProject={() => setOpenModal(true)} />
-      <main className="ml-[260px] min-h-screen p-8">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/50 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <Sidebar 
+        onNewProject={() => setOpenModal(true)} 
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      
+      {/* Mobile header */}
+      <div className="md:hidden flex items-center gap-3 px-4 h-16 border-b border-white/[0.06] bg-[#0a0a0a] sticky top-0 z-20">
+        <button 
+          onClick={() => setSidebarOpen(true)} 
+          className="p-2 -ml-2 text-white/60 hover:text-white"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M3 12h18M3 6h18M3 18h18" />
+          </svg>
+        </button>
+        <span className="font-bold text-white">Readlyn</span>
+      </div>
+
+      <main className="md:ml-[260px] min-h-screen p-4 sm:p-6 lg:p-8">
         {/* Hero Banner */}
         <div className="mb-8 rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f0f0f] via-[#0f0f0f] to-[#161616] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.4)] relative overflow-hidden">
           {/* Animated gradient overlay */}
