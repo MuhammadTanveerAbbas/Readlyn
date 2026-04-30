@@ -12,7 +12,6 @@ import ZoomSlider from "@/components/app/ZoomSlider";
 import GenerationHistoryPanel from "@/components/app/GenerationHistoryPanel";
 import ContentAwarenessPanel from "@/components/app/ContentAwarenessPanel";
 import MultiFormatExportModal from "@/components/app/MultiFormatExportModal";
-import AIContextMenu from "@/components/app/AIContextMenu";
 import { useCanvasHistory } from "@/hooks/use-canvas-history";
 import { useCanvasSelection } from "@/hooks/use-canvas-selection";
 import {
@@ -26,6 +25,7 @@ import {
 import {
   CANVAS_SIZES,
   type CanvasSize,
+  type InfographicData,
   type StylePreset,
   type ThemePalette,
 } from "@/types/infographic";
@@ -36,6 +36,8 @@ import {
   type ReadabilityItem,
   type OverflowItem,
 } from "@/lib/contentAwareness";
+import { toast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 const InfographicCanvas = dynamic(
   () => import("@/components/app/InfographicCanvas"),
@@ -50,6 +52,7 @@ export default function EditorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [canvasSize, setCanvasSize] = useState<CanvasSize>("a4");
   const [zoom, setZoom] = useState(0.6);
+  const [toolMode, setToolMode] = useState<"select" | "hand">("select");
   const [refresh, setRefresh] = useState(0);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [historyItems, setHistoryItems] = useState<
@@ -74,17 +77,7 @@ export default function EditorPage() {
     toneSummary: "Tone: pending",
     factChecks: [],
   });
-  const [lastGeneration, setLastGeneration] = useState({
-    prompt: "",
-    theme: "violet" as ThemePalette,
-    style: "auto" as StylePreset,
-  });
   const [historyLoading, setHistoryLoading] = useState(false);
-  const [contextMenu, setContextMenu] = useState({
-    visible: false,
-    x: 0,
-    y: 0,
-  });
   const canvasRef = useRef<CanvasRef>(null);
 
   const { pushState, undo, redo, canUndo, canRedo } = useCanvasHistory(canvas);
@@ -154,131 +147,74 @@ export default function EditorPage() {
     [loadHistory, projectId],
   );
 
-  const handleGenerate = async (
+  const handleGenerate = useCallback(async (
     prompt: string,
     theme: ThemePalette,
     size: CanvasSize,
     style: StylePreset,
   ) => {
-    setIsGenerating(true);
-    setCanvasSize(size);
-    setLastGeneration({ prompt, theme, style });
-
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, theme, size, style }),
-    });
-
-    if (!response.ok) {
-      setIsGenerating(false);
-      return;
-    }
-
-    if (!response.body) {
-      setIsGenerating(false);
-      return;
-    }
-    canvasRef.current?.prepareForStream({
-      canvasWidth: CANVAS_SIZES[size].width,
-      canvasHeight: CANVAS_SIZES[size].height,
-      background: "#ffffff",
-    });
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-    const rendered = new Set<string>();
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() || "";
-      for (const line of lines) {
-        if (!line.trim()) continue;
-        try {
-          const partial = JSON.parse(line);
-          if (partial.elements && Array.isArray(partial.elements)) {
-            for (const element of partial.elements) {
-              if (!rendered.has(element.id)) {
-                rendered.add(element.id);
-                canvasRef.current?.renderElement(element);
-              }
-            }
+    try {
+      setIsGenerating(true);
+      setCanvasSize(size);
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, theme, size, style }),
+      });
+      if (!response.ok || !response.body) {
+        throw new Error("Generation request failed.");
+      }
+      canvasRef.current?.prepareForStream({
+        canvasWidth: CANVAS_SIZES[size].width,
+        canvasHeight: CANVAS_SIZES[size].height,
+        background: "#ffffff",
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      const rendered = new Set<string>();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          const partial = JSON.parse(line) as {
+            element?: InfographicData["elements"][number];
+            progress?: { current: number; total: number };
+          };
+          if (partial.progress) {
+            canvasRef.current?.setStreamProgress(partial.progress);
           }
-        } catch {
-          // Silently skip malformed stream chunks — partial data is expected
+          if (partial.element && !rendered.has(partial.element.id)) {
+            rendered.add(partial.element.id);
+            canvasRef.current?.renderElement(partial.element);
+          }
         }
       }
+      canvasRef.current?.finishStream();
+      pushState();
+      setRefresh((v) => v + 1);
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      await saveHistorySnapshot(prompt, style, theme);
+    } catch {
+      canvasRef.current?.finishStream();
+      toast({
+        variant: "destructive",
+        title: "Generation failed",
+        description: "The AI response failed to stream. Please try again.",
+        action: (
+          <ToastAction altText="Try again" onClick={() => handleGenerate(prompt, theme, size, style)}>
+            Try Again
+          </ToastAction>
+        ),
+      });
+    } finally {
+      setIsGenerating(false);
     }
-    canvasRef.current?.finishStream();
-    pushState();
-    setRefresh((v) => v + 1);
-
-    // Wait for canvas to fully render before saving snapshot
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    await saveHistorySnapshot(prompt, style, theme);
-    setIsGenerating(false);
-  };
-
-  const handleSuggestLayout = async (): Promise<string> => {
-    if (!canvas) return "Use timeline layout";
-    const objectCount = canvas.getObjects().length || 0;
-    const res = await fetch("/api/ai-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "layout",
-        context: { objectCount, prompt: lastGeneration.prompt },
-      }),
-    });
-    const data = await res.json();
-    const suggestion = String(data?.output || "Use timeline layout");
-
-    // Return the suggestion to be filled in the prompt panel
-    return suggestion;
-  };
-
-  const handleAutoTheme = async () => {
-    const res = await fetch("/api/ai-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "theme",
-        context: { topic: lastGeneration.prompt },
-      }),
-    });
-    const data = await res.json();
-    const guess = String(data?.output || "").toLowerCase();
-    const nextTheme = (["violet", "ocean", "ember", "forest", "slate"].find(
-      (item) => guess.includes(item),
-    ) || "violet") as ThemePalette;
-    setLastGeneration((prev) => ({ ...prev, theme: nextTheme }));
-  };
-
-  const handleMissingSection = async () => {
-    if (!canvas) return;
-    const context =
-      canvas.getObjects().map((obj) => ({ type: obj.type })) || [];
-    const res = await fetch("/api/ai-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "missing-section", context }),
-    });
-    const data = await res.json();
-    if (
-      window.confirm(
-        `Suggestion: ${String(data?.output || "Add key takeaway section")}\nGenerate now?`,
-      )
-    ) {
-      await handleGenerate(
-        `${lastGeneration.prompt}\nAdd a key takeaway section only`,
-        lastGeneration.theme,
-        canvasSize,
-        lastGeneration.style,
-      );
-    }
-  };
+  }, [pushState, saveHistorySnapshot]);
 
   const handleAddElement = (
     type: "heading" | "text" | "rect" | "circle" | "stat" | "line",
@@ -300,18 +236,7 @@ export default function EditorPage() {
     let toneSummary = "Overall tone: Professional";
     let factChecks: string[] = [];
     if (analysis.textBlocks.length > 0) {
-      const res = await fetch("/api/ai-action", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "tone",
-          context: { textBlocks: analysis.textBlocks },
-        }),
-      });
-      const data = await res.json();
-      toneSummary = data?.output
-        ? `Tone summary: ${String(data.output).slice(0, 140)}`
-        : toneSummary;
+      toneSummary = `Tone summary: ${analysis.textBlocks.length} text blocks checked`;
       factChecks = analysis.textBlocks
         .filter((item) => /\d/.test(item.text))
         .slice(0, 2)
@@ -343,108 +268,18 @@ export default function EditorPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    const onContext = (event: MouseEvent) => {
-      if (!canvasRef.current?.canvas) return;
-      if (!selectedObject) return;
-      event.preventDefault();
-      setContextMenu({ visible: true, x: event.clientX, y: event.clientY });
-    };
-    window.addEventListener("contextmenu", onContext);
-    return () => window.removeEventListener("contextmenu", onContext);
-  }, [selectedObject]);
-
-  // Close context menu when clicking outside
-  useEffect(() => {
-    if (!contextMenu.visible) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (target.closest("[data-context-menu]")) return;
-      setContextMenu({ visible: false, x: 0, y: 0 });
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [contextMenu.visible]);
-
-  const applyAIRewrite = async (mode: string) => {
-    if (!selectedObject || !("text" in selectedObject)) return;
-
-    if (!window.confirm(`Rewrite text with "${mode}" mode?`)) return;
-
-    const currentText = String((selectedObject as fabric.IText).text || "");
-
-    try {
-      const res = await fetch("/api/ai-action", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "rewrite",
-          context: { text: currentText, instruction: mode },
-        }),
-      });
-
-      if (!res.ok) {
-        return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "z") {
+        event.preventDefault();
+        if (event.shiftKey) redo();
+        else undo();
       }
-
-      const data = await res.json();
-      const newText = String(data?.output || "").trim();
-
-      if (!newText) {
-        return;
-      }
-
-      (selectedObject as fabric.IText).set("text", newText);
-      canvasRef.current?.canvas?.requestRenderAll();
-      pushState();
-    } catch {
-      // Rewrite failed silently — canvas state unchanged
-    }
-
-    setContextMenu({ visible: false, x: 0, y: 0 });
-  };
-
-  const applyAISuggestColor = async () => {
-    if (!selectedObject) return;
-
-    if (!window.confirm("Apply AI-suggested color?")) return;
-
-    const res = await fetch("/api/ai-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "color",
-        context: {
-          type: selectedObject.type,
-          fill: (selectedObject as any).fill,
-        },
-      }),
-    });
-    const data = await res.json();
-    const hex =
-      String(data?.output || "#F5C518").match(/#[0-9a-fA-F]{6}/)?.[0] ||
-      "#F5C518";
-    if ("fill" in selectedObject) {
-      (selectedObject as any).set("fill", hex);
-    }
-    canvasRef.current?.canvas?.requestRenderAll();
-    pushState();
-    setContextMenu({ visible: false, x: 0, y: 0 });
-  };
-
-  const applyAIVariation = async () => {
-    if (!selectedObject || !canvasRef.current?.canvas) return;
-    await duplicateObject();
-    const active = canvasRef.current.canvas.getActiveObject();
-    if (!active) return;
-    if ("angle" in active) active.set("angle", (active.angle || 0) + 6);
-    if ("left" in active) active.set("left", (active.left || 0) + 16);
-    if ("top" in active) active.set("top", (active.top || 0) + 10);
-    canvasRef.current.canvas.requestRenderAll();
-    pushState();
-    setContextMenu({ visible: false, x: 0, y: 0 });
-  };
+      if (event.key.toLowerCase() === "v") setToolMode("select");
+      if (event.key.toLowerCase() === "h") setToolMode("hand");
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [redo, undo]);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-[#080808]">
@@ -452,8 +287,8 @@ export default function EditorPage() {
         canUndo={canUndo}
         canRedo={canRedo}
         zoom={zoom}
-        toolMode="select"
-        onToolModeChange={() => undefined}
+        toolMode={toolMode}
+        onToolModeChange={setToolMode}
         onUndo={undo}
         onRedo={redo}
         onOpenHistory={() => setHistoryOpen((v) => !v)}
@@ -532,13 +367,11 @@ export default function EditorPage() {
             onGenerate={handleGenerate}
             onAddElement={handleAddElement}
             isGenerating={isGenerating}
-            onSuggestLayout={handleSuggestLayout}
           />
           <LayersPanel
             canvas={canvas}
             onSelectObject={() => setRefresh((v) => v + 1)}
             refreshTrigger={refresh}
-            onAddMissingSection={handleMissingSection}
           />
         </div>
         <div className="flex flex-1 items-center justify-center bg-[#0e0e0e]">
@@ -547,6 +380,7 @@ export default function EditorPage() {
             width={width}
             height={height}
             zoom={zoom}
+            toolMode={toolMode}
             onReady={setCanvas}
             onObjectModified={() => setRefresh((v) => v + 1)}
           />
@@ -578,7 +412,6 @@ export default function EditorPage() {
               onSendToBack={sendToBack}
               onDuplicate={duplicateObject}
               onDelete={deleteObject}
-              onAutoTheme={handleAutoTheme}
             />
             <ContentAwarenessPanel
               readability={audit.readability}
@@ -595,16 +428,6 @@ export default function EditorPage() {
         onClose={() => setExportOpen(false)}
         canvasJson={canvasRef.current?.canvas?.toJSON() || {}}
         projectName={projectId}
-      />
-      <AIContextMenu
-        x={contextMenu.x}
-        y={contextMenu.y}
-        visible={contextMenu.visible}
-        isText={Boolean(selectedObject && "text" in selectedObject)}
-        onRewrite={applyAIRewrite}
-        onSuggestColor={applyAISuggestColor}
-        onDuplicateVary={applyAIVariation}
-        onClose={() => setContextMenu({ visible: false, x: 0, y: 0 })}
       />
     </div>
   );

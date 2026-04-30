@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   Pin,
   MoreHorizontal,
-  FileText,
   Sparkles,
   Calendar,
   ListOrdered,
@@ -18,6 +17,24 @@ import {
   Wand2,
 } from "lucide-react";
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export interface ProjectItem {
   id: string;
@@ -31,6 +48,7 @@ export interface ProjectItem {
 
 interface ProjectCardProps {
   project: ProjectItem;
+  onProjectsChanged?: () => Promise<void> | void;
 }
 
 const THEME_COLORS: Record<string, string> = {
@@ -56,8 +74,13 @@ const ARCHETYPE_ICONS: Record<
   auto: Wand2,
 };
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, onProjectsChanged }: ProjectCardProps) {
   const [imageError, setImageError] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
   const title = project.title?.trim() || "Untitled Project";
   const theme = (project.theme || "violet").toLowerCase();
   const archetype = (project.archetype || "auto").toLowerCase();
@@ -78,6 +101,52 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
+  const handleRename = async () => {
+    setMenuOpen(false);
+    const nextTitle = window.prompt("Rename project", title);
+    if (!nextTitle || !nextTitle.trim()) return;
+    const { error } = await supabase
+      .from("projects")
+      .update({ title: nextTitle.trim() })
+      .eq("id", project.id);
+    if (!error) await onProjectsChanged?.();
+  };
+
+  const handleDuplicate = async () => {
+    setMenuOpen(false);
+    const { data: source, error: fetchError } = await supabase
+      .from("projects")
+      .select("title,theme,archetype,canvas_json,thumbnail_url,user_id")
+      .eq("id", project.id)
+      .single();
+    if (fetchError || !source) return;
+    const { error } = await supabase.from("projects").insert({
+      ...source,
+      title: `${source.title || "Untitled Project"} (Copy)`,
+    });
+    if (!error) await onProjectsChanged?.();
+  };
+
+  const handleTogglePin = async () => {
+    setMenuOpen(false);
+    const { error } = await supabase
+      .from("projects")
+      .update({ is_pinned: !project.is_pinned })
+      .eq("id", project.id);
+    if (!error) await onProjectsChanged?.();
+  };
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    const { error } = await supabase.from("projects").delete().eq("id", project.id);
+    setDeleting(false);
+    if (!error) {
+      setDeleteDialogOpen(false);
+      await onProjectsChanged?.();
+      router.refresh();
+    }
   };
 
   return (
@@ -135,15 +204,64 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               <Pin className="h-3.5 w-3.5 text-[#F5C518] fill-[#F5C518]" />
             </div>
           )}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              // TODO: Add context menu
-            }}
-            className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
-          >
-            <MoreHorizontal className="h-3.5 w-3.5 text-white/70" />
-          </button>
+          <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+            <DropdownMenuTrigger asChild>
+              <button
+                onClick={(e) => e.preventDefault()}
+                className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-black/60 opacity-0 backdrop-blur-sm transition-opacity hover:bg-black/80 group-hover:opacity-100"
+                aria-label="Project actions"
+              >
+                <MoreHorizontal className="h-3.5 w-3.5 text-white/70" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              sideOffset={8}
+              className="z-[100] w-44 border-white/10 bg-[#0f0f0f] text-white"
+            >
+              <DropdownMenuItem onSelect={handleRename}>
+                Rename project
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={handleDuplicate}>
+                Duplicate project
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={handleTogglePin}>
+                {project.is_pinned ? "Unpin project" : "Pin project"}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={(event) => {
+                  event.preventDefault();
+                  setMenuOpen(false);
+                  setDeleteDialogOpen(true);
+                }}
+                className="text-red-400 focus:bg-red-500/10 focus:text-red-300"
+              >
+                Delete project
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialogContent className="border-white/10 bg-[#0f0f0f] text-white">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete project?</AlertDialogTitle>
+                    <AlertDialogDescription className="text-white/60">
+                      This action permanently deletes this project and cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="border-white/10 bg-transparent text-white hover:bg-white/5">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDelete}
+                      disabled={deleting}
+                      className="bg-red-500 text-white hover:bg-red-600"
+                    >
+                      {deleting ? "Deleting..." : "Delete"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+          </AlertDialog>
         </div>
 
         {/* Bottom left theme badge */}

@@ -22,9 +22,6 @@ import {
   Triangle,
   TrendingDown,
   RefreshCw,
-  FileImage,
-  Square,
-  RectangleHorizontal,
 } from "lucide-react";
 
 interface NewProjectModalProps {

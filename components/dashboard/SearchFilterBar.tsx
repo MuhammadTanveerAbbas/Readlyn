@@ -19,7 +19,7 @@ export default function SearchFilterBar({
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   return (
-    <div className="sticky top-0 z-10 mb-6 bg-[#080808]/95 pb-4 pt-2 backdrop-blur-xl">
+    <div className="mb-6 pb-2">
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Search */}
         <div className="relative flex-1">

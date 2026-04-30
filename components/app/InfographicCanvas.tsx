@@ -12,6 +12,16 @@ import { renderInfographic, createFabricObject } from "@/lib/renderElements";
 import { toast } from "@/hooks/use-toast";
 import type { InfographicData } from "@/types/infographic";
 
+function getPointerCoordinates(event: fabric.TPointerEvent): { x: number; y: number } {
+  if ("touches" in event && event.touches.length > 0) {
+    return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+  }
+  if ("clientX" in event) {
+    return { x: event.clientX, y: event.clientY };
+  }
+  return { x: 0, y: 0 };
+}
+
 export interface CanvasRef {
   canvas: fabric.Canvas | null;
   renderData: (data: InfographicData) => Promise<void>;
@@ -20,6 +30,7 @@ export interface CanvasRef {
     data: Pick<InfographicData, "canvasWidth" | "canvasHeight" | "background">,
   ) => void;
   finishStream: () => void;
+  setStreamProgress: (progress: { current: number; total: number }) => void;
   exportPNG: () => void;
   exportJSON: () => void;
   clearAll: () => void;
@@ -42,6 +53,9 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
   ) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const fabricRef = useRef<fabric.Canvas | null>(null);
+    const isSpacePressed = useRef(false);
+    const isPanning = useRef(false);
+    const panStart = useRef({ x: 0, y: 0 });
     const [isLoading, setIsLoading] = useState(false);
     const [loadingProgress, setLoadingProgress] = useState({
       current: 0,
@@ -105,6 +119,75 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
     }, [toolMode]);
 
     useEffect(() => {
+      const onKeyDown = (event: KeyboardEvent) => {
+        if (event.code === "Space") {
+          isSpacePressed.current = true;
+          event.preventDefault();
+        }
+      };
+      const onKeyUp = (event: KeyboardEvent) => {
+        if (event.code === "Space") {
+          isSpacePressed.current = false;
+          isPanning.current = false;
+        }
+      };
+      window.addEventListener("keydown", onKeyDown);
+      window.addEventListener("keyup", onKeyUp);
+      return () => {
+        window.removeEventListener("keydown", onKeyDown);
+        window.removeEventListener("keyup", onKeyUp);
+      };
+    }, []);
+
+    useEffect(() => {
+      const canvas = fabricRef.current;
+      if (!canvas) return;
+
+      const onWheel = (opt: fabric.TEvent<WheelEvent>) => {
+        const event = opt.e;
+        event.preventDefault();
+        event.stopPropagation();
+        const delta = event.deltaY;
+        const zoomFactor = delta > 0 ? 0.94 : 1.06;
+        const point = new fabric.Point(event.offsetX, event.offsetY);
+        canvas.zoomToPoint(point, Math.max(0.1, Math.min(2, canvas.getZoom() * zoomFactor)));
+      };
+
+      const onMouseDown = (opt: fabric.TPointerEventInfo<fabric.TPointerEvent>) => {
+        const shouldPan = toolMode === "hand" || isSpacePressed.current;
+        if (!shouldPan) return;
+        isPanning.current = true;
+        panStart.current = getPointerCoordinates(opt.e);
+      };
+      const onMouseMove = (opt: fabric.TPointerEventInfo<fabric.TPointerEvent>) => {
+        if (!isPanning.current) return;
+        const vpt = canvas.viewportTransform;
+        if (!vpt) return;
+        const point = getPointerCoordinates(opt.e);
+        const dx = point.x - panStart.current.x;
+        const dy = point.y - panStart.current.y;
+        vpt[4] += dx;
+        vpt[5] += dy;
+        canvas.requestRenderAll();
+        panStart.current = point;
+      };
+      const onMouseUp = () => {
+        isPanning.current = false;
+      };
+
+      canvas.on("mouse:wheel", onWheel);
+      canvas.on("mouse:down", onMouseDown);
+      canvas.on("mouse:move", onMouseMove);
+      canvas.on("mouse:up", onMouseUp);
+      return () => {
+        canvas.off("mouse:wheel", onWheel);
+        canvas.off("mouse:down", onMouseDown);
+        canvas.off("mouse:move", onMouseMove);
+        canvas.off("mouse:up", onMouseUp);
+      };
+    }, [toolMode]);
+
+    useEffect(() => {
       const canvas = fabricRef.current;
       if (!canvas) return;
 
@@ -164,9 +247,12 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
           fabricRef.current.requestRenderAll();
           setLoadingProgress((prev) => ({
             ...prev,
-            current: prev.current + 1,
+            current: Math.min(prev.total || 1, prev.current + 1),
           }));
         }
+      },
+      setStreamProgress: (progress) => {
+        setLoadingProgress(progress);
       },
       finishStream: () => {
         setIsLoading(false);
@@ -240,19 +326,20 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
         </div>
 
         {isLoading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-lg">
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div className="absolute inset-0 rounded-lg bg-black/55">
+            <div className="absolute inset-4 animate-pulse rounded-md border border-white/10 bg-[#0f0f0f]/80" />
+            <div className="absolute left-1/2 top-1/2 flex w-[300px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-lg border border-white/10 bg-[#0f0f0f] p-4">
+              <div className="h-3 w-full rounded bg-gradient-to-r from-white/5 via-white/15 to-white/5 [background-size:200%_100%] animate-[shimmer_1.3s_linear_infinite]" />
+              <div className="w-56 h-2 bg-gray-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-violet-500 transition-all duration-200"
+                  className="h-full bg-[#F5C518] transition-all duration-200"
                   style={{
-                    width: `${(loadingProgress.current / loadingProgress.total) * 100}%`,
+                    width: `${loadingProgress.total > 0 ? (loadingProgress.current / loadingProgress.total) * 100 : 0}%`,
                   }}
                 />
               </div>
-              <p className="text-sm text-gray-400">
-                Rendering {loadingProgress.current} of {loadingProgress.total}{" "}
-                elements
+              <p className="text-sm text-white/80">
+                Generating layout... {loadingProgress.current}/{loadingProgress.total} elements
               </p>
             </div>
           </div>

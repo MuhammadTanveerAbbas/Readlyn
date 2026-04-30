@@ -6,7 +6,7 @@ import {
   type ThemePalette,
   type StylePreset,
 } from "@/types/infographic";
-import { computeLayout } from "@/lib/archetypeLayouts";
+import { computeLayout, type SlotPosition } from "@/lib/archetypeLayouts";
 import { GROQ_MODEL } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
@@ -46,10 +46,10 @@ function buildFallbackInfographic(args: {
   width: number;
   height: number;
   colors: { primary: string; secondary: string; accent: string };
-  slots: Array<Record<string, any>>;
+  slots: SlotPosition[];
 }) {
   const { prompt, width, height, colors, slots } = args;
-  const elements: Array<Record<string, any>> = [
+  const elements: Array<Record<string, unknown>> = [
     {
       type: "rect",
       id: "bg-0",
@@ -83,7 +83,7 @@ function buildFallbackInfographic(args: {
 
   for (const slot of slots) {
     if (!slot?.id || !slot?.type) continue;
-    if (slot.type === "text") {
+    if (slot.type === "text_slot") {
       elements.push({
         type: "text",
         id: slot.id,
@@ -99,7 +99,7 @@ function buildFallbackInfographic(args: {
         opacity: 1,
         zIndex: slot.zIndexHint ?? 20,
       });
-    } else if (slot.type === "stat") {
+    } else if (slot.type === "stat_slot") {
       elements.push({
         type: "stat",
         id: slot.id,
@@ -115,7 +115,7 @@ function buildFallbackInfographic(args: {
         rx: slot.rx ?? 12,
         zIndex: slot.zIndexHint ?? 20,
       });
-    } else if (slot.type === "icon") {
+    } else if (slot.type === "icon_slot") {
       elements.push({
         type: "icon",
         id: slot.id,
@@ -175,7 +175,11 @@ function buildFallbackInfographic(args: {
     canvasWidth: width,
     canvasHeight: height,
     background: "#ffffff",
-    elements: elements.sort((a, b) => (a.zIndex ?? 0) - (b.zIndex ?? 0)),
+    elements: elements.sort((a, b) => {
+      const az = typeof a.zIndex === "number" ? a.zIndex : 0;
+      const bz = typeof b.zIndex === "number" ? b.zIndex : 0;
+      return az - bz;
+    }),
   };
 }
 
@@ -252,28 +256,30 @@ You MAY add extra decorative depth elements (circles, texture dots) at zIndex 1-
 but NEVER move or resize a pre-computed slot.`
         : `No layout manifest  use your best creative judgment for auto-layout based on the topic.`;
 
-    const systemPrompt = `You are a world-class infographic designer at Venngage. Generate structured JSON for a Fabric.js canvas.
+    const systemPrompt = `You are a senior infographic art director generating Fabric.js-ready JSON.
 
-CANVAS: ${w}×${h}px, origin (0,0) at top-left
-COLORS: Primary ${colors.primary}, Secondary ${colors.secondary}, Accent ${colors.accent}
+THINKING INSTRUCTION:
+- Think about the topic, pick the best layout, then generate elements.
+- Keep the reasoning private. Output only JSON.
+
+CANVAS: ${w}x${h}px (0,0 top-left)
+PALETTE: primary=${colors.primary}, secondary=${colors.secondary}, accent=${colors.accent}
 
 ${layoutManifest}
 
-═══════════════════════════════════════════
-GENERATION RULES
-═══════════════════════════════════════════
-1. elements array MUST be sorted by zIndex ascending (lowest first, highest last)
-2. ALWAYS start with full-canvas background rect (zIndex 0)
-3. ALWAYS use PRE-COMPUTED slot positions if a manifest is provided
-4. Include real, specific facts and statistics (not placeholder text)
-5. Make all text fit within container widths: never exceed slot width minus padding
-6. Title should use multiple text elements with mixed colors for visual pop
-7. Stat blocks use type 'stat' with value, label, bgFill, valueFill properties
-8. Icon groups use type 'icon' with emoji inside circles (bgFill, emoji)
-9. Lines use strokeDashArray: [6, 4] for dashed lines
-10. Total 40-65 elements only  do not exceed
-11. Use null for unused stroke/strokeWidth (never empty string)
-12. Ensure no text overlaps  stagger y positions by at least 20px`;
+QUALITY RULES:
+1) Output ONLY a valid JSON object with keys: canvasWidth, canvasHeight, background, elements.
+2) NEVER output markdown fences, prose, preamble, or explanation.
+3) If style=auto, choose the best archetype for the topic based on information density and narrative flow.
+4) Build strong hierarchy: clear title, section headers, body text, and supporting visual accents.
+5) Maintain high contrast between text and backgrounds.
+6) Respect spacing rhythm: avoid overlaps, preserve gutters, and keep breathing room between groups.
+7) Use statistically meaningful, concrete facts where possible (no placeholder copy).
+8) Use realistic typography values and bounded widths so text remains readable.
+9) Include decorative depth intentionally (subtle circles/lines) without harming readability.
+10) Sort elements by zIndex ascending and include a full-canvas background rect at zIndex 0.
+11) Keep output valid for schema types only: rect, circle, text, stat, icon, line.
+12) Keep total element count between 28 and 60 for balanced complexity.`;
 
     const userPrompt = `Create a professional, visually stunning ${style === "auto" ? "auto-layout" : `${style.toUpperCase()}-style`} infographic about: "${prompt}"
 
@@ -285,7 +291,7 @@ Generate REAL facts, statistics, and data about this topic. The visual structure
 the ${style === "auto" ? "selected" : style} archetype  pyramid shapes for pyramid, cycle rings for cycle, etc. 
 Make it look like it came from Venngage or Piktochart.
 
-Return ONLY a valid JSON object. Do not include markdown fences or commentary.`;
+Return ONLY a valid JSON object. No markdown fences. No explanation.`;
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
@@ -355,7 +361,18 @@ Return ONLY a valid JSON object. Do not include markdown fences or commentary.`;
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          controller.enqueue(encoder.encode(`${JSON.stringify(payload)}\n`));
+          const total = payload.elements.length;
+          for (let i = 0; i < total; i++) {
+            controller.enqueue(
+              encoder.encode(
+                `${JSON.stringify({
+                  element: payload.elements[i],
+                  progress: { current: i + 1, total },
+                })}\n`,
+              ),
+            );
+            await new Promise((resolve) => setTimeout(resolve, 8));
+          }
           controller.close();
         } catch (error) {
           controller.error(error);

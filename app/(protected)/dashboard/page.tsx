@@ -12,11 +12,9 @@ import {
   TrendingUp,
   Zap,
   Rocket,
-  Pin,
-  Clock,
-  FolderOpen,
   Wand2,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export default function DashboardPage() {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
@@ -25,6 +23,7 @@ export default function DashboardPage() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("updated");
   const [openModal, setOpenModal] = useState(false);
+  const searchParams = useSearchParams();
 
   const loadProjects = async () => {
     setLoading(true);
@@ -77,8 +76,11 @@ export default function DashboardPage() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const view = searchParams?.get("view");
   const pinned = filtered.filter((project) => project.is_pinned);
-  const recent = filtered.slice(0, 6);
+  const recent = filtered.slice(0, 12);
+  const visibleProjects =
+    view === "pinned" ? pinned : view === "recent" ? recent : filtered;
 
   return (
     <div
@@ -115,74 +117,31 @@ export default function DashboardPage() {
         <span className="font-bold text-white">Readlyn</span>
       </div>
 
-      <main className="md:ml-[260px] p-4 sm:p-6 lg:p-8">
-        {/* Hero Banner */}
-        <div className="mb-8 rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f0f0f] via-[#0f0f0f] to-[#161616] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.4)] relative overflow-hidden">
-          {/* Animated gradient overlay */}
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              background:
-                "radial-gradient(circle at 30% 50%, rgba(245,197,24,0.15), transparent 50%)",
-            }}
-          />
-
-          <div className="relative z-10 flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="h-5 w-5 text-[#F5C518]" />
-                <span className="text-xs font-bold uppercase tracking-[0.15em] text-[#F5C518]">
-                  AI-Powered Studio
-                </span>
-              </div>
-              <h1 className="text-2xl font-bold text-white tracking-tight mb-2">
-                Welcome to Readlyn
-              </h1>
-              <p className="text-sm text-white/60 max-w-2xl leading-relaxed">
-                Create stunning infographics in seconds. Describe your topic,
-                choose a layout and theme, and let AI generate a professional
-                design you can edit and customize.
-              </p>
-
-              {/* Quick stats */}
-              <div className="flex items-center gap-4 mt-5">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.08]">
-                  <TrendingUp className="h-3.5 w-3.5 text-[#4ADE80]" />
-                  <span className="text-xs font-semibold text-white">
-                    {projects.length}
-                  </span>
-                  <span className="text-xs text-white/50">Projects</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.08]">
-                  <Zap className="h-3.5 w-3.5 text-[#F5C518]" />
-                  <span className="text-xs font-semibold text-white">
-                    {pinned.length}
-                  </span>
-                  <span className="text-xs text-white/50">Pinned</span>
-                </div>
-              </div>
+      <main className="md:ml-[260px] px-4 pb-6 pt-4 sm:px-6 lg:px-8">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-[#0f0f0f] p-4">
+          <div>
+            <div className="mb-1 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-[#F5C518]" />
+              <h1 className="text-lg font-semibold text-white">Dashboard</h1>
             </div>
-
-            <div className="flex flex-col items-end gap-3">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F5C518]/10 border border-[#F5C518]/30 backdrop-blur-sm">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F5C518] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F5C518]" />
-                </span>
-                <span className="text-xs font-bold text-[#F5C518]">
-                  Ready to create
-                </span>
-              </div>
-
-              <button
-                onClick={() => setOpenModal(true)}
-                className="group flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#F5C518] hover:bg-[#FFDC40] text-black text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
-              >
-                <Rocket className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                Create New Project
-              </button>
+            <div className="flex items-center gap-3 text-xs text-white/50">
+              <span className="inline-flex items-center gap-1">
+                <TrendingUp className="h-3.5 w-3.5 text-[#4ADE80]" />
+                {projects.length} projects
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <Zap className="h-3.5 w-3.5 text-[#F5C518]" />
+                {pinned.length} pinned
+              </span>
             </div>
           </div>
+          <button
+            onClick={() => setOpenModal(true)}
+            className="group inline-flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2 text-sm font-bold text-black transition-all hover:bg-[#FFDC40]"
+          >
+            <Rocket className="h-4 w-4" />
+            Create New Project
+          </button>
         </div>
 
         <SearchFilterBar
@@ -211,7 +170,7 @@ export default function DashboardPage() {
             </p>
             <p className="text-xs text-red-300/70">{error}</p>
           </div>
-        ) : filtered.length === 0 ? (
+        ) : visibleProjects.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f0f0f] to-[#161616] p-16 text-center relative overflow-hidden">
             {/* Background decoration */}
             <div
@@ -256,13 +215,17 @@ export default function DashboardPage() {
           </div>
         ) : (
           <>
-            {pinned.length > 0 && (
-              <ProjectGrid title="Pinned Projects" projects={pinned} />
-            )}
-            {recent.length > 0 && (
-              <ProjectGrid title="Recent Projects" projects={recent} />
-            )}
-            <ProjectGrid title="All Projects" projects={filtered} />
+            <ProjectGrid
+              title={
+                view === "pinned"
+                  ? "Pinned Projects"
+                  : view === "recent"
+                    ? "Recent Projects"
+                    : "All Projects"
+              }
+              projects={visibleProjects}
+              onProjectsChanged={loadProjects}
+            />
           </>
         )}
       </main>

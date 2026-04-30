@@ -2,18 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import {
-  Home,
-  Star,
-  Clock3,
-  LayoutTemplate,
-  Trash2,
-  Plus,
-  Settings,
-  LogOut,
-  User,
-  Sparkles,
-} from "lucide-react";
+import { Home, Star, Clock3, Plus, Settings, LogOut, User, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -24,7 +13,7 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-export default function Sidebar({ onNewProject, isOpen = false, onClose }: SidebarProps) {
+export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -51,18 +40,6 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
       icon: Star,
       active: view === "pinned",
     },
-    {
-      href: "/dashboard/templates",
-      label: "Templates",
-      icon: LayoutTemplate,
-      active: pathname === "/dashboard/templates",
-    },
-    {
-      href: "/dashboard?view=trash",
-      label: "Trash",
-      icon: Trash2,
-      active: view === "trash",
-    },
   ];
 
   const handleSignOut = async () => {
@@ -73,7 +50,7 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
 
   return (
     <aside className={`
-      fixed md:sticky left-0 top-0 z-40 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[#0a0a0a] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+      fixed left-0 top-0 z-40 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[#0a0a0a] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
       transform transition-transform duration-200 ease-in-out
       ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
     `}>
@@ -108,7 +85,10 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
               <div className="absolute right-0 top-11 w-48 rounded-lg border border-white/[0.08] bg-[#0f0f0f] shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-50">
                 <div className="p-1">
                   <button
-                    onClick={() => router.push("/settings")}
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      router.push("/settings");
+                    }}
                     className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-white/70 hover:bg-white/[0.05] hover:text-white transition-colors"
                   >
                     <Settings className="h-4 w-4" />

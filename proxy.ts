@@ -31,7 +31,8 @@ export async function proxy(request: NextRequest) {
 
   if (
     (!user && request.nextUrl.pathname.startsWith("/dashboard")) ||
-    (!user && request.nextUrl.pathname.startsWith("/app"))
+    (!user && request.nextUrl.pathname.startsWith("/app")) ||
+    (!user && request.nextUrl.pathname.startsWith("/editor"))
   ) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

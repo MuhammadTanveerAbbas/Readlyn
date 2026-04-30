@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Loader2, Lightbulb } from "lucide-react";
+import { Sparkles, Loader2 } from "lucide-react";
 import {
   CANVAS_SIZES,
   THEME_COLORS,
@@ -21,8 +21,6 @@ interface PromptPanelProps {
     type: "heading" | "text" | "rect" | "circle" | "stat" | "line",
   ) => void;
   isGenerating: boolean;
-  onSuggestLayout?: () => Promise<string>;
-  onPromptChange?: (prompt: string) => void;
 }
 
 const LAYOUT_STYLES = [
@@ -52,53 +50,15 @@ export default function PromptPanel({
   onGenerate,
   onAddElement,
   isGenerating,
-  onSuggestLayout,
-  onPromptChange,
 }: PromptPanelProps) {
   const [prompt, setPrompt] = useState("");
   const [theme, setTheme] = useState<ThemePalette>("violet");
   const [size, setSize] = useState<CanvasSize>("a4");
   const [style, setStyle] = useState<LayoutStyle>("auto");
-  const [suggestingLayout, setSuggestingLayout] = useState(false);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
     await onGenerate(prompt, theme, size, style);
-  };
-
-  const handleSuggestLayout = async () => {
-    if (!onSuggestLayout) return;
-    setSuggestingLayout(true);
-    try {
-      const suggestion = await onSuggestLayout();
-      // Parse JSON and extract readable text
-      try {
-        const parsed = JSON.parse(suggestion);
-        // Create a readable text from the JSON
-        let readableText = "";
-        if (parsed.archetype) {
-          readableText += `Suggested Layout: ${parsed.archetype}`;
-        }
-        if (parsed.reason) {
-          readableText += `\n\nWhy: ${parsed.reason}`;
-        }
-        if (parsed.description) {
-          readableText += `\n\nDetails: ${parsed.description}`;
-        }
-
-        const finalText = readableText.trim() || suggestion;
-        setPrompt(finalText);
-        onPromptChange?.(finalText);
-      } catch {
-        // If not JSON, just use the raw suggestion
-        setPrompt(suggestion);
-        onPromptChange?.(suggestion);
-      }
-    } catch (error) {
-      console.error("Failed to get layout suggestion:", error);
-    } finally {
-      setSuggestingLayout(false);
-    }
   };
 
   const themeNames: Record<ThemePalette, string> = {
@@ -153,23 +113,6 @@ export default function PromptPanel({
               <>
                 <Sparkles className="w-4 h-4" />
                 <span>Generate Infographic</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={handleSuggestLayout}
-            disabled={isGenerating || suggestingLayout}
-            className="w-full h-8 flex items-center justify-center gap-2 rounded-lg border border-white/10 hover:border-white/20 text-[11px] text-[#A3A3A3] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {suggestingLayout ? (
-              <>
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Getting suggestion…</span>
-              </>
-            ) : (
-              <>
-                <Lightbulb className="w-3.5 h-3.5" />
-                <span>Suggest Layout</span>
               </>
             )}
           </button>
@@ -261,7 +204,11 @@ export default function PromptPanel({
             {ELEMENTS.map((el) => (
               <button
                 key={el.id}
-                onClick={() => onAddElement(el.id as any)}
+                onClick={() =>
+                  onAddElement(
+                    el.id as "heading" | "text" | "rect" | "circle" | "stat" | "line",
+                  )
+                }
                 className="h-8 flex items-center justify-center gap-2 rounded-lg text-[10px] font-medium transition-all duration-150 active:scale-95 bg-[#161616] border border-white/8 text-[#A3A3A3] hover:text-white hover:border-white/15 hover:bg-[#1c1c1c]"
                 title={el.desc}
               >

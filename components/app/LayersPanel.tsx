@@ -133,14 +133,16 @@ export default function LayersPanel({
           {layers.length}
         </div>
       </div>
-      <div className="px-3 pb-2">
-        <button
-          onClick={onAddMissingSection}
-          className="h-6 w-full rounded border border-white/10 text-[10px] text-white hover:border-[#F5C518]"
-        >
-          ✦ Add Missing Section
-        </button>
-      </div>
+      {onAddMissingSection && (
+        <div className="px-3 pb-2">
+          <button
+            onClick={onAddMissingSection}
+            className="h-6 w-full rounded border border-white/10 text-[10px] text-white hover:border-[#F5C518]"
+          >
+            ✦ Add Missing Section
+          </button>
+        </div>
+      )}
 
       {/* Layers List */}
       <div className="flex-1 overflow-y-auto px-2 pb-2 min-h-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

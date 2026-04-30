@@ -10,7 +10,13 @@ import { createClient } from "@/lib/supabase/client";
 
 function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const oauthError = searchParams.get("error");
   const [isChecking, setIsChecking] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -25,6 +31,12 @@ function LoginForm() {
     checkAuth();
   }, [router]);
 
+  useEffect(() => {
+    if (oauthError === "oauth_failed") {
+      setError("Google sign-in failed. Please try again.");
+    }
+  }, [oauthError]);
+
   if (isChecking) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#060606]">
@@ -32,17 +44,6 @@ function LoginForm() {
       </div>
     );
   }
-  const searchParams = useSearchParams();
-  const oauthError = searchParams.get("error");
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(
-    oauthError === "oauth_failed"
-      ? "Google sign-in failed. Please try again."
-      : "",
-  );
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
