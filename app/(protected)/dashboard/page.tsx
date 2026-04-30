@@ -115,7 +115,7 @@ export default function DashboardPage() {
         <span className="font-bold text-white">Readlyn</span>
       </div>
 
-      <main className="md:ml-[260px] min-h-screen p-4 sm:p-6 lg:p-8">
+      <main className="md:ml-[260px] p-4 sm:p-6 lg:p-8">
         {/* Hero Banner */}
         <div className="mb-8 rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f0f0f] via-[#0f0f0f] to-[#161616] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.4)] relative overflow-hidden">
           {/* Animated gradient overlay */}
