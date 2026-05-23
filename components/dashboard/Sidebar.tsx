@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Home, Star, Clock3, Plus, Settings, LogOut, User, Sparkles } from "lucide-react";
+import { Home, Star, Clock3, Plus, Settings, LogOut, User, Sparkles, CreditCard } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -93,6 +93,16 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
                   >
                     <Settings className="h-4 w-4" />
                     Settings
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      router.push("/billing");
+                    }}
+                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-white/70 hover:bg-white/[0.05] hover:text-white transition-colors"
+                  >
+                    <CreditCard className="h-4 w-4" />
+                    Billing
                   </button>
                   <button
                     onClick={handleSignOut}

@@ -2,13 +2,13 @@ import {
   InfographicSchema,
   CANVAS_SIZES,
   THEME_COLORS,
-  type CanvasSize,
-  type ThemePalette,
-  type StylePreset,
+  type InfographicElement,
+  type InfographicData,
 } from "@/types/infographic";
 import { computeLayout, type SlotPosition } from "@/lib/archetypeLayouts";
 import { GROQ_MODEL } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { z } from "zod";
 
 export const maxDuration = 60;
@@ -30,6 +30,8 @@ const GenerateRequestSchema = z.object({
   ]),
 });
 
+type GenerateRequest = z.infer<typeof GenerateRequestSchema>;
+
 function extractFirstJsonObject(raw: string) {
   const fencedMatch = raw.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
   const candidate = fencedMatch ? fencedMatch[1] : raw;
@@ -47,9 +49,9 @@ function buildFallbackInfographic(args: {
   height: number;
   colors: { primary: string; secondary: string; accent: string };
   slots: SlotPosition[];
-}) {
+}): InfographicData {
   const { prompt, width, height, colors, slots } = args;
-  const elements: Array<Record<string, unknown>> = [
+  const elements: InfographicElement[] = [
     {
       type: "rect",
       id: "bg-0",
@@ -171,15 +173,13 @@ function buildFallbackInfographic(args: {
     }
   }
 
+  elements.sort((a, b) => a.zIndex - b.zIndex);
+
   return {
     canvasWidth: width,
     canvasHeight: height,
     background: "#ffffff",
-    elements: elements.sort((a, b) => {
-      const az = typeof a.zIndex === "number" ? a.zIndex : 0;
-      const bz = typeof b.zIndex === "number" ? b.zIndex : 0;
-      return az - bz;
-    }),
+    elements,
   };
 }
 
@@ -194,6 +194,18 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Rate limiting — prevent abuse
+    const rateCheck = checkRateLimit(`generate:${user.id}`, RATE_LIMITS.generate);
+    if (!rateCheck.allowed) {
+      return Response.json(
+        {
+          error: "Too many requests. Please wait before generating again.",
+          retryAfter: Math.ceil(rateCheck.resetIn / 1000),
+        },
+        { status: 429 },
+      );
+    }
+
     // Validate and parse request body
     const body = await req.json();
     const parsed = GenerateRequestSchema.safeParse(body);
@@ -203,12 +215,7 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const { prompt, theme, size, style } = parsed.data as {
-      prompt: string;
-      theme: ThemePalette;
-      size: CanvasSize;
-      style: StylePreset;
-    };
+    const { prompt, theme, size, style } = parsed.data as GenerateRequest;
 
     const { width: w, height: h } = CANVAS_SIZES[size];
     const colors = THEME_COLORS[theme];
@@ -330,7 +337,7 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
     };
     const rawText = completionJson.choices?.[0]?.message?.content ?? "";
 
-    let payload: ReturnType<typeof buildFallbackInfographic>;
+    let payload: InfographicData;
     try {
       const normalizedJson = extractFirstJsonObject(rawText).replace(
         /:\s*undefined(\s*[,}])/g,

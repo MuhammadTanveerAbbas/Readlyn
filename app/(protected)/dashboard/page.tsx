@@ -162,13 +162,25 @@ export default function DashboardPage() {
           <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-8 text-center">
             <div className="flex justify-center mb-3">
               <div className="h-12 w-12 rounded-full bg-red-500/20 flex items-center justify-center">
-                <span className="text-2xl">⚠️</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 7v5M12 15v1" />
+                </svg>
               </div>
             </div>
             <p className="text-sm font-semibold text-red-200 mb-1">
               Error Loading Projects
             </p>
-            <p className="text-xs text-red-300/70">{error}</p>
+            <p className="text-xs text-red-300/70 mb-4">{error}</p>
+            <button
+              onClick={loadProjects}
+              className="inline-flex items-center gap-2 rounded-lg bg-red-500/20 border border-red-500/40 px-4 py-2 text-sm text-red-300 transition-colors hover:bg-red-500/30"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M1 4v6h6M23 20v-6h-6" />
+              </svg>
+              Retry
+            </button>
           </div>
         ) : visibleProjects.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f0f0f] to-[#161616] p-16 text-center relative overflow-hidden">

@@ -29,18 +29,16 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (
-    (!user && request.nextUrl.pathname.startsWith("/dashboard")) ||
-    (!user && request.nextUrl.pathname.startsWith("/app")) ||
-    (!user && request.nextUrl.pathname.startsWith("/editor"))
-  ) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  const protectedRoutes = ["/dashboard", "/editor", "/app", "/settings"];
+
+  if (!user && protectedRoutes.some((r) => request.nextUrl.pathname.startsWith(r))) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
-  if (
-    user &&
-    ["/login", "/signup", "/forgot-password"].includes(request.nextUrl.pathname)
-  ) {
+  const authRoutes = ["/login", "/signup", "/forgot-password", "/update-password"];
+  if (user && authRoutes.includes(request.nextUrl.pathname)) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

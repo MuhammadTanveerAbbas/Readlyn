@@ -24,19 +24,68 @@ const ibmPlexMono = localFont({
   ],
 });
 
+const siteUrl = "https://readlyn.vercel.app";
+const siteTitle = "Readlyn — AI Infographic Generator";
+const siteDescription =
+  "Describe any topic and get a stunning, data-rich infographic in seconds. Powered by Groq AI (Llama 3.3 70B) with 9 layout archetypes, 5 color themes, and a full Fabric.js canvas editor.";
+
 export const metadata: Metadata = {
-  title: "Readlyn",
-  description:
-    "Readlyn platform: marketing and protected app in one Next.js project.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteTitle,
+    template: "%s | Readlyn",
+  },
+  description: siteDescription,
+  keywords: [
+    "AI infographic generator",
+    "infographic maker",
+    "Groq AI",
+    "Llama 3.3",
+    "canvas editor",
+    "data visualization",
+    "content creation",
+    "Next.js SaaS",
+  ],
+  authors: [{ name: "Muhammad Tanveer Abbas", url: "https://themvpguy.vercel.app" }],
+  creator: "Muhammad Tanveer Abbas",
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "Readlyn",
+    title: siteTitle,
+    description: siteDescription,
+    images: [
+      {
+        url: "/Readlyn.png",
+        width: 1583,
+        height: 746,
+        alt: "Readlyn — AI-powered infographic generator",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@themvpguy",
+    creator: "@themvpguy",
+    title: siteTitle,
+    description: siteDescription,
+    images: ["/Readlyn.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/icon.svg", type: "image/svg+xml", sizes: "32x32" },
     ],
-    apple: [
-      { url: "/apple-icon.svg", type: "image/svg+xml", sizes: "180x180" },
-    ],
+    apple: [{ url: "/apple-icon.svg", type: "image/svg+xml", sizes: "180x180" }],
     shortcut: "/favicon.svg",
+  },
+  alternates: {
+    canonical: siteUrl,
   },
 };
 

@@ -99,3 +99,59 @@ ON public.templates
 FOR SELECT
 USING (is_public = true);
 
+-- Subscriptions table for Stripe billing
+CREATE TABLE IF NOT EXISTS public.subscriptions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+  stripe_subscription_id TEXT,
+  stripe_customer_id TEXT,
+  status TEXT NOT NULL DEFAULT 'incomplete',
+  plan_id TEXT NOT NULL DEFAULT 'free',
+  current_period_start TIMESTAMPTZ,
+  current_period_end TIMESTAMPTZ,
+  cancel_at_period_end BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+DROP TRIGGER IF EXISTS trg_subscriptions_updated_at ON public.subscriptions;
+CREATE TRIGGER trg_subscriptions_updated_at
+BEFORE UPDATE ON public.subscriptions
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
+
+CREATE INDEX IF NOT EXISTS idx_subscriptions_user_id ON public.subscriptions(user_id);
+CREATE INDEX IF NOT EXISTS idx_subscriptions_stripe_customer_id ON public.subscriptions(stripe_customer_id);
+CREATE INDEX IF NOT EXISTS idx_subscriptions_status ON public.subscriptions(status);
+
+ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can read own subscription" ON public.subscriptions;
+CREATE POLICY "Users can read own subscription"
+ON public.subscriptions
+FOR SELECT
+USING (auth.uid() = user_id);
+
+-- Invoices table for billing history
+CREATE TABLE IF NOT EXISTS public.invoices (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  stripe_subscription_id TEXT,
+  amount_paid BIGINT,
+  currency TEXT DEFAULT 'usd',
+  status TEXT NOT NULL,
+  attempt_count INT DEFAULT 1,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_invoices_user_id ON public.invoices(user_id);
+CREATE INDEX IF NOT EXISTS idx_invoices_created_at ON public.invoices(created_at DESC);
+
+ALTER TABLE public.invoices ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can read own invoices" ON public.invoices;
+CREATE POLICY "Users can read own invoices"
+ON public.invoices
+FOR SELECT
+USING (auth.uid() = user_id);
+

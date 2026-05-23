@@ -92,6 +92,24 @@ export default function EditorPage() {
   } = useCanvasSelection(canvas);
   const { width, height } = CANVAS_SIZES[canvasSize];
 
+  const loadProject = useCallback(async () => {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase
+      .from("projects")
+      .select("canvas_json, canvas_width, canvas_height")
+      .eq("id", projectId)
+      .eq("user_id", user.id)
+      .single();
+    if (data?.canvas_json && canvasRef.current?.canvas) {
+      await canvasRef.current.canvas.loadFromJSON(data.canvas_json);
+      canvasRef.current.canvas.requestRenderAll();
+    }
+  }, [projectId]);
+
   const loadHistory = useCallback(async () => {
     setHistoryLoading(true);
     try {
@@ -117,7 +135,8 @@ export default function EditorPage() {
 
   useEffect(() => {
     loadHistory();
-  }, [loadHistory]);
+    loadProject();
+  }, [loadHistory, loadProject]);
 
   const saveHistorySnapshot = useCallback(
     async (prompt: string, archetype: string, theme: string) => {
@@ -280,6 +299,36 @@ export default function EditorPage() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [redo, undo]);
+
+  const lastSavedRef = useRef(Date.now());
+  const [_saveStatus, _setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
+
+  useEffect(() => {
+    if (!canvas || !id) return;
+    const interval = setInterval(async () => {
+      const now = Date.now();
+      if (now - lastSavedRef.current < 5000) return;
+      _setSaveStatus("saving");
+      try {
+        const supabase = createClient();
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) return;
+        await supabase
+          .from("projects")
+          .update({
+            canvas_json: canvas.toJSON(),
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", id)
+          .eq("user_id", user.id);
+        lastSavedRef.current = now;
+        _setSaveStatus("saved");
+      } catch {
+        _setSaveStatus("unsaved");
+      }
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [canvas, id]);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-[#080808]">

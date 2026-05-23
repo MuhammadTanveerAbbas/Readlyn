@@ -12,7 +12,7 @@ export async function GET(request: Request) {
 
   try {
     const supabase = await createClient();
-    const { error } = await supabase.from("profiles").select("id").limit(1).single();
+    const { error } = await supabase.from("projects").select("id").limit(1).single();
 
     if (error) {
       console.error("[keep-alive] Supabase error:", error);

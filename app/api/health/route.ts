@@ -1,9 +1,10 @@
+import { createClient } from "@/lib/supabase/server";
+
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const checks: Record<string, string> = {};
 
-  // Verify required environment variables are present
   const requiredEnvVars = [
     "NEXT_PUBLIC_SUPABASE_URL",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
@@ -20,8 +21,27 @@ export async function GET() {
     }
   }
 
-  const status = allEnvPresent ? "ok" : "degraded";
-  const httpStatus = allEnvPresent ? 200 : 503;
+  let dbConnected = false;
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from("projects")
+      .select("id")
+      .limit(1)
+      .single();
+
+    if (!error) {
+      dbConnected = true;
+      checks["database"] = "ok";
+    } else {
+      checks["database"] = `error: ${error.message}`;
+    }
+  } catch {
+    checks["database"] = "unreachable";
+  }
+
+  const status = allEnvPresent && dbConnected ? "ok" : "degraded";
+  const httpStatus = status === "ok" ? 200 : 503;
 
   return Response.json(
     {

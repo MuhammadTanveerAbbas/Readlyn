@@ -4,7 +4,28 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Sidebar from "@/components/dashboard/Sidebar";
-import { Settings, Mail, Shield, KeyRound, LogOut } from "lucide-react";
+import {
+  Settings,
+  Mail,
+  Shield,
+  KeyRound,
+  LogOut,
+  CreditCard,
+  Trash2,
+  AlertTriangle,
+} from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 interface AccountData {
   email: string;
@@ -19,6 +40,8 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [subscription, setSubscription] = useState<{ plan_id: string; status: string } | null>(null);
 
   useEffect(() => {
     const loadAccount = async () => {
@@ -45,9 +68,15 @@ export default function SettingsPage() {
             })
           : "Unknown",
       });
+
+      const { data: sub } = await supabase
+        .from("subscriptions")
+        .select("plan_id, status")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      setSubscription(sub as { plan_id: string; status: string } | null);
       setLoading(false);
     };
-
     loadAccount();
   }, []);
 
@@ -57,6 +86,21 @@ export default function SettingsPage() {
     await supabase.auth.signOut();
     setIsSigningOut(false);
     router.push("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    try {
+      const res = await fetch("/api/account/delete", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete account");
+      toast.success("Account deleted successfully.");
+      router.push("/");
+    } catch {
+      toast.error("Failed to delete account. Please try again.");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -101,7 +145,7 @@ export default function SettingsPage() {
             <h1 className="text-lg font-semibold text-white">Settings</h1>
           </div>
           <p className="text-sm text-white/50">
-            Manage your account and security preferences.
+            Manage your account, billing, and security preferences.
           </p>
         </div>
 
@@ -111,12 +155,20 @@ export default function SettingsPage() {
             <p className="text-sm text-white/60">Loading account settings...</p>
           </div>
         ) : error ? (
-          <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-red-200">
-            <p className="text-sm font-medium">Failed to load settings</p>
-            <p className="mt-1 text-xs text-red-300/70">{error}</p>
+          <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-center">
+            <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-red-400" />
+            <p className="text-sm font-medium text-red-200">Failed to load settings</p>
+            <p className="mt-1 text-xs text-red-300/70 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-xs text-red-300 underline"
+            >
+              Retry
+            </button>
           </div>
         ) : (
           <div className="grid gap-4">
+            {/* Account Section */}
             <section className="rounded-xl border border-white/10 bg-[#0f0f0f] p-5">
               <div className="mb-4 flex items-center gap-2">
                 <Mail className="h-4 w-4 text-[#F5C518]" />
@@ -124,28 +176,42 @@ export default function SettingsPage() {
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-lg border border-white/8 bg-[#161616] p-3">
-                  <p className="text-[11px] uppercase tracking-wider text-white/40">
-                    Email
-                  </p>
+                  <p className="text-[11px] uppercase tracking-wider text-white/40">Email</p>
                   <p className="mt-1 text-sm text-white">{account?.email}</p>
                 </div>
                 <div className="rounded-lg border border-white/8 bg-[#161616] p-3">
-                  <p className="text-[11px] uppercase tracking-wider text-white/40">
-                    Member Since
-                  </p>
+                  <p className="text-[11px] uppercase tracking-wider text-white/40">Member Since</p>
                   <p className="mt-1 text-sm text-white">{account?.createdAt}</p>
                 </div>
               </div>
               <div className="mt-3 rounded-lg border border-white/8 bg-[#161616] p-3">
-                <p className="text-[11px] uppercase tracking-wider text-white/40">
-                  User ID
-                </p>
-                <p className="mt-1 break-all font-mono text-xs text-white/80">
-                  {account?.id}
-                </p>
+                <p className="text-[11px] uppercase tracking-wider text-white/40">User ID</p>
+                <p className="mt-1 break-all font-mono text-xs text-white/80">{account?.id}</p>
               </div>
             </section>
 
+            {/* Billing Section */}
+            <section className="rounded-xl border border-white/10 bg-[#0f0f0f] p-5">
+              <div className="mb-4 flex items-center gap-2">
+                <CreditCard className="h-4 w-4 text-[#F5C518]" />
+                <h2 className="text-sm font-semibold text-white">Billing</h2>
+              </div>
+              <div className="rounded-lg border border-white/8 bg-[#161616] p-3 mb-3">
+                <p className="text-[11px] uppercase tracking-wider text-white/40">Current Plan</p>
+                <p className="mt-1 text-sm text-white capitalize">
+                  {subscription?.plan_id || "Free"}
+                </p>
+              </div>
+              <button
+                onClick={() => router.push("/billing")}
+                className="inline-flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2 text-sm font-bold text-black transition-all hover:bg-[#FFDC40]"
+              >
+                <CreditCard className="h-4 w-4" />
+                Manage Billing
+              </button>
+            </section>
+
+            {/* Security Section */}
             <section className="rounded-xl border border-white/10 bg-[#0f0f0f] p-5">
               <div className="mb-4 flex items-center gap-2">
                 <Shield className="h-4 w-4 text-[#F5C518]" />
@@ -168,6 +234,50 @@ export default function SettingsPage() {
                   {isSigningOut ? "Signing Out..." : "Sign Out"}
                 </button>
               </div>
+            </section>
+
+            {/* Danger Zone */}
+            <section className="rounded-xl border border-red-500/20 bg-red-500/5 p-5">
+              <div className="mb-4 flex items-center gap-2">
+                <Trash2 className="h-4 w-4 text-red-400" />
+                <h2 className="text-sm font-semibold text-red-300">Danger Zone</h2>
+              </div>
+              <p className="text-xs text-red-300/70 mb-4">
+                Once you delete your account, all your projects, generation history,
+                and subscription data will be permanently removed. This action cannot
+                be undone.
+              </p>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    className="inline-flex items-center gap-2 rounded-lg bg-red-500/20 border border-red-500/40 px-4 py-2 text-sm text-red-300 transition-colors hover:bg-red-500/30"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Delete Account
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-[#0f0f0f] border border-white/10">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-white">Delete your account?</AlertDialogTitle>
+                    <AlertDialogDescription className="text-white/50">
+                      This will permanently delete your account, all projects, and
+                      active subscriptions. You will not be able to recover any data.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="bg-white/5 text-white/70 border border-white/10 hover:bg-white/10">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeleteAccount}
+                      disabled={isDeleting}
+                      className="bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500/30"
+                    >
+                      {isDeleting ? "Deleting..." : "Delete my account"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </section>
           </div>
         )}
