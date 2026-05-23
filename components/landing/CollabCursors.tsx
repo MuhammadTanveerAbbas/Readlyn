@@ -52,7 +52,7 @@ const icons: Record<string, React.ReactNode> = {
 };
 
 // All positions use % relative to the section container.
-// Y values stay between 5%–55% so cursors cluster around the headline text.
+// Y values stay between 5% and 55% so cursors cluster around the headline text.
 const CURSORS = [
   {
     name: "Alex K.",

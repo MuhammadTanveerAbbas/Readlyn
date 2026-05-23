@@ -185,7 +185,7 @@ function buildFallbackInfographic(args: {
 
 export async function POST(req: Request) {
   try {
-    // Auth check — only authenticated users may consume Groq quota
+    // Auth check, only authenticated users may consume Groq quota
     const supabase = await createClient();
     const {
       data: { user },
@@ -194,7 +194,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Rate limiting — prevent abuse
+    // Rate limiting, prevent abuse
     const rateCheck = checkRateLimit(`generate:${user.id}`, RATE_LIMITS.generate);
     if (!rateCheck.allowed) {
       return Response.json(
@@ -394,7 +394,7 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
       },
     });
   } catch (error) {
-    // Log server-side only — never expose internals to client
+    // Log server-side only, never expose internals to client
     console.error(
       "[generate] route error:",
       error instanceof Error ? error.message : "unknown",

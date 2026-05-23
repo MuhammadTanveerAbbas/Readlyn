@@ -39,7 +39,7 @@ export default function ProtectedError({
             Something went wrong
           </h1>
           <p className="mt-2 text-sm text-white/50">
-            An unexpected error occurred. Your work is safe — try refreshing the
+            An unexpected error occurred. Your work is safe, try refreshing the
             page.
           </p>
         </div>

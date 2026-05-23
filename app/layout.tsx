@@ -25,7 +25,7 @@ const ibmPlexMono = localFont({
 });
 
 const siteUrl = "https://readlyn.vercel.app";
-const siteTitle = "Readlyn — AI Infographic Generator";
+const siteTitle = "Readlyn | AI Infographic Generator";
 const siteDescription =
   "Describe any topic and get a stunning, data-rich infographic in seconds. Powered by Groq AI (Llama 3.3 70B) with 9 layout archetypes, 5 color themes, and a full Fabric.js canvas editor.";
 
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
         url: "/Readlyn.png",
         width: 1583,
         height: 746,
-        alt: "Readlyn — AI-powered infographic generator",
+        alt: "Readlyn | AI-powered infographic generator",
       },
     ],
   },

@@ -247,7 +247,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <div align="center">
 
 **Muhammad Tanveer Abbas**
-SaaS Developer | Building production-ready MVPs in 14–21 days
+SaaS Developer | Building production-ready MVPs in 14 to 21 days
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-themvpguy.vercel.app-black?style=for-the-badge)](https://themvpguy.vercel.app)
 [![GitHub](https://img.shields.io/badge/GitHub-MuhammadTanveerAbbas-181717?style=for-the-badge&logo=github)](https://github.com/MuhammadTanveerAbbas)

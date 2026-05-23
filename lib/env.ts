@@ -1,6 +1,6 @@
 /**
  * Environment variable validation.
- * Called at module load time — the app will throw a clear error at startup
+ * Called at module load time, the app will throw a clear error at startup
  * rather than failing silently at runtime when a required variable is missing.
  */
 
