@@ -1,0 +1,283 @@
+import type { ParallaxConfig, ParallaxLayer } from "./parallax-types"
+
+function layerStyles(layers: ParallaxLayer[], perspective: number): string {
+  return layers.map((layer, i) => `
+  .pl-${i} {
+    position: absolute;
+    inset: -20%;
+    background-image: url('${layer.imageUrl}');
+    background-size: cover;
+    background-position: ${50 + layer.offsetX}% ${50 + layer.offsetY}%;
+    opacity: ${layer.opacity};
+    transform: translateZ(${((layer.depth - 0.5) * perspective * -0.3).toFixed(0)}px) scale(${(layer.scale + 0.2).toFixed(2)});
+    mix-blend-mode: ${layer.blendMode};
+    pointer-events: none;
+    will-change: transform;
+  }`).join("\n")
+}
+
+export function generateHtml(config: ParallaxConfig): string {
+  const { layers, perspective, effect, backgroundColor } = config
+  const depths = layers.map((l) => l.depth.toFixed(2)).join(", ")
+
+  const effectScript = effect === "tilt"
+    ? `  const handleMouse = (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 2
+    const y = (e.clientY / window.innerHeight - 0.5) * 2
+    layers.forEach((el, i) => {
+      const d = depths[i]
+      el.style.transform = \`translateX(\${x * d * 40}px) translateY(\${y * d * 40}px)\`
+    })
+  }
+  document.addEventListener('mousemove', handleMouse)`
+    : `  const update = () => {
+    const scrollY = window.scrollY
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+    const progress = Math.min(scrollY / maxScroll, 1)
+    layers.forEach((el, i) => {
+      const d = depths[i]
+      const ty = progress * d * 200
+      const sc = ${effect === "zoom" ? "1 + progress * d * 0.5" : "1"}
+      const op = ${effect === "fade" ? "Math.max(0, 1 - progress * d * 0.6)" : "1"}
+      el.style.transform = \`translateY(\${ty}px) scale(\${sc})\`
+      el.style.opacity = op
+    })
+  }
+  window.addEventListener('scroll', update, { passive: true })
+  update()`
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parallax Scene</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: ${backgroundColor};
+      overflow-x: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .parallax-container {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      perspective: ${perspective}px;
+    }
+
+    .parallax-layers {
+      position: fixed;
+      inset: 0;
+      transform-style: preserve-3d;
+    }
+
+    .scroll-content {
+      position: relative;
+      z-index: 10;
+      min-height: 200vh;
+      ${effect !== "tilt" ? "pointer-events: none;" : ""}
+    }
+
+    .content-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      pointer-events: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .content-overlay h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      max-width: 800px;
+    }
+
+    .content-overlay p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: rgba(255,255,255,0.7);
+      margin-top: 1rem;
+      max-width: 600px;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .content-overlay > * {
+      animation: fade-up 0.8s ease 0.5s both;
+    }
+
+    ${layerStyles(layers, perspective)}
+  </style>
+</head>
+<body>
+  <div class="parallax-container">
+    <div class="parallax-layers">
+      ${layers.map((_, i) => `      <div class="pl-${i}"></div>`).join("\n")}
+    </div>
+    <div class="content-overlay">
+      <h1>Your Parallax Scene</h1>
+      <p>Scroll down to experience the parallax effect with ${layers.length} layer${layers.length !== 1 ? "s" : ""}</p>
+    </div>
+    <div class="scroll-hint">Scroll to explore</div>
+  </div>
+  <div class="scroll-content"></div>
+
+  <script>
+    const layers = document.querySelectorAll('[class^="pl-"]');
+    const depths = [${depths}];
+${effectScript}
+  </script>
+</body>
+</html>`
+}
+
+export function generateCss(config: ParallaxConfig): string {
+  const { layers, perspective, effect, backgroundColor } = config
+
+  return `/* Parallax Scene - Generated by Readlyn */
+
+.parallax-scene {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  perspective: ${perspective}px;
+  background: ${backgroundColor};
+}
+
+.parallax-layers {
+  position: fixed;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+${layers.map((layer, i) => `
+.pl-${i} {
+  position: absolute;
+  inset: -20%;
+  background-image: url('${layer.imageUrl}');
+  background-size: cover;
+  background-position: ${50 + layer.offsetX}% ${50 + layer.offsetY}%;
+  opacity: ${layer.opacity};
+  transform: translateZ(${((layer.depth - 0.5) * perspective * -0.3).toFixed(0)}px) scale(${(layer.scale + 0.2).toFixed(2)});
+  mix-blend-mode: ${layer.blendMode};
+  will-change: transform;
+  pointer-events: none;
+}
+`).join("\n")}
+
+.scroll-area {
+  position: relative;
+  z-index: 10;
+  min-height: 200vh;
+}
+
+.parallax-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+  text-align: center;
+}
+
+.parallax-overlay h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  letter-spacing: -0.03em;
+  max-width: 800px;
+}
+
+.parallax-overlay p {
+  color: rgba(255,255,255,0.7);
+  margin-top: 1rem;
+  max-width: 600px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.parallax-overlay > * {
+  animation: fadeUp 0.8s ease 0.5s both;
+}`
+}
+
+export function generateJs(config: ParallaxConfig): string {
+  const { layers, effect } = config
+  const depths = layers.map((l) => l.depth.toFixed(2)).join(", ")
+
+  if (effect === "tilt") {
+    return `// Parallax Tilt Effect - Generated by Readlyn
+const layers = document.querySelectorAll('[class^="pl-"]');
+const depths = [${depths}];
+
+document.addEventListener('mousemove', (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 2;
+  const y = (e.clientY / window.innerHeight - 0.5) * 2;
+  layers.forEach((el, i) => {
+    const d = depths[i];
+    el.style.transform = \`translateX(\${x * d * 40}px) translateY(\${y * d * 40}px)\`;
+  });
+});`
+  }
+
+  return `// Parallax Scroll Effect - Generated by Readlyn
+const layers = document.querySelectorAll('[class^="pl-"]');
+const depths = [${depths}];
+
+function updateParallax() {
+  const scrollY = window.scrollY;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = Math.min(scrollY / maxScroll, 1);
+
+  layers.forEach((el, i) => {
+    const depth = depths[i];
+    const translateY = progress * depth * 200;
+    ${effect === "zoom" ? "const scale = 1 + progress * depth * 0.5;" : "const scale = 1;"}
+    ${effect === "fade" ? "const opacity = Math.max(0, 1 - progress * depth * 0.6);" : "const opacity = 1;"}
+    el.style.transform = \`translateY(\${translateY}px) scale(\${scale})\`;
+    el.style.opacity = opacity;
+  });
+}
+
+window.addEventListener('scroll', updateParallax, { passive: true });
+updateParallax();`
+}

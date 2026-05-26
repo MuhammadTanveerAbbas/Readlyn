@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Home, Star, Clock3, Plus, Settings, LogOut, User, Sparkles, CreditCard } from "lucide-react";
+import { Home, Star, Clock3, Plus, Settings, LogOut, User, Sparkles, CreditCard, Layers } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -39,6 +39,12 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
       label: "Pinned",
       icon: Star,
       active: view === "pinned",
+    },
+    {
+      href: "/tools/parallax",
+      label: "Parallax Studio",
+      icon: Layers,
+      active: pathname === "/tools/parallax",
     },
   ];
 

@@ -195,6 +195,25 @@ const features = [
     tag: "Export",
     tagColor: "#4ADE80",
   },
+  {
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path
+          d="M3 3h6v6H3V3zM11 3h6v6h-6V3zM3 11h6v6H3v-6zM11 11h6v6h-6v-6z"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+        <path d="M10 3v14M3 10h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
+      </svg>
+    ),
+    iconColor: "#60A5FA",
+    title: "Parallax\nStudio",
+    description:
+      "Create scroll-driven parallax scenes with layered images, tilt effects, and zoom transitions. Export clean HTML/CSS/JS code.",
+    tag: "New tool",
+    tagColor: "#60A5FA",
+  },
 ];
 
 export default function Features() {
@@ -228,7 +247,7 @@ export default function Features() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
         {features.map((f, i) => (
           <FeatureCard key={i} {...f} index={i} />
         ))}

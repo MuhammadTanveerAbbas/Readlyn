@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <rect fill="#050510" width="1920" height="1080"/>
+  <g fill="#ffffff">
+    <circle cx="180" cy="120" r="1.5" opacity="0.8"/>
+    <circle cx="340" cy="60" r="1" opacity="0.6"/>
+    <circle cx="520" cy="200" r="2" opacity="0.9"/>
+    <circle cx="680" cy="90" r="1" opacity="0.5"/>
+    <circle cx="850" cy="180" r="1.5" opacity="0.7"/>
+    <circle cx="1020" cy="50" r="2.5" opacity="0.9"/>
+    <circle cx="1180" cy="160" r="1" opacity="0.6"/>
+    <circle cx="1350" cy="80" r="1.5" opacity="0.8"/>
+    <circle cx="1520" cy="220" r="1" opacity="0.5"/>
+    <circle cx="1680" cy="110" r="2" opacity="0.8"/>
+    <circle cx="1850" cy="70" r="1.5" opacity="0.7"/>
+    <circle cx="120" cy="350" r="1" opacity="0.4"/>
+    <circle cx="280" cy="420" r="1.5" opacity="0.6"/>
+    <circle cx="450" cy="380" r="1" opacity="0.5"/>
+    <circle cx="620" cy="500" r="1.5" opacity="0.7"/>
+    <circle cx="780" cy="340" r="1" opacity="0.4"/>
+    <circle cx="950" cy="480" r="2" opacity="0.8"/>
+    <circle cx="1120" cy="360" r="1" opacity="0.5"/>
+    <circle cx="1280" cy="520" r="1.5" opacity="0.6"/>
+    <circle cx="1450" cy="390" r="1" opacity="0.4"/>
+    <circle cx="1620" cy="460" r="1.5" opacity="0.7"/>
+    <circle cx="1780" cy="540" r="1" opacity="0.5"/>
+    <circle cx="1920" cy="400" r="1.5" opacity="0.6"/>
+    <circle cx="50" cy="600" r="1" opacity="0.3"/>
+    <circle cx="220" cy="680" r="1.5" opacity="0.5"/>
+    <circle cx="400" cy="750" r="1" opacity="0.4"/>
+    <circle cx="580" cy="650" r="2" opacity="0.7"/>
+    <circle cx="750" cy="800" r="1" opacity="0.3"/>
+    <circle cx="920" cy="700" r="1.5" opacity="0.5"/>
+    <circle cx="1080" cy="850" r="1" opacity="0.4"/>
+    <circle cx="1250" cy="720" r="1.5" opacity="0.6"/>
+    <circle cx="1420" cy="880" r="1" opacity="0.3"/>
+    <circle cx="1580" cy="760" r="2" opacity="0.7"/>
+    <circle cx="1750" cy="920" r="1" opacity="0.4"/>
+    <circle cx="1900" cy="800" r="1.5" opacity="0.5"/>
+  </g>
+  <g fill="#aaccff">
+    <circle cx="520" cy="200" r="0.8" opacity="0.5"/>
+    <circle cx="1020" cy="50" r="1" opacity="0.4"/>
+    <circle cx="950" cy="480" r="0.8" opacity="0.5"/>
+    <circle cx="580" cy="650" r="0.8" opacity="0.4"/>
+  </g>
+</svg>

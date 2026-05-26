@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <rect fill="#0d0d1a" width="1920" height="1080"/>
+  <rect x="0" y="750" width="1920" height="330" fill="#111122"/>
+  <rect x="0" y="750" width="1920" height="2" fill="#ffee44" opacity="0.3"/>
+  <g fill="#ffee44" opacity="0.08">
+    <circle cx="100" cy="800" r="3"/>
+    <circle cx="300" cy="820" r="3"/>
+    <circle cx="500" cy="790" r="3"/>
+    <circle cx="700" cy="810" r="3"/>
+    <circle cx="900" cy="800" r="3"/>
+    <circle cx="1100" cy="820" r="3"/>
+    <circle cx="1300" cy="790" r="3"/>
+    <circle cx="1500" cy="810" r="3"/>
+    <circle cx="1700" cy="800" r="3"/>
+    <circle cx="1900" cy="820" r="3"/>
+  </g>
+</svg>

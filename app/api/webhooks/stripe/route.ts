@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       }
 
       case "invoice.payment_succeeded": {
-        const invoice = event.data.object as { subscription: string; amount_paid: number; currency: string };
+        const invoice = event.data.object as { id: string; subscription: string; amount_paid: number; currency: string };
         if (invoice.subscription) {
           const { data: invSub } = await supabase
             .from("subscriptions")
@@ -76,6 +76,7 @@ export async function POST(request: Request) {
             );
             await supabase.from("invoices").insert({
               user_id: invSub.user_id,
+              stripe_invoice_id: invoice.id,
               stripe_subscription_id: invoice.subscription,
               amount_paid: invoice.amount_paid,
               currency: invoice.currency,
@@ -88,7 +89,7 @@ export async function POST(request: Request) {
       }
 
       case "invoice.payment_failed": {
-        const failedInvoice = event.data.object as { subscription: string; attempt_count?: number };
+        const failedInvoice = event.data.object as { id: string; subscription: string; attempt_count?: number };
         if (failedInvoice.subscription) {
           const { data: failSub } = await supabase
             .from("subscriptions")
@@ -98,6 +99,7 @@ export async function POST(request: Request) {
           if (failSub?.user_id) {
             await supabase.from("invoices").insert({
               user_id: failSub.user_id,
+              stripe_invoice_id: failedInvoice.id,
               stripe_subscription_id: failedInvoice.subscription,
               status: "failed",
               attempt_count: failedInvoice.attempt_count || 1,

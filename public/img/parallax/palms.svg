@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <rect fill="transparent" width="1920" height="1080"/>
+  <g fill="#0a0a0a" opacity="0.8">
+    <path d="M200 900 L210 500 Q220 480 230 500 L240 900Z" fill="#1a1a0a"/>
+    <path d="M210 500 Q150 420 180 380 Q210 440 230 500Z" fill="#0a1a0a"/>
+    <path d="M210 500 Q250 400 280 420 Q240 460 230 500Z" fill="#0a1a0a"/>
+  </g>
+  <g fill="#0a0a0a" opacity="0.7">
+    <path d="M1700 920 L1710 520 Q1720 500 1730 520 L1740 920Z" fill="#1a1a0a"/>
+    <path d="M1710 520 Q1650 440 1680 400 Q1710 460 1730 520Z" fill="#0a1a0a"/>
+    <path d="M1710 520 Q1750 420 1780 440 Q1740 480 1730 520Z" fill="#0a1a0a"/>
+  </g>
+  <g fill="#0d0d0a" opacity="0.6">
+    <path d="M-50 950 L-40 600 Q-30 580 -20 600 L-10 950Z" fill="#1a1a0a"/>
+    <path d="M-30 600 Q-90 520 -60 480 Q-30 540 -10 600Z" fill="#0a1a0a"/>
+    <path d="M-30 600 Q10 500 40 520 Q0 560 -10 600Z" fill="#0a1a0a"/>
+  </g>
+</svg>

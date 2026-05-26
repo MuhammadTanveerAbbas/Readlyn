@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <radialGradient id="p" cx="0.4" cy="0.35" r="0.5">
+      <stop offset="0%" stop-color="#ff8844"/>
+      <stop offset="40%" stop-color="#cc5522"/>
+      <stop offset="70%" stop-color="#883311"/>
+      <stop offset="100%" stop-color="#552211"/>
+    </radialGradient>
+    <radialGradient id="g" cx="0.35" cy="0.3" r="0.15">
+      <stop offset="0%" stop-color="#ffaa66" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ffaa66" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="c">
+      <rect x="0" y="0" width="1920" height="1080"/>
+    </clipPath>
+  </defs>
+  <rect fill="transparent" width="1920" height="1080"/>
+  <g clip-path="url(#c)">
+    <circle cx="1300" cy="450" r="250" fill="url(#p)"/>
+    <circle cx="1300" cy="450" r="250" fill="url(#g)"/>
+    <ellipse cx="1300" cy="500" rx="260" ry="40" fill="none" stroke="#ffaa66" stroke-width="2" opacity="0.2"/>
+    <ellipse cx="1300" cy="420" rx="250" ry="30" fill="none" stroke="#ffaa66" stroke-width="1.5" opacity="0.15"/>
+    <circle cx="1180" cy="380" r="30" fill="#cc6633" opacity="0.3"/>
+    <circle cx="1360" cy="500" r="20" fill="#cc6633" opacity="0.2"/>
+    <circle cx="1250" cy="550" r="25" fill="#cc6633" opacity="0.25"/>
+  </g>
+</svg>

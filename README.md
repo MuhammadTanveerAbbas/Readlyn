@@ -44,6 +44,7 @@ Readlyn turns plain text prompts into professional infographics using Groq AI (L
 - 🔒 **Auth with Supabase** Email/password sign up, login, forgot password, and protected routes via middleware
 - ⚡ **Streaming Generation** Elements stream to the canvas in real time as the AI generates them
 - 🔍 **Zoom Controls** Zoom in/out, fit-to-screen, mouse wheel zoom toward cursor, and pan with hand tool or Space+drag
+- 🖼️ **Parallax Studio** Standalone layer-based parallax scene builder with 6 presets, scroll/tilt effects, image upload, and clean HTML/CSS/JS code export
 
 ---
 
@@ -69,6 +70,7 @@ Readlyn uses a hand-crafted dark design language think Resend meets Framer. The 
 | Framework       | Next.js 16 + React 19 + TypeScript                 |
 | Styling         | Tailwind CSS v4 + shadcn/ui + Radix UI             |
 | Canvas          | Fabric.js v6                                       |
+| Parallax        | Pure CSS transforms (no extra dependencies)        |
 | AI              | Groq (`llama-3.3-70b-versatile`) via Vercel AI SDK |
 | Auth & Database | Supabase (Auth + SSR)                              |
 | Fonts           | Space Grotesk + IBM Plex Mono                      |
@@ -148,6 +150,7 @@ readlyn/
 │   ├── app/                 # Editor UI: Canvas, Toolbar, Layers, Properties, Prompt
 │   ├── auth/                # AuthCard with refined dark card design
 │   ├── landing/             # Landing page sections (all "use client" with useReveal)
+│   ├── parallax/            # Parallax Studio: Preview, ConfigPanel, ImagePicker, ExportModal
 │   └── ui/                  # shadcn/ui primitives
 ├── hooks/
 │   ├── use-canvas-history.ts
@@ -161,6 +164,10 @@ readlyn/
 │   ├── exportMultiFormat.ts # PNG / ZIP export logic
 │   ├── groq.ts              # Groq client + model constant
 │   ├── renderElements.ts    # Fabric.js object factory + canvas renderer
+│   ├── parallax-types.ts    # Parallax Studio types, defaults, constants
+│   ├── presets.ts           # 6 parallax scene presets
+│   ├── code-generator.ts    # HTML/CSS/JS export for parallax scenes
+│   ├── parallax-upload.ts   # Supabase Storage upload for parallax images
 │   └── supabase/            # Client, server, middleware helpers
 ├── types/
 │   └── infographic.ts       # Zod schemas + TypeScript types for all element types
@@ -216,6 +223,7 @@ This project is deployed on **Vercel**.
 - [x] Streaming partial generation
 - [x] Generation history per project
 - [x] Multi-format export (PNG, ZIP)
+- [x] Parallax Studio layer-based scene builder (scroll/tilt effects)
 - [ ] Real-time team collaboration
 - [ ] Custom font upload
 - [ ] Figma import

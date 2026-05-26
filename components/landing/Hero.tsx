@@ -552,7 +552,7 @@ export default function Hero() {
                 "Product Roadmap Overview",
                 "Market Analysis Chart",
                 "Team OKR Summary",
-                "Investor Pitch Stats",
+                "Parallax Scene Builder",
               ]}
             />
           </div>

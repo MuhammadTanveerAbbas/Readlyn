@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <rect fill="transparent" width="1920" height="1080"/>
+  <g fill="#ffaa44" opacity="0.1">
+    <polygon points="50,800 150,700 250,800 150,900"/>
+    <polygon points="1300,700 1400,600 1500,700 1400,800"/>
+    <polygon points="800,600 880,500 960,600 880,700"/>
+  </g>
+  <g fill="#88bbff" opacity="0.08">
+    <circle cx="1700" cy="200" r="40"/>
+    <circle cx="500" cy="300" r="30"/>
+  </g>
+  <g fill="#ffcc44" opacity="0.06">
+    <rect x="1000" y="700" width="80" height="80" rx="40" transform="rotate(45,1040,740)"/>
+    <rect x="200" y="200" width="60" height="60" rx="30" transform="rotate(30,230,230)"/>
+  </g>
+</svg>
