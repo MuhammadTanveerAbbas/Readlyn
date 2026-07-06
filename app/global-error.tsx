@@ -9,7 +9,7 @@ export default function GlobalError({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[#080808]">
+      <body className="bg-[var(--bg-base)]">
         <div className="min-h-screen flex items-center justify-center">
           <div className="flex flex-col items-center gap-6 max-w-md text-center px-6">
             <p className="font-mono text-[11px] text-red-400 tracking-[2px] uppercase">
@@ -24,7 +24,7 @@ export default function GlobalError({
             <div className="flex gap-3">
               <button
                 onClick={reset}
-                className="px-4 py-2 rounded-lg bg-[#F5C518] hover:bg-[#FFDC40] text-black text-sm font-semibold transition-all"
+                className="px-4 py-2 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black text-sm font-semibold transition-all"
               >
                 Try again
               </button>

@@ -10,8 +10,8 @@ const slides = [
     title: "Analytics Dashboard",
     description:
       "Data-dense dashboards with charts, tables, and real-time indicators  built entirely with Readlyn components.",
-    accent: "#F5C518",
-    bg: "#0D0D0D",
+    accent: "var(--accent)",
+    bg: "var(--bg-subtle)",
     border: "rgba(245,197,24,0.12)",
     glow: "rgba(245,197,24,0.07)",
   },
@@ -22,8 +22,8 @@ const slides = [
     title: "Component Library",
     description:
       "Full design systems with tokens, variants, and documentation  exported as clean React or Vue code.",
-    accent: "#A78BFA",
-    bg: "#0C0C0C",
+    accent: "var(--purple)",
+    bg: "var(--bg-subtle)",
     border: "rgba(167,139,250,0.12)",
     glow: "rgba(167,139,250,0.07)",
   },
@@ -34,8 +34,8 @@ const slides = [
     title: "Mobile Interface",
     description:
       "Responsive mobile-first layouts with touch-optimized components, exported to Flutter or React Native.",
-    accent: "#FF6B35",
-    bg: "#0D0D0D",
+    accent: "var(--orange)",
+    bg: "var(--bg-subtle)",
     border: "rgba(255,107,53,0.12)",
     glow: "rgba(255,107,53,0.07)",
   },
@@ -46,8 +46,8 @@ const slides = [
     title: "Landing Page",
     description:
       "High-converting marketing pages with sections, CTAs, and animations  ready to ship in hours.",
-    accent: "#4ADE80",
-    bg: "#0C0C0C",
+    accent: "var(--success-soft)",
+    bg: "var(--bg-subtle)",
     border: "rgba(74,222,128,0.12)",
     glow: "rgba(74,222,128,0.07)",
   },
@@ -85,7 +85,7 @@ function DashboardPreview({ accent }: { accent: string }) {
             <div className="h-1.5 w-8 rounded-full bg-white/10" />
             <span
               className="font-ibm-mono text-[11px] font-bold"
-              style={{ color: i === 0 ? accent : "#888" }}
+              style={{ color: i === 0 ? accent : "var(--text-muted-val)" }}
             >
               {val}
             </span>
@@ -97,7 +97,7 @@ function DashboardPreview({ accent }: { accent: string }) {
         className="flex-1 rounded-lg p-3 flex flex-col justify-end gap-1"
         style={{
           backgroundColor: "rgba(255,255,255,0.02)",
-          border: "1px solid rgba(255,255,255,0.05)",
+          border: "1px solid var(--border-subtle-val)",
         }}
       >
         <div className="flex items-end gap-1.5 h-16">
@@ -158,12 +158,12 @@ function DesignSystemPreview({ accent }: { accent: string }) {
       <div className="flex gap-2">
         <div
           className="h-7 px-3 rounded-md flex items-center font-ibm-mono text-[9px] font-bold"
-          style={{ backgroundColor: accent, color: "#0A0A0A" }}
+          style={{ backgroundColor: accent, color: "var(--bg-subtle)" }}
         >
           Button
         </div>
         <div
-          className="h-7 px-3 rounded-md flex items-center font-ibm-mono text-[9px] text-[#666]"
+          className="h-7 px-3 rounded-md flex items-center font-ibm-mono text-[9px] text-[var(--text-muted-val)]"
           style={{ border: "1px solid rgba(255,255,255,0.1)" }}
         >
           Ghost
@@ -194,7 +194,7 @@ function DesignSystemPreview({ accent }: { accent: string }) {
         className="flex-1 rounded-lg p-3 flex flex-col justify-center gap-2"
         style={{
           backgroundColor: "rgba(255,255,255,0.02)",
-          border: "1px solid rgba(255,255,255,0.05)",
+          border: "1px solid var(--border-subtle-val)",
         }}
       >
         <div className="h-3 w-3/4 rounded-full bg-white/20" />
@@ -210,7 +210,7 @@ function DesignSystemPreview({ accent }: { accent: string }) {
             className="h-4 rounded"
             style={{
               backgroundColor: i < 2 ? `${accent}20` : "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.05)",
+              border: "1px solid var(--border-subtle-val)",
             }}
           />
         ))}
@@ -225,7 +225,7 @@ function MobilePreview({ accent }: { accent: string }) {
       {/* Phone frame */}
       <div
         className="relative h-full max-h-[220px] aspect-[9/16] rounded-[20px] overflow-hidden flex flex-col"
-        style={{ border: `1px solid ${accent}25`, backgroundColor: "#0A0A0A" }}
+        style={{ border: `1px solid ${accent}25`, backgroundColor: "var(--bg-subtle)" }}
       >
         {/* Notch */}
         <div className="flex justify-center pt-2 pb-1">
@@ -266,7 +266,7 @@ function MobilePreview({ accent }: { accent: string }) {
                   backgroundColor:
                     i === 0
                       ? "rgba(255,255,255,0.12)"
-                      : "rgba(255,255,255,0.05)",
+                      : "var(--border-subtle-val)",
                 }}
               />
             ))}
@@ -349,7 +349,7 @@ function MarketingPreview({ accent }: { accent: string }) {
             className="rounded-lg p-2 flex flex-col gap-1.5"
             style={{
               backgroundColor: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.05)",
+              border: "1px solid var(--border-subtle-val)",
             }}
           >
             <div
@@ -384,7 +384,7 @@ export default function Showcase() {
   return (
     <section
       id="showcase"
-      className="relative w-full bg-[#060606] pt-20 md:pt-[100px] pb-16 md:pb-[100px] overflow-hidden"
+      className="relative w-full bg-[var(--bg-base)] pt-20 md:pt-[100px] pb-16 md:pb-[100px] overflow-hidden"
     >
       {/* Ambient glows */}
       <div
@@ -427,7 +427,7 @@ export default function Showcase() {
           <button
             onClick={prev}
             disabled={active === 0}
-            className="flex items-center justify-center w-10 h-10 rounded-xl border border-white/8 bg-white/3 text-[#555] hover:border-white/20 hover:text-white transition-all duration-200 disabled:opacity-25 disabled:cursor-not-allowed"
+            className="flex items-center justify-center w-10 h-10 rounded-xl border border-white/8 bg-white/3 text-[var(--text-dim)] hover:border-white/20 hover:text-white transition-all duration-200 disabled:opacity-25 disabled:cursor-not-allowed"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path
@@ -513,7 +513,7 @@ export default function Showcase() {
                 >
                   {slide.title}
                 </h3>
-                <p className="font-ibm-mono text-[12px] text-[#555] leading-[1.8] tracking-[0.2px] max-w-[340px]">
+                <p className="font-ibm-mono text-[12px] text-[var(--text-dim)] leading-[1.8] tracking-[0.2px] max-w-[340px]">
                   {slide.description}
                 </p>
               </div>
@@ -529,7 +529,7 @@ export default function Showcase() {
                       style={{
                         width: i === active ? 24 : 6,
                         backgroundColor:
-                          i === active ? slide.accent : "#2A2A2A",
+                          i === active ? slide.accent : "var(--bg-active)",
                       }}
                     />
                   ))}
@@ -539,7 +539,7 @@ export default function Showcase() {
                   <button
                     onClick={prev}
                     disabled={active === 0}
-                    className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/8 text-[#555] disabled:opacity-25"
+                    className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/8 text-[var(--text-dim)] disabled:opacity-25"
                   >
                     <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                       <path
@@ -597,7 +597,7 @@ export default function Showcase() {
                 className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full"
                 style={{
                   backgroundColor: "rgba(0,0,0,0.6)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid var(--border-default)",
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -611,7 +611,7 @@ export default function Showcase() {
                     style={{ backgroundColor: slide.accent }}
                   />
                 </span>
-                <span className="font-ibm-mono text-[9px] tracking-[0.15em] text-[#666]">
+                <span className="font-ibm-mono text-[9px] tracking-[0.15em] text-[var(--text-muted-val)]">
                   LIVE PREVIEW
                 </span>
               </div>

@@ -1,3 +1,5 @@
+import { generateText } from "ai";
+import { createGroq } from "@ai-sdk/groq";
 import {
   InfographicSchema,
   CANVAS_SIZES,
@@ -6,9 +8,11 @@ import {
   type InfographicData,
 } from "@/types/infographic";
 import { computeLayout, type SlotPosition } from "@/lib/archetypeLayouts";
-import { GROQ_MODEL } from "@/lib/groq";
+import { FREE_PLAN } from "@/config/plans";
 import { createClient } from "@/lib/supabase/server";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { checkCsrfOrigin } from "@/lib/csrf";
+import { sanitizePrompt, sanitizeOutput } from "@/lib/sanitize";
 import { z } from "zod";
 
 export const maxDuration = 60;
@@ -30,11 +34,10 @@ const GenerateRequestSchema = z.object({
   ]),
 });
 
-type GenerateRequest = z.infer<typeof GenerateRequestSchema>;
-
 function extractFirstJsonObject(raw: string) {
   const fencedMatch = raw.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  const candidate = fencedMatch ? fencedMatch[1] : raw;
+  const firstGroup = fencedMatch?.[1];
+  const candidate = firstGroup ?? raw;
   const firstBrace = candidate.indexOf("{");
   const lastBrace = candidate.lastIndexOf("}");
   if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
@@ -185,7 +188,11 @@ function buildFallbackInfographic(args: {
 
 export async function POST(req: Request) {
   try {
-    // Auth check, only authenticated users may consume Groq quota
+    const csrf = checkCsrfOrigin(req);
+    if (!csrf.valid) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const supabase = await createClient();
     const {
       data: { user },
@@ -194,19 +201,17 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Rate limiting, prevent abuse
-    const rateCheck = checkRateLimit(`generate:${user.id}`, RATE_LIMITS.generate);
+    const rateCheck = await checkRateLimit(`generate:${user.id}`, "generate");
     if (!rateCheck.allowed) {
       return Response.json(
         {
           error: "Too many requests. Please wait before generating again.",
-          retryAfter: Math.ceil(rateCheck.resetIn / 1000),
+          retryAfter: Math.ceil(rateCheck.resetIn),
         },
         { status: 429 },
       );
     }
 
-    // Validate and parse request body
     const body = await req.json();
     const parsed = GenerateRequestSchema.safeParse(body);
     if (!parsed.success) {
@@ -215,20 +220,33 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const { prompt, theme, size, style } = parsed.data as GenerateRequest;
+    const { prompt, theme, size, style } = parsed.data;
 
+    const { count: generationsToday } = await supabase
+      .from("generation_history")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .gte("created_at", new Date(Date.now() - 86400000).toISOString());
+
+    const dailyLimit = FREE_PLAN.limits.generationsPerDay;
+    if ((generationsToday ?? 0) >= dailyLimit) {
+      return Response.json(
+        { error: `Daily generation limit reached (${dailyLimit}/day). Try again tomorrow.` },
+        { status: 429 },
+      );
+    }
+
+    const sanitizedPrompt = sanitizePrompt(prompt);
     const { width: w, height: h } = CANVAS_SIZES[size];
     const colors = THEME_COLORS[theme];
 
-    // Pre-compute layout slots for the selected style
     const slots = style !== "auto" ? computeLayout(style, w, h) : [];
 
-    // Build the layout manifest  AI uses these EXACT coordinates
     const layoutManifest =
       slots.length > 0
         ? `
 ═══════════════════════════════════════════
-PRE-COMPUTED LAYOUT MANIFEST  USE EXACTLY
+PRE-COMPUTED LAYOUT MANIFEST — USE EXACTLY
 ═══════════════════════════════════════════
 The following element slots have been mathematically pre-computed.
 YOU MUST place elements at these EXACT x, y, width, height, radius values.
@@ -261,7 +279,7 @@ rect/circle/line → generate that exact type
 
 You MAY add extra decorative depth elements (circles, texture dots) at zIndex 1-4,
 but NEVER move or resize a pre-computed slot.`
-        : `No layout manifest  use your best creative judgment for auto-layout based on the topic.`;
+        : `No layout manifest — use your best creative judgment for auto-layout based on the topic.`;
 
     const systemPrompt = `You are a senior infographic art director generating Fabric.js-ready JSON.
 
@@ -288,58 +306,30 @@ QUALITY RULES:
 11) Keep output valid for schema types only: rect, circle, text, stat, icon, line.
 12) Keep total element count between 28 and 60 for balanced complexity.`;
 
-    const userPrompt = `Create a professional, visually stunning ${style === "auto" ? "auto-layout" : `${style.toUpperCase()}-style`} infographic about: "${prompt}"
+    const userPrompt = `Create a professional, visually stunning ${style === "auto" ? "auto-layout" : `${style.toUpperCase()}-style`} infographic about: "${sanitizedPrompt}"
 
 Canvas: ${w}×${h}px
 Theme: ${theme}
 Style: ${style}
 
 Generate REAL facts, statistics, and data about this topic. The visual structure must match 
-the ${style === "auto" ? "selected" : style} archetype  pyramid shapes for pyramid, cycle rings for cycle, etc. 
+the ${style === "auto" ? "selected" : style} archetype — pyramid shapes for pyramid, cycle rings for cycle, etc. 
 Make it look like it came from Venngage or Piktochart.
 
 Return ONLY a valid JSON object. No markdown fences. No explanation.`;
 
-    const apiKey = process.env.GROQ_API_KEY;
-    if (!apiKey) {
-      return Response.json({ error: "Missing GROQ_API_KEY" }, { status: 500 });
-    }
+    const groq = createGroq({ apiKey: process.env.GROQ_API_KEY! });
 
-    const completion = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: GROQ_MODEL,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-          temperature: 0.7,
-        }),
-      },
-    );
-
-    if (!completion.ok) {
-      const errorText = await completion.text();
-      return Response.json(
-        { error: "Groq generation failed", details: errorText },
-        { status: 500 },
-      );
-    }
-
-    const completionJson = (await completion.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
-    const rawText = completionJson.choices?.[0]?.message?.content ?? "";
+    const { text } = await generateText({
+      model: groq("llama-3.3-70b-versatile"),
+      system: systemPrompt,
+      prompt: userPrompt,
+      temperature: 0.7,
+    });
 
     let payload: InfographicData;
     try {
-      const normalizedJson = extractFirstJsonObject(rawText).replace(
+      const normalizedJson = extractFirstJsonObject(text).replace(
         /:\s*undefined(\s*[,}])/g,
         ": null$1",
       );
@@ -363,7 +353,13 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
       });
     }
 
-    // Keep response format compatible with editor stream reader.
+    payload.elements = payload.elements.map((el) => {
+      if (el.type === "text") {
+        return { ...el, text: sanitizeOutput(el.text) };
+      }
+      return el;
+    });
+
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
@@ -394,11 +390,7 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
       },
     });
   } catch (error) {
-    // Log server-side only, never expose internals to client
-    console.error(
-      "[generate] route error:",
-      error instanceof Error ? error.message : "unknown",
-    );
+    console.error("[generate] route error:", error instanceof Error ? error.message : "unknown");
     return Response.json(
       { error: "Failed to generate infographic" },
       { status: 500 },

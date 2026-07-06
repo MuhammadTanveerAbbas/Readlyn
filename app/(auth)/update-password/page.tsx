@@ -95,15 +95,15 @@ export default function UpdatePasswordPage() {
               fill="none"
               className="shrink-0 mt-[1px]"
             >
-              <circle cx="7" cy="7" r="6" stroke="#ef4444" strokeWidth="1.5" />
+              <circle cx="7" cy="7" r="6" stroke="var(--destructive)" strokeWidth="1.5" />
               <path
                 d="M7 4v3.5M7 9.5v.5"
-                stroke="#ef4444"
+                stroke="var(--destructive)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
               />
             </svg>
-            <p className="font-ibm-mono text-[11px] text-[#ef4444] tracking-[0.3px] leading-relaxed">
+            <p className="font-ibm-mono text-[11px] text-[var(--destructive)] tracking-[0.3px] leading-relaxed">
               {error}
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function UpdatePasswordPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[#F5C518] hover:bg-[#FFDC40] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+          className="w-full py-3 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -145,10 +145,10 @@ export default function UpdatePasswordPage() {
         </button>
       </form>
 
-      <p className="mt-6 text-center font-ibm-mono text-[11px] text-[#444] tracking-[0.3px]">
+      <p className="mt-6 text-center font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.3px]">
         <Link
           href="/login"
-          className="text-[#A3A3A3] hover:text-white transition-colors"
+          className="text-[var(--text-body)] hover:text-white transition-colors"
         >
           ← Back to sign in
         </Link>

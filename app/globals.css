@@ -38,7 +38,11 @@
   --text-muted-val: #666666;
 
   --success: #22c55e;
+  --success-soft: #4ade80;
   --error: #ef4444;
+  --purple: #a78bfa;
+  --purple-deep: #7c3aed;
+  --blue: #60a5fa;
 
   /* App editor tokens */
   --bg-app: #080808;
@@ -146,7 +150,7 @@ html {
 /* ── Selection color ── */
 ::selection {
   background-color: rgba(245, 197, 24, 0.2);
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 /* ── Scrollbar ── */
@@ -154,14 +158,14 @@ html {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #060606;
+  background: var(--bg-base);
 }
 ::-webkit-scrollbar-thumb {
-  background: #222222;
+  background: var(--bg-active);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: var(--text-dim);
 }
 
 /* ── Scrollbar hide utility ── */
@@ -187,12 +191,12 @@ html {
 }
 
 .json-textarea::placeholder {
-  color: #555555;
+  color: var(--text-dim);
 }
 
 @layer base {
   * {
-    border-color: rgba(255, 255, 255, 0.07);
+    border-color: var(--border-default);
   }
 
   html, body {
@@ -201,14 +205,14 @@ html {
   }
 
   body {
-    background-color: #080808;
-    color: #e2e2e2;
+    background-color: var(--bg-base);
+    color: var(--text-secondary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   input::placeholder {
-    color: #555555;
+    color: var(--text-dim);
   }
 
   img, video, svg {

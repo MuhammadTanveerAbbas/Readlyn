@@ -1,14 +1,18 @@
-/**
- * Environment variable validation.
- * Called at module load time, the app will throw a clear error at startup
- * rather than failing silently at runtime when a required variable is missing.
- */
-
 const REQUIRED_ENV_VARS = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
   "GROQ_API_KEY",
 ] as const;
+
+export const OPTIONAL_ENV_VARS = [
+  "SUPABASE_SERVICE_ROLE_KEY",
+  "CRON_SECRET",
+  "NEXT_PUBLIC_APP_URL",
+  "UPSTASH_REDIS_REST_URL",
+  "UPSTASH_REDIS_REST_TOKEN",
+] as const;
+
+export type OptionalEnvVar = (typeof OPTIONAL_ENV_VARS)[number];
 
 function validateEnv() {
   const missing: string[] = [];
@@ -26,7 +30,6 @@ function validateEnv() {
   }
 }
 
-// Only validate on the server side (not in browser bundles)
 if (typeof window === "undefined") {
   validateEnv();
 }

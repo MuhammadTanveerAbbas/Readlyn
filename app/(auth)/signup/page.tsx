@@ -27,8 +27,8 @@ export default function SignupPage() {
 
   if (isChecking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#060606]">
-        <div className="w-8 h-8 border-2 border-[#F5C518] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)]">
+        <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function SignupPage() {
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path
                 d="M3 8l9 6 9-6"
-                stroke="#F5C518"
+                stroke="var(--accent)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
               />
@@ -105,26 +105,26 @@ export default function SignupPage() {
                 width="18"
                 height="13"
                 rx="2"
-                stroke="#F5C518"
+                stroke="var(--accent)"
                 strokeWidth="1.5"
               />
             </svg>
           </div>
           <div className="text-center">
-            <p className="font-ibm-mono text-[12px] text-[#666] tracking-[0.3px] leading-relaxed">
+            <p className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-relaxed">
               A confirmation email was sent to
             </p>
-            <p className="font-ibm-mono text-[13px] text-[#A3A3A3] mt-1">
+            <p className="font-ibm-mono text-[13px] text-[var(--text-body)] mt-1">
               {email}
             </p>
           </div>
-          <p className="font-ibm-mono text-[11px] text-[#444] tracking-[0.3px] text-center leading-relaxed">
+          <p className="font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.3px] text-center leading-relaxed">
             Click the link in the email to activate your account. Check your
             spam folder if you don&apos;t see it.
           </p>
           <Link
             href="/login"
-            className="font-ibm-mono text-[11px] text-[#F5C518] opacity-70 hover:opacity-100 transition-opacity tracking-[0.5px]"
+            className="font-ibm-mono text-[11px] text-[var(--accent)] opacity-70 hover:opacity-100 transition-opacity tracking-[0.5px]"
           >
             ← Back to sign in
           </Link>
@@ -214,7 +214,7 @@ export default function SignupPage() {
                     : password.length >= 8
                       ? 2
                       : 1;
-              const colors = ["#ef4444", "#FF6B35", "#F5C518", "#4ADE80"];
+              const colors = ["var(--destructive)", "var(--orange)", "var(--accent)", "var(--success-soft)"];
               return (
                 <div
                   key={level}
@@ -228,7 +228,7 @@ export default function SignupPage() {
                 />
               );
             })}
-            <span className="font-ibm-mono text-[10px] text-[#444] tracking-[0.5px] shrink-0">
+            <span className="font-ibm-mono text-[10px] text-[var(--text-dim)] tracking-[0.5px] shrink-0">
               {password.length >= 12 &&
               /[A-Z]/.test(password) &&
               /[0-9]/.test(password) &&
@@ -260,15 +260,15 @@ export default function SignupPage() {
               fill="none"
               className="shrink-0 mt-[1px]"
             >
-              <circle cx="7" cy="7" r="6" stroke="#ef4444" strokeWidth="1.5" />
+              <circle cx="7" cy="7" r="6" stroke="var(--destructive)" strokeWidth="1.5" />
               <path
                 d="M7 4v3.5M7 9.5v.5"
-                stroke="#ef4444"
+                stroke="var(--destructive)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
               />
             </svg>
-            <p className="font-ibm-mono text-[11px] text-[#ef4444] tracking-[0.3px] leading-relaxed">
+            <p className="font-ibm-mono text-[11px] text-[var(--destructive)] tracking-[0.3px] leading-relaxed">
               {error}
             </p>
           </div>
@@ -277,7 +277,7 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[#F5C518] hover:bg-[#FFDC40] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+          className="w-full py-3 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -310,11 +310,11 @@ export default function SignupPage() {
         </button>
       </form>
 
-      <p className="mt-6 text-center font-ibm-mono text-[11px] text-[#444] tracking-[0.3px]">
+      <p className="mt-6 text-center font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.3px]">
         Already have an account?{" "}
         <Link
           href="/login"
-          className="text-[#A3A3A3] hover:text-white transition-colors"
+          className="text-[var(--text-body)] hover:text-white transition-colors"
         >
           Sign in
         </Link>

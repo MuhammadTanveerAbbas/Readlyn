@@ -37,7 +37,9 @@ export default function ExportModal({ open, onOpenChange, config }: ExportModalP
       await navigator.clipboard.writeText(code)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    } catch { }
+    } catch {
+      // Ignore clipboard errors
+    }
   }
 
   const handleDownload = () => {

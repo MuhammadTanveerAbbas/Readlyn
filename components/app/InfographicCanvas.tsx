@@ -14,7 +14,8 @@ import type { InfographicData } from "@/types/infographic";
 
 function getPointerCoordinates(event: fabric.TPointerEvent): { x: number; y: number } {
   if ("touches" in event && event.touches.length > 0) {
-    return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+    const touch = event.touches[0];
+    return { x: touch!.clientX, y: touch!.clientY };
   }
   if ("clientX" in event) {
     return { x: event.clientX, y: event.clientY };
@@ -70,11 +71,11 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
         selection: true,
         width,
         height,
-        backgroundColor: "#ffffff",
+        backgroundColor: "var(--text-primary)",
       });
 
-      fabric.FabricObject.prototype.borderColor = "#F5C518";
-      fabric.FabricObject.prototype.cornerColor = "#F5C518";
+      fabric.FabricObject.prototype.borderColor = "var(--accent)";
+      fabric.FabricObject.prototype.cornerColor = "var(--accent)";
       fabric.FabricObject.prototype.cornerStyle = "circle";
       fabric.FabricObject.prototype.transparentCorners = false;
       fabric.FabricObject.prototype.cornerSize = 10;
@@ -219,7 +220,7 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
         fabricRef.current.clear();
         fabricRef.current.setWidth(data.canvasWidth);
         fabricRef.current.setHeight(data.canvasHeight);
-        fabricRef.current.set("backgroundColor", data.background || "#ffffff");
+        fabricRef.current.set("backgroundColor", data.background || "var(--text-primary)");
         fabricRef.current.requestRenderAll();
         setIsLoading(true);
         setLoadingProgress({ current: 0, total: 50 });
@@ -293,7 +294,7 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
       clearAll: () => {
         if (!fabricRef.current) return;
         fabricRef.current.clear();
-        fabricRef.current.backgroundColor = "#ffffff";
+        fabricRef.current.backgroundColor = "var(--text-primary)";
         fabricRef.current.renderAll();
       },
       getObjects: () => {
@@ -327,12 +328,12 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
 
         {isLoading && (
           <div className="absolute inset-0 rounded-lg bg-black/55">
-            <div className="absolute inset-4 animate-pulse rounded-md border border-white/10 bg-[#0f0f0f]/80" />
-            <div className="absolute left-1/2 top-1/2 flex w-[300px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-lg border border-white/10 bg-[#0f0f0f] p-4">
+            <div className="absolute inset-4 animate-pulse rounded-md border border-white/10 bg-[var(--bg-panel)]/80" />
+            <div className="absolute left-1/2 top-1/2 flex w-[300px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-lg border border-white/10 bg-[var(--bg-panel)] p-4">
               <div className="h-3 w-full rounded bg-gradient-to-r from-white/5 via-white/15 to-white/5 [background-size:200%_100%] animate-[shimmer_1.3s_linear_infinite]" />
               <div className="w-56 h-2 bg-gray-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#F5C518] transition-all duration-200"
+                  className="h-full bg-[var(--accent)] transition-all duration-200"
                   style={{
                     width: `${loadingProgress.total > 0 ? (loadingProgress.current / loadingProgress.total) * 100 : 0}%`,
                   }}

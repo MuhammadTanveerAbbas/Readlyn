@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Home, Star, Clock3, Plus, Settings, LogOut, User, Sparkles, CreditCard, Layers } from "lucide-react";
+import { Home, Star, Clock3, Plus, Settings, LogOut, User, Sparkles, Layers } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -56,7 +56,7 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
 
   return (
     <aside className={`
-      fixed left-0 top-0 z-40 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[#0a0a0a] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+      fixed left-0 top-0 z-40 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[var(--bg-subtle)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
       transform transition-transform duration-200 ease-in-out
       ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
     `}>
@@ -68,9 +68,9 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
               <h1 className="text-lg font-bold tracking-tight text-white">
                 Readlyn
               </h1>
-              <div className="flex h-5 items-center gap-1 rounded-md bg-[#F5C518]/10 border border-[#F5C518]/20 px-1.5">
-                <Sparkles className="h-2.5 w-2.5 text-[#F5C518]" />
-                <span className="text-[9px] font-bold text-[#F5C518] uppercase tracking-wider">
+              <div className="flex h-5 items-center gap-1 rounded-md bg-[var(--accent)]/10 border border-[var(--accent)]/20 px-1.5">
+                <Sparkles className="h-2.5 w-2.5 text-[var(--accent)]" />
+                <span className="text-[9px] font-bold text-[var(--accent)] uppercase tracking-wider">
                   AI
                 </span>
               </div>
@@ -82,13 +82,13 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-gradient-to-br from-[#161616] to-[#0f0f0f] hover:border-white/[0.15] transition-all hover:scale-105"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-gradient-to-br from-[var(--bg-elevated)] to-[var(--bg-panel)] hover:border-white/[0.15] transition-all hover:scale-105"
             >
               <User className="h-4 w-4 text-white/70" />
             </button>
 
             {showUserMenu && (
-              <div className="absolute right-0 top-11 w-48 rounded-lg border border-white/[0.08] bg-[#0f0f0f] shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-50">
+              <div className="absolute right-0 top-11 w-48 rounded-lg border border-white/[0.08] bg-[var(--bg-panel)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-50">
                 <div className="p-1">
                   <button
                     onClick={() => {
@@ -100,16 +100,7 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
                     <Settings className="h-4 w-4" />
                     Settings
                   </button>
-                  <button
-                    onClick={() => {
-                      setShowUserMenu(false);
-                      router.push("/billing");
-                    }}
-                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-white/70 hover:bg-white/[0.05] hover:text-white transition-colors"
-                  >
-                    <CreditCard className="h-4 w-4" />
-                    Billing
-                  </button>
+
                   <button
                     onClick={handleSignOut}
                     className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
@@ -125,7 +116,7 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
 
         <button
           onClick={onNewProject}
-          className="group relative flex w-full items-center justify-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2.5 text-sm font-bold text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)] transition-all hover:bg-[#FFDC40] hover:shadow-[0_15px_40px_rgba(245,197,24,0.4)] hover:scale-[1.02] active:scale-[0.98]"
+          className="group relative flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)] transition-all hover:bg-[var(--accent-hover)] hover:shadow-[0_15px_40px_rgba(245,197,24,0.4)] hover:scale-[1.02] active:scale-[0.98]"
         >
           <Plus className="h-4 w-4" />
           New Project
@@ -147,16 +138,16 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
               href={href}
               className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                 active
-                  ? "bg-[#F5C518]/10 text-[#F5C518] border border-[#F5C518]/20"
+                  ? "bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20"
                   : "text-white/60 hover:bg-white/[0.04] hover:text-white border border-transparent hover:border-white/[0.08]"
               }`}
             >
               <Icon
-                className={`h-4 w-4 transition-transform group-hover:scale-110 ${active ? "text-[#F5C518]" : ""}`}
+                className={`h-4 w-4 transition-transform group-hover:scale-110 ${active ? "text-[var(--accent)]" : ""}`}
               />
               {label}
               {active && (
-                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#F5C518] animate-pulse" />
+                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
               )}
             </Link>
           ))}
@@ -164,11 +155,11 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
       </nav>
 
       {/* Bottom section */}
-      <div className="absolute bottom-0 left-0 right-0 border-t border-white/[0.06] bg-[#0a0a0a] p-4">
-        <div className="rounded-lg border border-white/[0.08] bg-gradient-to-br from-[#F5C518]/5 to-transparent p-3">
+      <div className="absolute bottom-0 left-0 right-0 border-t border-white/[0.06] bg-[var(--bg-subtle)] p-4">
+        <div className="rounded-lg border border-white/[0.08] bg-gradient-to-br from-[var(--accent)]/5 to-transparent p-3">
           <div className="flex items-start gap-2 mb-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#F5C518]/20">
-              <Sparkles className="h-4 w-4 text-[#F5C518]" />
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/20">
+              <Sparkles className="h-4 w-4 text-[var(--accent)]" />
             </div>
             <div className="flex-1">
               <p className="text-xs font-semibold text-white">AI-Powered</p>

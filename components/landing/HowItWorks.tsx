@@ -8,7 +8,7 @@ const steps = [
     title: "Describe your topic",
     description:
       "Type any topic or paste your content. Pick a layout archetype (Steps, Stats, Timeline, etc.) and a color theme.",
-    color: "#F5C518",
+    color: "var(--accent)",
     detail: "~10 seconds",
   },
   {
@@ -16,7 +16,7 @@ const steps = [
     title: "AI builds the infographic",
     description:
       "Groq's Llama 3.3 70B generates a fully structured infographic with real element positions, streamed live to your canvas.",
-    color: "#FF6B35",
+    color: "var(--orange)",
     detail: "Streamed live",
     featured: true,
   },
@@ -25,7 +25,7 @@ const steps = [
     title: "Edit and export",
     description:
       "Drag, resize, recolor, and fine-tune any element on the Fabric.js canvas. Export as PNG or save the JSON to continue later.",
-    color: "#4ADE80",
+    color: "var(--success-soft)",
     detail: "PNG export",
   },
 ];
@@ -36,12 +36,12 @@ export default function HowItWorks() {
   return (
     <section
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[#080808] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
+      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
     >
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
-          <span className="w-4 h-px bg-[#F5C518]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[#F5C518] tracking-[0.2em] uppercase">
+          <span className="w-4 h-px bg-[var(--accent)]" />
+          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             How it works
           </span>
         </div>
@@ -54,13 +54,13 @@ export default function HowItWorks() {
         >
           {"Three steps.\nPrompt to PNG."}
         </h2>
-        <p className="font-ibm-mono text-[13px] text-[#666666] tracking-[0.3px] leading-[1.8]">
+        <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
           No design skills needed. Just describe what you want.
         </p>
       </div>
 
       <div className="flex flex-col md:flex-row w-full gap-3 relative">
-        <div className="hidden md:block absolute top-[52px] left-[calc(33.33%+24px)] right-[calc(33.33%+24px)] h-px bg-gradient-to-r from-[#F5C518]/30 via-[#FF6B35]/30 to-[#4ADE80]/30" />
+        <div className="hidden md:block absolute top-[52px] left-[calc(33.33%+24px)] right-[calc(33.33%+24px)] h-px bg-gradient-to-r from-[var(--accent)]/30 via-[var(--orange)]/30 to-[var(--success-soft)]/30" />
 
         {steps.map((step, i) => (
           <div
@@ -69,8 +69,8 @@ export default function HowItWorks() {
                         border transition-all duration-500 hover:-translate-y-1
                         ${
                           step.featured
-                            ? "border-[#FF6B35]/25 bg-[#0e0e0e] shadow-[0_0_0_1px_rgba(255,107,53,0.08),0_20px_60px_rgba(0,0,0,0.5)]"
-                            : "border-white/[0.07] bg-[#0c0c0c] hover:border-white/[0.14]"
+                            ? "border-[var(--orange)]/25 bg-[var(--bg-subtle)] shadow-[0_0_0_1px_rgba(255,107,53,0.08),0_20px_60px_rgba(0,0,0,0.5)]"
+                            : "border-white/[0.07] bg-[var(--bg-subtle)] hover:border-white/[0.14]"
                         }`}
           >
             <div
@@ -107,7 +107,7 @@ export default function HowItWorks() {
               >
                 {step.title}
               </h3>
-              <p className="font-ibm-mono text-[12px] text-[#666666] tracking-[0.3px] leading-[1.8]">
+              <p className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
                 {step.description}
               </p>
             </div>

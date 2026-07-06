@@ -28,7 +28,9 @@ export default function GlitchText({
     if (!el) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
         if (entry.isIntersecting && !hasRun.current) {
           hasRun.current = true;
           setTimeout(() => {

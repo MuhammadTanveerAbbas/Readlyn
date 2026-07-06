@@ -42,11 +42,15 @@ export default function ParallaxStudioPage() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) setConfigState(JSON.parse(saved))
-    } catch { }
+    } catch {
+      // Ignore localStorage errors
+    }
   }, [])
 
   useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(config)) } catch { }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(config)) } catch {
+      // Ignore localStorage errors
+    }
   }, [config])
 
   const setConfig = (next: ParallaxConfig) => {
@@ -123,9 +127,9 @@ export default function ParallaxStudioPage() {
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="h-screen w-screen flex flex-col bg-[#080808] text-zinc-200 overflow-hidden font-sans">
+      <div className="h-screen w-screen flex flex-col bg-[var(--bg-base)] text-zinc-200 overflow-hidden font-sans">
         {/* HEADER */}
-        <header className="h-12 border-b border-white/[0.07] flex items-center justify-between px-3 gap-2 flex-shrink-0 bg-[#0a0a0a]">
+        <header className="h-12 border-b border-white/[0.07] flex items-center justify-between px-3 gap-2 flex-shrink-0 bg-[var(--bg-subtle)]">
           <div className="flex items-center gap-2 min-w-0">
             <div className="leading-tight select-none">
               <div className="text-sm font-bold tracking-tighter text-white">
@@ -162,7 +166,7 @@ export default function ParallaxStudioPage() {
                   Presets
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56 border-white/10 bg-[#0f0f0f] text-white">
+              <DropdownMenuContent align="start" className="w-56 border-white/10 bg-[var(--bg-panel)] text-white">
                 <DropdownMenuLabel className="text-white/60">Ready-made templates</DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-white/10" />
                 {PRESETS.map((p) => (
@@ -199,7 +203,7 @@ export default function ParallaxStudioPage() {
                   Session
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="border-white/10 bg-[#0f0f0f] text-white">
+              <DropdownMenuContent align="end" className="border-white/10 bg-[var(--bg-panel)] text-white">
                 <DropdownMenuItem onClick={exportJSON} className="hover:bg-white/10">
                   <Download className="h-3.5 w-3.5" />
                   Export JSON
@@ -218,7 +222,7 @@ export default function ParallaxStudioPage() {
 
             <Button
               size="sm"
-              className="h-8 gap-1.5 text-xs font-medium text-black bg-[#F5C518] hover:bg-[#FFDC40] shadow-[0_0_20px_rgba(245,197,24,0.3)]"
+              className="h-8 gap-1.5 text-xs font-medium text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] shadow-[0_0_20px_rgba(245,197,24,0.3)]"
               onClick={() => setExportOpen(true)}
             >
               <Code2 className="h-3.5 w-3.5" />
@@ -230,11 +234,11 @@ export default function ParallaxStudioPage() {
 
         <div className="flex-1 flex min-h-0 relative">
           {panelOpen && !cinemaMode && (
-            <aside className="w-[300px] flex-shrink-0 border-r border-white/[0.06] bg-[#0a0a0a] flex flex-col min-h-0 relative">
+            <aside className="w-[300px] flex-shrink-0 border-r border-white/[0.06] bg-[var(--bg-subtle)] flex flex-col min-h-0 relative">
               <ConfigPanel config={config} setConfig={setConfig} />
               <button
                 onClick={() => setPanelOpen(false)}
-                className="absolute top-[30px] -right-5 -translate-y-1/2 z-30 h-8 w-8 rounded-full bg-[#0a0a0a] border border-white/10 text-white/40 hover:text-white hover:bg-[#0f0f0f] flex items-center justify-center shadow-md transition-colors"
+                className="absolute top-[30px] -right-5 -translate-y-1/2 z-30 h-8 w-8 rounded-full bg-[var(--bg-subtle)] border border-white/10 text-white/40 hover:text-white hover:bg-[var(--bg-panel)] flex items-center justify-center shadow-md transition-colors"
                 aria-label="Close panel"
               >
                 <PanelLeftClose className="h-4 w-4" />
@@ -245,16 +249,16 @@ export default function ParallaxStudioPage() {
           {!panelOpen && !cinemaMode && (
             <button
               onClick={() => setPanelOpen(true)}
-              className="absolute left-0 top-[70px] z-30 h-9 w-9 rounded-r-xl bg-[#0a0a0a] border border-l-0 border-white/10 text-white/40 hover:text-white hover:bg-[#0f0f0f] flex items-center justify-center shadow-lg transition-colors"
+              className="absolute left-0 top-[70px] z-30 h-9 w-9 rounded-r-xl bg-[var(--bg-subtle)] border border-l-0 border-white/10 text-white/40 hover:text-white hover:bg-[var(--bg-panel)] flex items-center justify-center shadow-lg transition-colors"
               aria-label="Open panel"
             >
               <PanelLeftOpen className="h-4 w-4" />
             </button>
           )}
 
-          <main className={`flex-1 min-w-0 bg-[#080808] flex items-center justify-center ${cinemaMode ? "p-0" : "p-4"}`}>
+          <main className={`flex-1 min-w-0 bg-[var(--bg-base)] flex items-center justify-center ${cinemaMode ? "p-0" : "p-4"}`}>
             <div
-              className={`relative overflow-hidden shadow-2xl transition-all duration-300 bg-[#080808] ${
+              className={`relative overflow-hidden shadow-2xl transition-all duration-300 bg-[var(--bg-base)] ${
                 cinemaMode
                   ? "rounded-none border-0 w-full h-full"
                   : `rounded-xl border border-white/10 ${viewportSizes[viewport]}`
@@ -283,7 +287,7 @@ function ViewportButton({ active, onClick, icon, label }: { active: boolean; onC
           onClick={onClick}
           className={`h-7 w-7 rounded inline-flex items-center justify-center transition-colors ${
             active
-              ? "bg-[#0f0f0f] text-white shadow-sm"
+              ? "bg-[var(--bg-panel)] text-white shadow-sm"
               : "text-white/40 hover:text-white"
           }`}
         >

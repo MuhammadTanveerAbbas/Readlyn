@@ -94,7 +94,7 @@ export default function Toolbar({
   const buttonClasses = (disabled = false) => `
     h-7 px-3 flex items-center gap-1.5 rounded
     border border-transparent hover:border-white/[0.08] hover:bg-white/[0.05]
-    text-[11px] text-[#A3A3A3] hover:text-white
+    text-[11px] text-[var(--text-body)] hover:text-white
     transition-all duration-150 cursor-pointer
     ${disabled ? "opacity-40 cursor-not-allowed" : "hover:opacity-100"}
   `;
@@ -110,7 +110,7 @@ export default function Toolbar({
           <>
             <button
               onClick={handleBack}
-              className="h-8 w-8 flex items-center justify-center rounded-lg border border-white/8 hover:border-white/15 bg-[#161616] hover:bg-[#1c1c1c] text-[#A3A3A3] hover:text-white transition-all duration-200 group shadow-sm hover:shadow-md"
+              className="h-8 w-8 flex items-center justify-center rounded-lg border border-white/8 hover:border-white/15 bg-[var(--bg-elevated)] hover:bg-[var(--bg-hover)] text-[var(--text-body)] hover:text-white transition-all duration-200 group shadow-sm hover:shadow-md"
               title="Back to Dashboard"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
@@ -130,20 +130,20 @@ export default function Toolbar({
           <h1 className="text-[13px] font-semibold text-white tracking-[-0.01em] hidden sm:block">
             Readlyn
           </h1>
-          <div className="text-[10px] border border-white/[0.1] rounded px-1.5 py-0.5 text-[#666666] font-ibm-mono hidden sm:block">
+          <div className="text-[10px] border border-white/[0.1] rounded px-1.5 py-0.5 text-[var(--text-muted-val)] font-ibm-mono hidden sm:block">
             Beta
           </div>
         </div>
 
         {/* Select / Hand tool toggle */}
-        <div className="flex items-center gap-0.5 bg-[#161616] border border-white/[0.08] rounded-lg p-0.5">
+        <div className="flex items-center gap-0.5 bg-[var(--bg-elevated)] border border-white/[0.08] rounded-lg p-0.5">
           <button
             onClick={() => onToolModeChange("select")}
             title="Select tool (V)"
             className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
               toolMode === "select"
-                ? "bg-[#F5C518] text-black shadow-sm"
-                : "text-[#A3A3A3] hover:text-white hover:bg-white/[0.06]"
+                ? "bg-[var(--accent)] text-black shadow-sm"
+                : "text-[var(--text-body)] hover:text-white hover:bg-white/[0.06]"
             }`}
           >
             <MousePointer2 className="w-3.5 h-3.5" />
@@ -153,8 +153,8 @@ export default function Toolbar({
             title="Hand tool (H)"
             className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
               toolMode === "hand"
-                ? "bg-[#F5C518] text-black shadow-sm"
-                : "text-[#A3A3A3] hover:text-white hover:bg-white/[0.06]"
+                ? "bg-[var(--accent)] text-black shadow-sm"
+                : "text-[var(--text-body)] hover:text-white hover:bg-white/[0.06]"
             }`}
           >
             <Hand className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export default function Toolbar({
         <div className="h-5 w-px bg-white/[0.07] mx-1 hidden md:block" />
         <button
           onClick={onClearAll}
-          className="h-7 px-3 flex items-center gap-1.5 rounded border border-transparent hover:border-[#ef4444]/50 hover:bg-[#ef4444]/[0.07] text-[11px] text-[#A3A3A3] hover:text-[#ef4444] transition-all duration-150 cursor-pointer"
+          className="h-7 px-3 flex items-center gap-1.5 rounded border border-transparent hover:border-[var(--destructive)]/50 hover:bg-[var(--destructive)]/[0.07] text-[11px] text-[var(--text-body)] hover:text-[var(--destructive)] transition-all duration-150 cursor-pointer"
           title="Clear canvas"
         >
           <Trash2 className="w-3.5 h-3.5" />
@@ -228,13 +228,13 @@ export default function Toolbar({
       </div>
 
       {/* Right: Zoom */}
-      <div className="flex items-center gap-1 bg-[#161616] rounded-full px-2 py-1 border border-white/[0.08] flex-shrink-0">
+      <div className="flex items-center gap-1 bg-[var(--bg-elevated)] rounded-full px-2 py-1 border border-white/[0.08] flex-shrink-0">
         <button
           onClick={onZoomOut}
           className="p-1.5 hover:bg-white/[0.06] rounded transition-colors"
           title="Zoom out"
         >
-          <ZoomOut className="w-3.5 h-3.5 text-[#A3A3A3]" />
+          <ZoomOut className="w-3.5 h-3.5 text-[var(--text-body)]" />
         </button>
         <input
           type="text"
@@ -248,12 +248,12 @@ export default function Toolbar({
           className="p-1.5 hover:bg-white/[0.06] rounded transition-colors"
           title="Zoom in"
         >
-          <ZoomIn className="w-3.5 h-3.5 text-[#A3A3A3]" />
+          <ZoomIn className="w-3.5 h-3.5 text-[var(--text-body)]" />
         </button>
         <div className="h-4 w-px bg-white/[0.07] mx-0.5 hidden sm:block" />
         <button
           onClick={onFitToScreen}
-          className="px-2 py-1 text-[11px] text-[#A3A3A3] hover:text-white hover:bg-white/[0.06] rounded transition-colors hidden sm:flex"
+          className="px-2 py-1 text-[11px] text-[var(--text-body)] hover:text-white hover:bg-white/[0.06] rounded transition-colors hidden sm:flex"
           title="Fit to screen"
         >
           <Maximize className="w-3.5 h-3.5" />

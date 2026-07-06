@@ -5,6 +5,8 @@ Allow: /
 Disallow: /dashboard
 Disallow: /editor
 Disallow: /app
+Disallow: /settings
+Disallow: /tools
 Disallow: /api/
 
 Sitemap: ${appUrl}/sitemap.xml

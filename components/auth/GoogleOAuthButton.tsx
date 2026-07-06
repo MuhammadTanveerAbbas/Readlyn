@@ -27,7 +27,7 @@ export default function GoogleOAuthButton({
       type="button"
       onClick={handleGoogleLogin}
       disabled={isLoading}
-      className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl font-ibm-mono text-[12px] text-[#A3A3A3] tracking-[0.5px] transition-all duration-200 hover:text-white hover:border-white/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl font-ibm-mono text-[12px] text-[var(--text-body)] tracking-[0.5px] transition-all duration-200 hover:text-white hover:border-white/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
       style={{
         background: "rgba(255,255,255,0.03)",
         border: "1px solid rgba(255,255,255,0.09)",

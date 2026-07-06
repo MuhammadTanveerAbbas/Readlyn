@@ -61,7 +61,7 @@ export default function Navbar() {
     >
       <div className="flex items-center justify-between h-[64px] px-6 md:px-[48px] max-w-[1400px] mx-auto">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-[10px] shrink-0 group">
+        <a href="/" className="flex items-center gap-[10px] shrink-0 group">
           <div className="relative">
             <img
               src="/favicon.svg"
@@ -75,7 +75,7 @@ export default function Navbar() {
           <span className="font-grotesk text-[13px] font-bold text-white tracking-[2.5px]">
             READLYN
           </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#F5C518] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
         </a>
 
         {/* Desktop nav */}
@@ -87,21 +87,21 @@ export default function Navbar() {
                 key={label}
                 onClick={() => scrollTo(section)}
                 className="relative font-ibm-mono text-[11px] tracking-[1.5px] transition-colors duration-200 bg-transparent border-none cursor-pointer py-1"
-                style={{ color: isActive ? "#F5C518" : "#888888" }}
+                style={{ color: isActive ? "var(--accent)" : "#888888" }}
                 onMouseEnter={(e) => {
                   if (!isActive)
                     (e.currentTarget as HTMLButtonElement).style.color =
-                      "#FFFFFF";
+                      "var(--text-primary)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.color = isActive
-                    ? "#F5C518"
+                    ? "var(--accent)"
                     : "#888888";
                 }}
               >
                 {label}
                 <span
-                  className="absolute left-0 -bottom-[2px] h-[1px] bg-[#F5C518] transition-all duration-300"
+                  className="absolute left-0 -bottom-[2px] h-[1px] bg-[var(--accent)] transition-all duration-300"
                   style={{ width: isActive ? "100%" : "0%" }}
                 />
               </button>
@@ -120,7 +120,7 @@ export default function Navbar() {
           <a
             href="/signup"
             className="relative px-5 py-2 rounded-lg text-[12px] font-bold text-black
-                       bg-[#F5C518] hover:bg-[#FFDC40]
+                       bg-[var(--accent)] hover:bg-[var(--accent-hover)]
                        transition-all duration-200
                        shadow-[0_0_20px_rgba(245,197,24,0.3)]
                        hover:shadow-[0_0_30px_rgba(245,197,24,0.5)]
@@ -178,11 +178,11 @@ export default function Navbar() {
                   setMenuOpen(false);
                 }}
                 className="flex items-center gap-3 w-full font-ibm-mono text-[12px] tracking-[1px] py-[14px] border-b border-white/[0.05] transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer"
-                style={{ color: isActive ? "#F5C518" : "#888888" }}
+                style={{ color: isActive ? "var(--accent)" : "#888888" }}
               >
                 <span
                   className="w-[4px] h-[4px] rounded-full shrink-0 transition-colors"
-                  style={{ background: isActive ? "#F5C518" : "#333" }}
+                  style={{ background: isActive ? "var(--accent)" : "#333" }}
                 />
                 {label}
               </button>
@@ -197,7 +197,7 @@ export default function Navbar() {
             </a>
             <a
               href="/signup"
-              className="font-grotesk text-[12px] font-bold text-black bg-[#F5C518] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[#FFDC40] transition-colors"
+              className="font-grotesk text-[12px] font-bold text-black bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
             >
               Start free
             </a>

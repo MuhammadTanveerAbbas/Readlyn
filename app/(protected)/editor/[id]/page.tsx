@@ -38,6 +38,7 @@ import {
 } from "@/lib/contentAwareness";
 import { toast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { parseRouteId } from "@/lib/params";
 
 const InfographicCanvas = dynamic(
   () => import("@/components/app/InfographicCanvas"),
@@ -45,8 +46,11 @@ const InfographicCanvas = dynamic(
 );
 
 export default function EditorPage() {
-  const { id } = useParams<{ id: string }>();
-  const projectId = id ?? "";
+  const { id: rawId } = useParams<{ id: string }>();
+  const { id: projectId, error: idError } = parseRouteId(rawId);
+  if (idError) {
+    throw new Error(idError);
+  }
   const searchParams = useSearchParams();
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -186,7 +190,7 @@ export default function EditorPage() {
       canvasRef.current?.prepareForStream({
         canvasWidth: CANVAS_SIZES[size].width,
         canvasHeight: CANVAS_SIZES[size].height,
-        background: "#ffffff",
+        background: "var(--text-primary)",
       });
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -304,7 +308,7 @@ export default function EditorPage() {
   const [_saveStatus, _setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
 
   useEffect(() => {
-    if (!canvas || !id) return;
+    if (!canvas || !projectId) return;
     const interval = setInterval(async () => {
       const now = Date.now();
       if (now - lastSavedRef.current < 5000) return;
@@ -319,7 +323,7 @@ export default function EditorPage() {
             canvas_json: canvas.toJSON(),
             updated_at: new Date().toISOString(),
           })
-          .eq("id", id)
+          .eq("id", projectId)
           .eq("user_id", user.id);
         lastSavedRef.current = now;
         _setSaveStatus("saved");
@@ -328,10 +332,10 @@ export default function EditorPage() {
       }
     }, 8000);
     return () => clearInterval(interval);
-  }, [canvas, id]);
+  }, [canvas, projectId]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#080808]">
+    <div className="h-screen w-screen overflow-hidden bg-[var(--bg-base)]">
       <Toolbar
         canUndo={canUndo}
         canRedo={canRedo}
@@ -411,7 +415,7 @@ export default function EditorPage() {
         }}
       />
       <div className="flex h-[calc(100vh-44px)]">
-        <div className="w-[260px] border-r border-white/[0.07] bg-[#0f0f0f]">
+        <div className="w-[260px] border-r border-white/[0.07] bg-[var(--bg-panel)]">
           <PromptPanel
             onGenerate={handleGenerate}
             onAddElement={handleAddElement}
@@ -423,7 +427,7 @@ export default function EditorPage() {
             refreshTrigger={refresh}
           />
         </div>
-        <div className="flex flex-1 items-center justify-center bg-[#0e0e0e]">
+        <div className="flex flex-1 items-center justify-center bg-[var(--bg-subtle)]">
           <InfographicCanvas
             ref={canvasRef}
             width={width}
@@ -440,7 +444,7 @@ export default function EditorPage() {
           onFitToScreen={() => setZoom(0.6)}
         />
         <div
-          className="w-[280px] border-l border-white/[0.07] bg-[#0f0f0f] flex flex-col overflow-hidden"
+          className="w-[280px] border-l border-white/[0.07] bg-[var(--bg-panel)] flex flex-col overflow-hidden"
           style={{
             scrollbarWidth: "thin",
             scrollbarColor: "rgba(255,255,255,0.1) transparent",
@@ -450,7 +454,7 @@ export default function EditorPage() {
             className="flex-1 overflow-y-auto"
             style={{
               scrollbarWidth: "thin",
-              scrollbarColor: "rgba(255,255,255,0.15) transparent",
+              scrollbarColor: "var(--border-strong) transparent",
             }}
           >
             <PropertiesPanel

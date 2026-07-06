@@ -4,8 +4,10 @@ export async function GET() {
 
   const pages = [
     { url: "/", priority: "1.0", changefreq: "weekly" },
-    { url: "/login", priority: "0.5", changefreq: "monthly" },
     { url: "/signup", priority: "0.7", changefreq: "monthly" },
+    { url: "/login", priority: "0.5", changefreq: "monthly" },
+    { url: "/privacy", priority: "0.3", changefreq: "monthly" },
+    { url: "/terms", priority: "0.3", changefreq: "monthly" },
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

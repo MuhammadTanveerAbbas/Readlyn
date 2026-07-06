@@ -24,7 +24,7 @@ function FeatureCard({
   return (
     <div
       className="group relative flex flex-col gap-6 p-8 w-full md:flex-1 overflow-hidden
-                 border border-white/[0.07] bg-[#0c0c0c]
+                 border border-white/[0.07] bg-[var(--bg-subtle)]
                  hover:border-white/[0.14]
                  transition-all duration-500 cursor-default
                  hover:-translate-y-1 rounded-2xl"
@@ -102,12 +102,12 @@ const features = [
         />
       </svg>
     ),
-    iconColor: "#F5C518",
+    iconColor: "var(--accent)",
     title: "AI generation\nwith Groq",
     description:
       "Describe any topic and Llama 3.3 70B generates a complete, structured infographic with real layout positions  not just placeholder text.",
     tag: "Groq AI",
-    tagColor: "#F5C518",
+    tagColor: "var(--accent)",
   },
   {
     icon: (
@@ -150,12 +150,12 @@ const features = [
         />
       </svg>
     ),
-    iconColor: "#FF6B35",
+    iconColor: "var(--orange)",
     title: "9 layout\narchetypes",
     description:
       "Steps, Stats, Timeline, Compare, List, Pyramid, Funnel, Cycle, or Auto  each with pre-computed element positions so the layout is always structured.",
     tag: "Layouts",
-    tagColor: "#FF6B35",
+    tagColor: "var(--orange)",
   },
   {
     icon: (
@@ -169,12 +169,12 @@ const features = [
         />
       </svg>
     ),
-    iconColor: "#A78BFA",
+    iconColor: "var(--purple)",
     title: "Interactive\ncanvas editor",
     description:
       "Drag, resize, rotate, and edit any element on the Fabric.js canvas. Layers panel, properties panel, undo/redo, zoom, and pan all included.",
     tag: "Editor",
-    tagColor: "#A78BFA",
+    tagColor: "var(--purple)",
   },
   {
     icon: (
@@ -188,12 +188,12 @@ const features = [
         />
       </svg>
     ),
-    iconColor: "#4ADE80",
+    iconColor: "var(--success-soft)",
     title: "Export PNG\nor JSON",
     description:
       "Download your infographic as a high-res PNG or save the raw JSON schema to reload and continue editing later.",
     tag: "Export",
-    tagColor: "#4ADE80",
+    tagColor: "var(--success-soft)",
   },
   {
     icon: (
@@ -207,12 +207,12 @@ const features = [
         <path d="M10 3v14M3 10h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
       </svg>
     ),
-    iconColor: "#60A5FA",
+    iconColor: "var(--blue)",
     title: "Parallax\nStudio",
     description:
       "Create scroll-driven parallax scenes with layered images, tilt effects, and zoom transitions. Export clean HTML/CSS/JS code.",
     tag: "New tool",
-    tagColor: "#60A5FA",
+    tagColor: "var(--blue)",
   },
 ];
 
@@ -223,12 +223,12 @@ export default function Features() {
     <section
       id="features"
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[#060606] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
+      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
     >
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
-          <span className="w-4 h-px bg-[#F5C518]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[#F5C518] tracking-[0.2em] uppercase">
+          <span className="w-4 h-px bg-[var(--accent)]" />
+          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             Features
           </span>
         </div>
@@ -241,7 +241,7 @@ export default function Features() {
         >
           {"Everything you need.\nNothing you don't."}
         </h2>
-        <p className="font-ibm-mono text-[13px] text-[#666666] tracking-[0.3px] leading-[1.8]">
+        <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
           From prompt to polished infographic AI generation, a full canvas
           editor, and PNG export in one tool.
         </p>

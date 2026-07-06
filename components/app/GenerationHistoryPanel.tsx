@@ -26,7 +26,7 @@ export default function GenerationHistoryPanel({
 }: GenerationHistoryPanelProps) {
   if (!open) return null;
   return (
-    <aside className="absolute left-0 top-11 z-20 h-[calc(100vh-44px)] w-[320px] border-r border-white/[0.07] bg-[#0f0f0f] p-3">
+    <aside className="absolute left-0 top-11 z-20 h-[calc(100vh-44px)] w-[320px] border-r border-white/[0.07] bg-[var(--bg-panel)] p-3">
       <h3 className="mb-3 text-sm font-semibold text-white">
         Generation History
       </h3>
@@ -39,7 +39,7 @@ export default function GenerationHistoryPanel({
           {items.map((item) => (
             <div
               key={item.id}
-              className="rounded border border-white/[0.07] bg-[#161616] p-2"
+              className="rounded border border-white/[0.07] bg-[var(--bg-elevated)] p-2"
             >
               {item.thumbnail_url ? (
                 <img
@@ -57,7 +57,7 @@ export default function GenerationHistoryPanel({
               <div className="mt-2 flex gap-2">
                 <button
                   onClick={() => onRestore(item.id)}
-                  className="rounded bg-[#F5C518] px-2 py-1 text-[10px] font-semibold text-black"
+                  className="rounded bg-[var(--accent)] px-2 py-1 text-[10px] font-semibold text-black"
                 >
                   Restore
                 </button>

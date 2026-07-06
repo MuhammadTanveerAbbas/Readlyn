@@ -24,7 +24,7 @@ function sliderToZoom(pos: number) {
 
 const btnCls =
   "w-6 h-6 flex items-center justify-center rounded transition-all active:scale-90";
-const btnStyle = { color: "#A3A3A3" };
+const btnStyle = { color: "var(--text-body)" };
 
 export default function ZoomSlider({
   zoom,
@@ -38,7 +38,7 @@ export default function ZoomSlider({
     <div
       className="w-9 flex-shrink-0 flex flex-col items-center py-3 gap-3"
       style={{
-        backgroundColor: "#0f0f0f",
+        backgroundColor: "var(--bg-panel)",
         borderLeft: "1px solid rgba(255,255,255,0.07)",
       }}
     >
@@ -50,8 +50,8 @@ export default function ZoomSlider({
         className={btnCls}
         style={btnStyle}
         title="Zoom in"
-        onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "#A3A3A3")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-body)")}
       >
         <ZoomIn className="w-3.5 h-3.5" />
       </button>
@@ -76,7 +76,7 @@ export default function ZoomSlider({
                 "slider-vertical" as React.CSSProperties["appearance"],
               WebkitAppearance:
                 "slider-vertical" as React.CSSProperties["WebkitAppearance"],
-              accentColor: "#F5C518",
+              accentColor: "var(--accent)",
             } as React.CSSProperties
           }
           title={`Zoom: ${pct}%`}
@@ -86,7 +86,7 @@ export default function ZoomSlider({
       {/* Zoom % */}
       <div
         className="text-[9px] font-mono leading-none"
-        style={{ color: "#666666" }}
+        style={{ color: "var(--text-muted-val)" }}
       >
         {pct}%
       </div>
@@ -99,8 +99,8 @@ export default function ZoomSlider({
         className={btnCls}
         style={btnStyle}
         title="Zoom out"
-        onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "#A3A3A3")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-body)")}
       >
         <ZoomOut className="w-3.5 h-3.5" />
       </button>
@@ -109,10 +109,10 @@ export default function ZoomSlider({
       <button
         onClick={onFitToScreen}
         className={btnCls}
-        style={{ color: "#666666" }}
+        style={{ color: "var(--text-muted-val)" }}
         title="Fit to screen"
-        onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "#666666")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted-val)")}
       >
         <Maximize className="w-3 h-3" />
       </button>

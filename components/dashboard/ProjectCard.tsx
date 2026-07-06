@@ -52,11 +52,11 @@ interface ProjectCardProps {
 }
 
 const THEME_COLORS: Record<string, string> = {
-  violet: "#7c3aed",
-  ocean: "#0284c7",
-  ember: "#ea580c",
-  forest: "#15803d",
-  slate: "#475569",
+  violet: "var(--purple-deep)",
+  ocean: "var(--blue)",
+  ember: "var(--orange)",
+  forest: "var(--success)",
+  slate: "var(--text-muted-val)",
 };
 
 const ARCHETYPE_ICONS: Record<
@@ -84,7 +84,7 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
   const title = project.title?.trim() || "Untitled Project";
   const theme = (project.theme || "violet").toLowerCase();
   const archetype = (project.archetype || "auto").toLowerCase();
-  const themeColor = THEME_COLORS[theme] || "#7c3aed";
+  const themeColor = THEME_COLORS[theme] || "var(--purple-deep)";
   const ArchetypeIcon = ARCHETYPE_ICONS[archetype] || Wand2;
 
   const formatDate = (dateStr?: string | null) => {
@@ -152,7 +152,7 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
   return (
     <Link
       href={`/editor/${project.id}`}
-      className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[#0f0f0f] transition-all duration-300 hover:scale-[1.02] hover:border-white/[0.15] hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(245,197,24,0.1)]"
+      className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[var(--bg-panel)] transition-all duration-300 hover:scale-[1.02] hover:border-white/[0.15] hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(245,197,24,0.1)]"
     >
       {/* Top accent line */}
       <div
@@ -163,7 +163,7 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
       />
 
       {/* Thumbnail */}
-      <div className="relative aspect-[4/3] bg-gradient-to-br from-[#161616] via-[#131313] to-[#0f0f0f] overflow-hidden">
+      <div className="relative aspect-[4/3] bg-gradient-to-br from-[var(--bg-elevated)] via-[var(--bg-elevated)] to-[var(--bg-panel)] overflow-hidden">
         {project.thumbnail_url && !imageError ? (
           <img
             src={project.thumbnail_url}
@@ -200,8 +200,8 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
         {/* Top right badges */}
         <div className="absolute right-2 top-2 flex gap-1.5">
           {project.is_pinned && (
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm border border-[#F5C518]/30">
-              <Pin className="h-3.5 w-3.5 text-[#F5C518] fill-[#F5C518]" />
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm border border-[var(--accent)]/30">
+              <Pin className="h-3.5 w-3.5 text-[var(--accent)] fill-[var(--accent)]" />
             </div>
           )}
           <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
@@ -217,7 +217,7 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
             <DropdownMenuContent
               align="end"
               sideOffset={8}
-              className="z-[100] w-44 border-white/10 bg-[#0f0f0f] text-white"
+              className="z-[100] w-44 border-white/10 bg-[var(--bg-panel)] text-white"
             >
               <DropdownMenuItem onSelect={handleRename}>
                 Rename project
@@ -241,7 +241,7 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
             </DropdownMenuContent>
           </DropdownMenu>
           <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <AlertDialogContent className="border-white/10 bg-[#0f0f0f] text-white">
+                <AlertDialogContent className="border-white/10 bg-[var(--bg-panel)] text-white">
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete project?</AlertDialogTitle>
                     <AlertDialogDescription className="text-white/60">
@@ -279,10 +279,10 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
       {/* Content */}
       <div className="p-3.5">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-white group-hover:text-[#F5C518] transition-colors">
+          <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-white group-hover:text-[var(--accent)] transition-colors">
             {title}
           </h3>
-          <Sparkles className="h-3.5 w-3.5 text-[#F5C518] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+          <Sparkles className="h-3.5 w-3.5 text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
         </div>
 
         <div className="flex items-center justify-between gap-2">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { FREE_PLAN } from "@/config/plans";
 import type {
   CanvasSize,
   ThemePalette,
@@ -31,11 +32,11 @@ interface NewProjectModalProps {
 }
 
 const THEME_COLORS: Record<ThemePalette, { primary: string; name: string }> = {
-  violet: { primary: "#7c3aed", name: "Violet" },
-  ocean: { primary: "#0284c7", name: "Ocean" },
-  ember: { primary: "#ea580c", name: "Ember" },
-  forest: { primary: "#15803d", name: "Forest" },
-  slate: { primary: "#475569", name: "Slate" },
+  violet: { primary: "var(--purple-deep)", name: "Violet" },
+  ocean: { primary: "var(--blue)", name: "Ocean" },
+  ember: { primary: "var(--orange)", name: "Ember" },
+  forest: { primary: "var(--success)", name: "Forest" },
+  slate: { primary: "var(--text-muted-val)", name: "Slate" },
 };
 
 const STYLE_ICONS: Record<
@@ -81,6 +82,21 @@ export default function NewProjectModal({
       setErrorMsg("You need to be logged in to create projects.");
       return;
     }
+
+    const { count: projectCount } = await supabase
+      .from("projects")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("is_trashed", false);
+
+    if ((projectCount ?? 0) >= FREE_PLAN.limits.projects) {
+      setPending(false);
+      setErrorMsg(
+        `Project limit reached (${FREE_PLAN.limits.projects} projects on the free plan). Delete a project to create a new one.`,
+      );
+      return;
+    }
+
     const title =
       withAI && prompt.trim() ? prompt.slice(0, 70) : "Untitled Project";
 
@@ -114,7 +130,7 @@ export default function NewProjectModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="w-full max-w-3xl rounded-2xl border border-white/10 bg-[#0a0a0a] shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden">
+      <div className="w-full max-w-3xl rounded-2xl border border-white/10 bg-[var(--bg-subtle)] shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden">
         {/* Header gradient */}
         <div
           className="absolute top-0 left-0 right-0 h-32 opacity-30"
@@ -127,8 +143,8 @@ export default function NewProjectModal({
         {/* Header */}
         <div className="relative z-10 flex items-center justify-between p-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F5C518]/10 border border-[#F5C518]/20">
-              <Sparkles className="h-5 w-5 text-[#F5C518]" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20">
+              <Sparkles className="h-5 w-5 text-[var(--accent)]" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">
@@ -155,8 +171,8 @@ export default function NewProjectModal({
               onClick={() => setTab("ai")}
               className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
                 tab === "ai"
-                  ? "bg-[#F5C518] text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
-                  : "bg-[#161616] text-white/70 hover:bg-[#1a1a1a] border border-white/10"
+                  ? "bg-[var(--accent)] text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
+                  : "bg-[var(--bg-elevated)] text-white/70 hover:bg-[var(--bg-overlay)] border border-white/10"
               }`}
             >
               <Wand2 className="h-4 w-4" />
@@ -166,8 +182,8 @@ export default function NewProjectModal({
               onClick={() => setTab("blank")}
               className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
                 tab === "blank"
-                  ? "bg-[#F5C518] text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
-                  : "bg-[#161616] text-white/70 hover:bg-[#1a1a1a] border border-white/10"
+                  ? "bg-[var(--accent)] text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
+                  : "bg-[var(--bg-elevated)] text-white/70 hover:bg-[var(--bg-overlay)] border border-white/10"
               }`}
             >
               <FileText className="h-4 w-4" />
@@ -184,7 +200,7 @@ export default function NewProjectModal({
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="w-full h-32 rounded-xl border border-white/10 bg-[#0f0f0f] p-4 text-white placeholder:text-white/40 focus:border-[#F5C518] focus:outline-none focus:ring-2 focus:ring-[#F5C518]/20 transition-all resize-none"
+                className="w-full h-32 rounded-xl border border-white/10 bg-[var(--bg-panel)] p-4 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all resize-none"
                 placeholder="E.g., 'Create a sales report showing Q4 2024 revenue growth across 5 regions with bar charts and key metrics'"
               />
               <p className="text-xs text-white/40 mt-2">
@@ -194,7 +210,7 @@ export default function NewProjectModal({
           )}
 
           {/* Options Grid */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             {/* Canvas Size */}
             <div>
               <label className="block text-xs font-semibold text-white/70 mb-2 uppercase tracking-wider">
@@ -203,7 +219,7 @@ export default function NewProjectModal({
               <select
                 value={size}
                 onChange={(e) => setSize(e.target.value as CanvasSize)}
-                className="w-full h-11 rounded-lg border border-white/10 bg-[#0f0f0f] px-3 text-sm text-white focus:border-[#F5C518] focus:outline-none focus:ring-2 focus:ring-[#F5C518]/20 transition-all cursor-pointer"
+                className="w-full h-11 rounded-lg border border-white/10 bg-[var(--bg-panel)] px-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
               >
                 <option value="a4">A4 Portrait</option>
                 <option value="square">Square</option>
@@ -220,7 +236,7 @@ export default function NewProjectModal({
                 <select
                   value={theme}
                   onChange={(e) => setTheme(e.target.value as ThemePalette)}
-                  className="w-full h-11 rounded-lg border border-white/10 bg-[#0f0f0f] pl-10 pr-3 text-sm text-white focus:border-[#F5C518] focus:outline-none focus:ring-2 focus:ring-[#F5C518]/20 transition-all cursor-pointer appearance-none"
+                  className="w-full h-11 rounded-lg border border-white/10 bg-[var(--bg-panel)] pl-10 pr-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
                 >
                   {Object.entries(THEME_COLORS).map(([key, { name }]) => (
                     <option key={key} value={key}>
@@ -244,7 +260,7 @@ export default function NewProjectModal({
                 <select
                   value={style}
                   onChange={(e) => setStyle(e.target.value as StylePreset)}
-                  className="w-full h-11 rounded-lg border border-white/10 bg-[#0f0f0f] pl-10 pr-3 text-sm text-white focus:border-[#F5C518] focus:outline-none focus:ring-2 focus:ring-[#F5C518]/20 transition-all cursor-pointer appearance-none"
+                  className="w-full h-11 rounded-lg border border-white/10 bg-[var(--bg-panel)] pl-10 pr-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
                 >
                   <option value="auto">Auto</option>
                   <option value="steps">Steps</option>
@@ -285,7 +301,7 @@ export default function NewProjectModal({
             <button
               disabled={pending || (tab === "ai" && !prompt.trim())}
               onClick={() => createProject(tab === "ai")}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F5C518] text-black text-sm font-bold hover:bg-[#FFDC40] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--accent)] text-black text-sm font-bold hover:bg-[var(--accent-hover)] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
             >
               {pending ? (
                 <>

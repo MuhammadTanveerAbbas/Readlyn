@@ -35,7 +35,7 @@ export default function Stats() {
   return (
     <section
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="relative w-full py-20 md:py-24 bg-[#060606] border-y border-white/[0.06]"
+      className="relative w-full py-20 md:py-24 bg-[var(--bg-base)] border-y border-white/[0.06]"
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -63,12 +63,12 @@ export default function Stats() {
                 }}
               >
                 {stat.value}
-                <span className="text-[#F5C518]">{stat.suffix}</span>
+                <span className="text-[var(--accent)]">{stat.suffix}</span>
               </span>
-              <span className="font-grotesk text-[14px] font-semibold text-[#E2E2E2] tracking-[-0.01em]">
+              <span className="font-grotesk text-[14px] font-semibold text-[var(--text-secondary)] tracking-[-0.01em]">
                 {stat.label}
               </span>
-              <span className="font-ibm-mono text-[10px] text-[#555555] tracking-[0.1em] text-center">
+              <span className="font-ibm-mono text-[10px] text-[var(--text-dim)] tracking-[0.1em] text-center">
                 {stat.description}
               </span>
             </div>

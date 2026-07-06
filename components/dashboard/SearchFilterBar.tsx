@@ -28,7 +28,7 @@ export default function SearchFilterBar({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search projects..."
-            className="h-11 w-full rounded-lg border border-white/[0.08] bg-[#0f0f0f] pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:border-[#F5C518] focus:outline-none focus:ring-2 focus:ring-[#F5C518]/20 transition-all"
+            className="h-11 w-full rounded-lg border border-white/[0.08] bg-[var(--bg-panel)] pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all"
           />
         </div>
 
@@ -39,7 +39,7 @@ export default function SearchFilterBar({
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="h-11 appearance-none rounded-lg border border-white/[0.08] bg-[#0f0f0f] pl-10 pr-10 text-sm text-white focus:border-[#F5C518] focus:outline-none focus:ring-2 focus:ring-[#F5C518]/20 transition-all cursor-pointer"
+              className="h-11 appearance-none rounded-lg border border-white/[0.08] bg-[var(--bg-panel)] pl-10 pr-10 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
             >
               <option value="updated">Last Edited</option>
               <option value="created">Date Created</option>
@@ -63,12 +63,12 @@ export default function SearchFilterBar({
           </div>
 
           {/* View mode toggle */}
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-[#0f0f0f] p-1">
+          <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-[var(--bg-panel)] p-1">
             <button
               onClick={() => setViewMode("grid")}
               className={`flex h-9 w-9 items-center justify-center rounded-md transition-all ${
                 viewMode === "grid"
-                  ? "bg-[#F5C518] text-black"
+                  ? "bg-[var(--accent)] text-black"
                   : "text-white/50 hover:text-white hover:bg-white/[0.05]"
               }`}
               title="Grid view"
@@ -79,7 +79,7 @@ export default function SearchFilterBar({
               onClick={() => setViewMode("list")}
               className={`flex h-9 w-9 items-center justify-center rounded-md transition-all ${
                 viewMode === "list"
-                  ? "bg-[#F5C518] text-black"
+                  ? "bg-[var(--accent)] text-black"
                   : "text-white/50 hover:text-white hover:bg-white/[0.05]"
               }`}
               title="List view"
@@ -94,11 +94,11 @@ export default function SearchFilterBar({
       {search && (
         <div className="mt-3 flex items-center gap-2">
           <span className="text-xs text-white/50">Searching for:</span>
-          <div className="flex items-center gap-1.5 rounded-md bg-[#F5C518]/10 border border-[#F5C518]/20 px-2 py-1">
-            <span className="text-xs font-medium text-[#F5C518]">{search}</span>
+          <div className="flex items-center gap-1.5 rounded-md bg-[var(--accent)]/10 border border-[var(--accent)]/20 px-2 py-1">
+            <span className="text-xs font-medium text-[var(--accent)]">{search}</span>
             <button
               onClick={() => setSearch("")}
-              className="text-[#F5C518] hover:text-[#FFDC40] transition-colors"
+              className="text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
             >
               <svg
                 className="h-3 w-3"

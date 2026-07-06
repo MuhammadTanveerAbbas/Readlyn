@@ -8,13 +8,13 @@ export default function Testimonials() {
   return (
     <section
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[#080808] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
+      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
     >
       {/* Header */}
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
-          <span className="w-4 h-px bg-[#F5C518]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[#F5C518] tracking-[0.2em] uppercase">
+          <span className="w-4 h-px bg-[var(--accent)]" />
+          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             Early access
           </span>
         </div>
@@ -27,7 +27,7 @@ export default function Testimonials() {
         >
           {"Be among the first\nto build with Readlyn."}
         </h2>
-        <p className="font-ibm-mono text-[13px] text-[#666666] tracking-[0.3px] leading-[1.8] max-w-[520px]">
+        <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8] max-w-[520px]">
           We&apos;re in early access. No fake testimonials, no inflated numbers
           just an honest tool we&apos;re building in public. Try it, break it,
           and tell us what to fix.
@@ -42,16 +42,17 @@ export default function Testimonials() {
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
                   d="M10 2L3 7v11h5v-5h4v5h5V7L10 2z"
-                  stroke="#F5C518"
+                  stroke="var(--accent)"
                   strokeWidth="1.5"
                   strokeLinejoin="round"
                 />
               </svg>
             ),
-            color: "#F5C518",
+            color: "var(--accent)",
             title: "Built in public",
-            body: "Every feature, every decision  shared openly. Follow the build on GitHub and our changelog.",
-            cta: "View changelog →",
+            body: "Every feature, every decision — shared openly. Follow the build on GitHub.",
+            cta: "View on GitHub →",
+            href: "https://github.com/MuhammadTanveerAbbas/Readlyn",
           },
           {
             icon: (
@@ -60,45 +61,47 @@ export default function Testimonials() {
                   cx="10"
                   cy="10"
                   r="8"
-                  stroke="#FF6B35"
+                  stroke="var(--orange)"
                   strokeWidth="1.5"
                 />
                 <path
                   d="M7 10l2 2 4-4"
-                  stroke="#FF6B35"
+                  stroke="var(--orange)"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
             ),
-            color: "#FF6B35",
+            color: "var(--orange)",
             title: "Your feedback shapes it",
             body: "We read every issue and feature request. Early users directly influence what gets built next.",
             cta: "Open an issue →",
+            href: "https://github.com/MuhammadTanveerAbbas/Readlyn/issues",
           },
           {
             icon: (
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
                   d="M4 10h12M10 4l6 6-6 6"
-                  stroke="#A78BFA"
+                  stroke="var(--purple)"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
             ),
-            color: "#A78BFA",
+            color: "var(--purple)",
             title: "No lock-in, ever",
             body: "Export clean code you own. No proprietary formats, no vendor dependency. Your work stays yours.",
             cta: "See export formats →",
+            href: "#showcase",
           },
         ].map((card, i) => (
           <div
             key={i}
             className="group relative flex flex-col gap-5 p-8 rounded-2xl overflow-hidden
-                       border border-white/7 bg-[#0c0c0c]
+                       border border-white/7 bg-[var(--bg-subtle)]
                        hover:border-white/14 transition-all duration-500 hover:-translate-y-1"
           >
             <div
@@ -122,13 +125,15 @@ export default function Testimonials() {
               <h3 className="font-grotesk text-[15px] font-bold text-white tracking-[-0.01em]">
                 {card.title}
               </h3>
-              <p className="font-ibm-mono text-[12px] text-[#666666] tracking-[0.3px] leading-[1.8]">
+              <p className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
                 {card.body}
               </p>
             </div>
 
             <a
-              href="#"
+              href={card.href}
+              target={card.href.startsWith("http") ? "_blank" : undefined}
+              rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
               className="mt-auto font-ibm-mono text-[11px] tracking-[0.1em] uppercase hover:underline"
               style={{ color: card.color }}
             >

@@ -45,13 +45,13 @@ export default function PropertiesPanel({
         <div
           className="w-8 h-8 rounded-lg flex items-center justify-center"
           style={{
-            backgroundColor: "#161616",
-            border: "1px solid rgba(255,255,255,0.08)",
+            backgroundColor: "var(--bg-elevated)",
+            border: "1px solid var(--border-default)",
           }}
         >
           <svg
             className="w-4 h-4"
-            style={{ color: "#666666" }}
+            style={{ color: "var(--text-muted-val)" }}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -64,7 +64,7 @@ export default function PropertiesPanel({
             />
           </svg>
         </div>
-        <p className="text-[11px] leading-relaxed" style={{ color: "#666666" }}>
+        <p className="text-[11px] leading-relaxed" style={{ color: "var(--text-muted-val)" }}>
           Select an element
           <br />
           to edit properties
@@ -76,15 +76,15 @@ export default function PropertiesPanel({
   const inputCls =
     "w-full h-6 px-2 text-[11px] font-mono rounded outline-none transition-colors";
   const inputStyle = {
-    backgroundColor: "#161616",
-    border: "1px solid rgba(255,255,255,0.08)",
-    color: "#E2E2E2",
+    backgroundColor: "var(--bg-elevated)",
+    border: "1px solid var(--border-default)",
+    color: "var(--text-secondary)",
   };
   const inputFocusStyle =
     "focus:border-[rgba(245,197,24,0.4)] focus:ring-1 focus:ring-[rgba(245,197,24,0.15)]";
 
   const labelCls = "text-[10px] font-medium uppercase tracking-wide";
-  const labelStyle = { color: "#666666" };
+  const labelStyle = { color: "var(--text-muted-val)" };
   const sectionCls = "px-3 py-2.5 space-y-2";
   const sectionStyle = { borderBottom: "1px solid rgba(255,255,255,0.07)" };
 
@@ -177,7 +177,7 @@ export default function PropertiesPanel({
               {
                 label: "Fill",
                 key: "fill" as const,
-                val: properties.fill || "#7c3aed",
+                val: properties.fill || "var(--purple-deep)",
               },
               {
                 label: "Stroke",
@@ -196,7 +196,7 @@ export default function PropertiesPanel({
                     onChange={(e) => onUpdateProperty(key, e.target.value)}
                     className="w-6 h-6 rounded cursor-pointer p-0.5 shrink-0"
                     style={{
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      border: "1px solid var(--border-default)",
                       backgroundColor: "transparent",
                     }}
                   />
@@ -299,14 +299,14 @@ export default function PropertiesPanel({
                   className="flex-1 h-6 flex items-center justify-center rounded border transition-all"
                   style={{
                     backgroundColor:
-                      properties.textAlign === val ? "#222222" : "transparent",
+                      properties.textAlign === val ? "var(--bg-active)" : "transparent",
                     borderColor:
                       properties.textAlign === val
                         ? "rgba(245,197,24,0.4)"
-                        : "rgba(255,255,255,0.08)",
+                        : "var(--border-default)",
                   }}
                 >
-                  <Icon className="w-3.5 h-3.5" style={{ color: "#A3A3A3" }} />
+                  <Icon className="w-3.5 h-3.5" style={{ color: "var(--text-body)" }} />
                 </button>
               ))}
             </div>
@@ -317,17 +317,17 @@ export default function PropertiesPanel({
               <div className="flex gap-1.5">
                 <input
                   type="color"
-                  value={properties.fill || "#ffffff"}
+                  value={properties.fill || "var(--text-primary)"}
                   onChange={(e) => onUpdateProperty("fill", e.target.value)}
                   className="w-6 h-6 rounded cursor-pointer p-0.5 shrink-0"
                   style={{
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    border: "1px solid var(--border-default)",
                     backgroundColor: "transparent",
                   }}
                 />
                 <input
                   type="text"
-                  value={properties.fill || "#ffffff"}
+                  value={properties.fill || "var(--text-primary)"}
                   onChange={(e) => onUpdateProperty("fill", e.target.value)}
                   className={`${inputCls} font-mono ${inputFocusStyle}`}
                   style={inputStyle}
@@ -343,7 +343,7 @@ export default function PropertiesPanel({
         {onAutoTheme && (
           <button
             onClick={onAutoTheme}
-            className="mb-2 h-6 w-full rounded border border-white/10 text-[10px] text-white hover:border-[#F5C518]"
+            className="mb-2 h-6 w-full rounded border border-white/10 text-[10px] text-white hover:border-[var(--accent)]"
           >
             ✦ Auto Theme
           </button>
@@ -378,21 +378,21 @@ export default function PropertiesPanel({
               onClick={onClick}
               className="h-6 flex items-center justify-center gap-1 rounded text-[10px] transition-all active:scale-95"
               style={{
-                backgroundColor: danger ? "rgba(239,68,68,0.07)" : "#161616",
+                backgroundColor: danger ? "rgba(239,68,68,0.07)" : "var(--bg-elevated)",
                 border: danger
                   ? "1px solid transparent"
-                  : "1px solid rgba(255,255,255,0.08)",
-                color: danger ? "#ef4444" : "#A3A3A3",
+                  : "1px solid var(--border-default)",
+                color: danger ? "var(--destructive)" : "var(--text-body)",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget;
                 if (danger) {
-                  el.style.borderColor = "#ef4444";
-                  el.style.backgroundColor = "#ef4444";
-                  el.style.color = "#ffffff";
+                  el.style.borderColor = "var(--destructive)";
+                  el.style.backgroundColor = "var(--destructive)";
+                  el.style.color = "var(--text-primary)";
                 } else {
                   el.style.borderColor = "rgba(245,197,24,0.3)";
-                  el.style.color = "#ffffff";
+                  el.style.color = "var(--text-primary)";
                 }
               }}
               onMouseLeave={(e) => {
@@ -400,10 +400,10 @@ export default function PropertiesPanel({
                 if (danger) {
                   el.style.borderColor = "transparent";
                   el.style.backgroundColor = "rgba(239,68,68,0.07)";
-                  el.style.color = "#ef4444";
+                  el.style.color = "var(--destructive)";
                 } else {
-                  el.style.borderColor = "rgba(255,255,255,0.08)";
-                  el.style.color = "#A3A3A3";
+                  el.style.borderColor = "var(--border-default)";
+                  el.style.color = "var(--text-body)";
                 }
               }}
             >

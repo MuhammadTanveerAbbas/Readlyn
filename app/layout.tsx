@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 const spaceGrotesk = localFont({
@@ -102,9 +103,10 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon.svg" />
       </head>
       <body
-        className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} h-full bg-[#080808] overflow-x-hidden`}
+        className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} h-full bg-[var(--bg-base)] overflow-x-hidden`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

@@ -56,8 +56,8 @@ const icons: Record<string, React.ReactNode> = {
 const CURSORS = [
   {
     name: "Alex K.",
-    color: "#F5C518",
-    textColor: "#0A0A0A",
+    color: "var(--accent)",
+    textColor: "var(--bg-subtle)",
     animName: "cursor-alex",
     duration: "18s",
     keyframes: `@keyframes cursor-alex {
@@ -72,8 +72,8 @@ const CURSORS = [
   },
   {
     name: "Sara M.",
-    color: "#FF6B35",
-    textColor: "#FFFFFF",
+    color: "var(--orange)",
+    textColor: "var(--text-primary)",
     animName: "cursor-sara",
     duration: "22s",
     keyframes: `@keyframes cursor-sara {
@@ -88,8 +88,8 @@ const CURSORS = [
   },
   {
     name: "Jin L.",
-    color: "#4ADE80",
-    textColor: "#0A0A0A",
+    color: "var(--success-soft)",
+    textColor: "var(--bg-subtle)",
     animName: "cursor-jin",
     duration: "26s",
     keyframes: `@keyframes cursor-jin {
@@ -104,8 +104,8 @@ const CURSORS = [
   },
   {
     name: "Mila V.",
-    color: "#818CF8",
-    textColor: "#FFFFFF",
+    color: "var(--purple)",
+    textColor: "var(--text-primary)",
     animName: "cursor-mila",
     duration: "30s",
     keyframes: `@keyframes cursor-mila {

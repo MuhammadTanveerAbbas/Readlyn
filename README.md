@@ -4,7 +4,7 @@
 
 # Readlyn
 
-**AI-powered infographic generator describe any topic, get a stunning visual in seconds**
+**AI-powered infographic generator — describe any topic, get a stunning visual in seconds**
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://readlyn.vercel.app)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Readlyn-181717?style=for-the-badge&logo=github)](https://github.com/MuhammadTanveerAbbas/Readlyn)
@@ -12,7 +12,10 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
+[![Vercel AI SDK](https://img.shields.io/badge/Vercel_AI_SDK-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://sdk.vercel.ai)
+[![Upstash](https://img.shields.io/badge/Upstash-00C9A7?style=for-the-badge&logo=upstash&logoColor=white)](https://upstash.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev)
 
 </div>
 
@@ -41,7 +44,7 @@ Readlyn turns plain text prompts into professional infographics using Groq AI (L
 - ⚙️ **Properties Panel** Edit transform (X, Y, W, H, rotation, opacity), fill/stroke colors, border radius, and typography per selected element
 - ↩️ **Undo / Redo** Full canvas history with keyboard shortcuts (Cmd+Z / Cmd+Shift+Z)
 - 📤 **Export PNG & JSON** Download as high-res PNG or save the raw JSON schema for later
-- 🔒 **Auth with Supabase** Email/password sign up, login, forgot password, and protected routes via middleware
+- 🔒 **Auth with Supabase** Email/password sign up, login, forgot password, and protected routes via Next.js proxy
 - ⚡ **Streaming Generation** Elements stream to the canvas in real time as the AI generates them
 - 🔍 **Zoom Controls** Zoom in/out, fit-to-screen, mouse wheel zoom toward cursor, and pan with hand tool or Space+drag
 - 🖼️ **Parallax Studio** Standalone layer-based parallax scene builder with 6 presets, scroll/tilt effects, image upload, and clean HTML/CSS/JS code export
@@ -50,31 +53,35 @@ Readlyn turns plain text prompts into professional infographics using Groq AI (L
 
 ## 🎨 Design System
 
-Readlyn uses a hand-crafted dark design language think Resend meets Framer. The visual layer was fully overhauled from the v0.dev scaffold:
+Readlyn uses a hand-crafted dark design language think Resend meets Framer. The entire UI is driven by CSS custom properties defined in `globals.css`:
 
-- **Background scale** `#080808` base with `#0f0f0f` cards and `#161616` inputs. No pure black.
-- **Yellow accent (`#F5C518`)** Used sparingly: primary CTAs, active states, icon containers, and inline accent text only.
+- **Background scale** `--bg-base` (#080808), `--bg-panel` (#0f0f0f), `--bg-elevated` (#161616). No pure black.
+- **Accent (`--accent`: #F5C518)** Used sparingly: primary CTAs, active states, icon containers, and inline accent text only.
+- **Semantic tokens** `--text-primary`, `--text-secondary`, `--text-body`, `--text-muted-val`, `--text-dim` for typography; `--destructive`, `--success`, `--purple`, `--blue`, `--orange` for status/accent colors.
 - **Typography** Mixed-case headings with tight tracking (`-0.02em` to `-0.03em`). All-caps reserved for labels and badges only.
 - **Noise texture** Subtle SVG fractal noise overlay on all pages for depth.
 - **Scroll animations** `useReveal()` hook triggers `animate-fade-up` at 15% viewport entry on every section.
 - **Micro-interactions** `hover:scale-[1.02] active:scale-[0.98]` on buttons, border brightens + top accent line on cards, yellow focus ring on inputs, chevron rotation on FAQ accordion.
 - **Auth pages** Card with deep shadow, labeled inputs, yellow glow submit button, `animate-fade-up` on mount.
-- **Canvas editor** Panels at `#0f0f0f`, borders at `rgba(255,255,255,0.07)`, active tool uses `#F5C518`, generate button with glow.
+- **Canvas editor** Panels at `--bg-panel`, borders at `--border-default`, active tool uses `--accent`, generate button with glow.
 
 ---
 
 ## 🛠 Tech Stack
 
-| Category        | Technology                                         |
-| --------------- | -------------------------------------------------- |
-| Framework       | Next.js 16 + React 19 + TypeScript                 |
-| Styling         | Tailwind CSS v4 + shadcn/ui + Radix UI             |
-| Canvas          | Fabric.js v6                                       |
-| Parallax        | Pure CSS transforms (no extra dependencies)        |
-| AI              | Groq (`llama-3.3-70b-versatile`) via Vercel AI SDK |
-| Auth & Database | Supabase (Auth + SSR)                              |
-| Fonts           | Space Grotesk + IBM Plex Mono                      |
-| Deployment      | Vercel                                             |
+| Category             | Technology                                             |
+| -------------------- | ------------------------------------------------------ |
+| Framework            | Next.js 16 + React 19 + TypeScript                     |
+| Styling              | Tailwind CSS v4 + Radix UI                             |
+| Canvas               | Fabric.js v6                                           |
+| Parallax             | Pure CSS transforms (no extra dependencies)            |
+| AI                   | Groq (`llama-3.3-70b-versatile`) via Vercel AI SDK     |
+| Rate Limiting        | Upstash Redis (with in-memory fallback for development)|
+| Auth & Database      | Supabase (Auth + SSR)                                  |
+| Input Sanitization   | isomorphic-dompurify                                   |
+| Testing              | Vitest                                                 |
+| Fonts                | Space Grotesk + IBM Plex Mono                          |
+| Deployment           | Vercel                                                 |
 
 ---
 
@@ -115,20 +122,55 @@ http://localhost:3000
 Create a `.env.local` file in the root directory (or copy `.env.example`):
 
 ```env
-# Supabase  Project Settings → API
+# Required
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-
-# Groq  https://console.groq.com/keys
 GROQ_API_KEY=your-groq-api-key
+
+# Optional (rate limiting)  https://console.upstash.com/redis
+# Without these, rate limiting falls back to an in-memory store.
+UPSTASH_REDIS_REST_URL=https://your-upstash-url.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-upstash-token
 ```
 
 Get your keys:
 
 - **Supabase:** [https://supabase.com](https://supabase.com) → Project Settings → API
 - **Groq:** [https://console.groq.com/keys](https://console.groq.com/keys) → Create API Key (free tier available)
+- **Upstash Redis:** [https://console.upstash.com/redis](https://console.upstash.com/redis) → Create a database → Copy REST URL and Token
 
 > `GROQ_API_KEY` is server-side only (no `NEXT_PUBLIC_` prefix). The `NEXT_PUBLIC_` Supabase vars are safe to expose to the browser.
+
+### Testing
+
+```bash
+pnpm test        # Run tests
+pnpm test:watch  # Watch mode
+```
+
+Tests use **Vitest** with path alias resolution (`@/` → `./`). Test files live in `tests/`.
+
+---
+
+## 🛡 Security
+
+- **CSRF Protection** All state-changing API routes (`/api/generate`, `/api/account/delete`, `/api/export-multi`, `/api/keep-alive`) validate the `Origin` header matches the deployed host.
+- **Rate Limiting** The `/api/generate` route enforces a daily generation quota (10/day per user by default, configurable in `config/plans.ts`). Uses Upstash Redis in production; falls back to an in-memory `Map` when Upstash env vars are absent.
+- **Input Sanitization** Prompt text is stripped of HTML tags and control characters before being sent to the AI. Generated output is sanitized via `isomorphic-dompurify` to prevent XSS.
+- **Route Params** All dynamic route segments (`[id]`) are validated as UUIDs via `parseRouteId()`.
+
+---
+
+## ⚙️ Configuration
+
+Usage limits are defined in `config/plans.ts`. The default Free plan allows:
+- 5 projects
+- 10 AI generations per day
+- 50 exports
+
+To adjust limits, edit the `PLANS` object in `config/plans.ts`.
+
+---
 
 ### Supabase Setup
 
@@ -143,15 +185,15 @@ readlyn/
 ├── app/
 │   ├── (auth)/              # Login, signup, forgot-password pages
 │   ├── (protected)/         # Dashboard + app editor (auth-gated)
-│   ├── api/generate/        # Streaming AI generation endpoint
-│   ├── globals.css          # Design tokens, noise texture, animations
+│   ├── api/generate/        # AI generation (Vercel AI SDK + CSRF + rate limit + sanitize)
+│   ├── globals.css          # Design tokens (CSS custom properties), noise texture, animations
 │   └── layout.tsx
 ├── components/
 │   ├── app/                 # Editor UI: Canvas, Toolbar, Layers, Properties, Prompt
 │   ├── auth/                # AuthCard with refined dark card design
 │   ├── landing/             # Landing page sections (all "use client" with useReveal)
 │   ├── parallax/            # Parallax Studio: Preview, ConfigPanel, ImagePicker, ExportModal
-│   └── ui/                  # shadcn/ui primitives
+│   └── ui/                  # Shared UI primitives
 ├── hooks/
 │   ├── use-canvas-history.ts
 │   ├── use-canvas-selection.ts
@@ -160,10 +202,14 @@ readlyn/
 ├── lib/
 │   ├── archetypeLayouts.ts  # Pre-computed pixel positions for all layout archetypes
 │   ├── contentAwareness.ts  # AI content analysis helpers
+│   ├── csrf.ts              # Origin + Host CSRF validation for API routes
 │   ├── defaultInfographic.ts
+│   ├── env.ts               # Environment variable validation
 │   ├── exportMultiFormat.ts # PNG / ZIP export logic
-│   ├── groq.ts              # Groq client + model constant
+│   ├── params.ts            # UUID route param validator
+│   ├── rate-limit.ts        # Upstash Redis rate limiter (with in-memory fallback)
 │   ├── renderElements.ts    # Fabric.js object factory + canvas renderer
+│   ├── sanitize.ts          # Prompt + output sanitization (isomorphic-dompurify)
 │   ├── parallax-types.ts    # Parallax Studio types, defaults, constants
 │   ├── presets.ts           # 6 parallax scene presets
 │   ├── code-generator.ts    # HTML/CSS/JS export for parallax scenes
@@ -182,12 +228,12 @@ readlyn/
 
 ## 📦 Available Scripts
 
-| Command      | Description              |
-| ------------ | ------------------------ |
-| `pnpm dev`   | Start development server |
-| `pnpm build` | Build for production     |
+| Command      | Description                |
+| ------------ | -------------------------- |
+| `pnpm dev`   | Start development server   |
 | `pnpm start` | Start production server  |
 | `pnpm lint`  | Run ESLint               |
+| `pnpm test`  | Run Vitest               |
 
 ---
 
@@ -205,6 +251,8 @@ This project is deployed on **Vercel**.
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `GROQ_API_KEY`
+   - `UPSTASH_REDIS_REST_URL` (optional — rate limiting)
+   - `UPSTASH_REDIS_REST_TOKEN` (optional — rate limiting)
 4. Deploy
 
 > The `/api/generate` route uses streaming and has a 60-second max duration this works on Vercel's Hobby plan.
@@ -224,6 +272,11 @@ This project is deployed on **Vercel**.
 - [x] Generation history per project
 - [x] Multi-format export (PNG, ZIP)
 - [x] Parallax Studio layer-based scene builder (scroll/tilt effects)
+- [x] CSRF protection on all API routes
+- [x] Rate limiting via Upstash Redis (with dev fallback)
+- [x] Input sanitization (strip HTML, control chars, DOMPurify)
+- [x] UUID validation on all dynamic route params
+- [x] CSS custom property design system (no hardcoded hex colors)
 - [ ] Real-time team collaboration
 - [ ] Custom font upload
 - [ ] Figma import

@@ -84,7 +84,7 @@ export default function DashboardPage() {
 
   return (
     <div
-      className="min-h-screen bg-[#080808]"
+      className="min-h-screen bg-[var(--bg-base)]"
       style={{
         backgroundImage:
           "radial-gradient(circle at 20% 10%, rgba(245,197,24,0.08), transparent 35%), radial-gradient(circle at 80% 60%, rgba(124,58,237,0.06), transparent 40%)",
@@ -105,10 +105,11 @@ export default function DashboardPage() {
       />
       
       {/* Mobile header */}
-      <div className="md:hidden flex items-center gap-3 px-4 h-16 border-b border-white/[0.06] bg-[#0a0a0a] sticky top-0 z-20">
+      <div className="md:hidden flex items-center gap-3 px-4 h-16 border-b border-white/[0.06] bg-[var(--bg-subtle)] sticky top-0 z-20">
         <button 
           onClick={() => setSidebarOpen(true)} 
-          className="p-2 -ml-2 text-white/60 hover:text-white"
+          className="p-2.5 -ml-2 min-h-11 min-w-11 text-white/60 hover:text-white"
+          aria-label="Open menu"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M3 12h18M3 6h18M3 18h18" />
@@ -118,26 +119,26 @@ export default function DashboardPage() {
       </div>
 
       <main className="md:ml-[260px] px-4 pb-6 pt-4 sm:px-6 lg:px-8">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-[#0f0f0f] p-4">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-[var(--bg-panel)] p-4">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[#F5C518]" />
+              <Sparkles className="h-4 w-4 text-[var(--accent)]" />
               <h1 className="text-lg font-semibold text-white">Dashboard</h1>
             </div>
             <div className="flex items-center gap-3 text-xs text-white/50">
               <span className="inline-flex items-center gap-1">
-                <TrendingUp className="h-3.5 w-3.5 text-[#4ADE80]" />
+                <TrendingUp className="h-3.5 w-3.5 text-[var(--success-soft)]" />
                 {projects.length} projects
               </span>
               <span className="inline-flex items-center gap-1">
-                <Zap className="h-3.5 w-3.5 text-[#F5C518]" />
+                <Zap className="h-3.5 w-3.5 text-[var(--accent)]" />
                 {pinned.length} pinned
               </span>
             </div>
           </div>
           <button
             onClick={() => setOpenModal(true)}
-            className="group inline-flex items-center gap-2 rounded-lg bg-[#F5C518] px-4 py-2 text-sm font-bold text-black transition-all hover:bg-[#FFDC40]"
+            className="group inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-black transition-all hover:bg-[var(--accent-hover)]"
           >
             <Rocket className="h-4 w-4" />
             Create New Project
@@ -152,9 +153,9 @@ export default function DashboardPage() {
         />
 
         {loading ? (
-          <div className="rounded-xl border border-white/10 bg-[#0f0f0f] p-12 text-center">
+          <div className="rounded-xl border border-white/10 bg-[var(--bg-panel)] p-12 text-center">
             <div className="flex justify-center mb-4">
-              <div className="h-12 w-12 rounded-full border-2 border-[#F5C518] border-t-transparent animate-spin" />
+              <div className="h-12 w-12 rounded-full border-2 border-[var(--accent)] border-t-transparent animate-spin" />
             </div>
             <p className="text-sm text-white/60">Loading your projects...</p>
           </div>
@@ -162,7 +163,7 @@ export default function DashboardPage() {
           <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-8 text-center">
             <div className="flex justify-center mb-3">
               <div className="h-12 w-12 rounded-full bg-red-500/20 flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--destructive)" strokeWidth="2">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 7v5M12 15v1" />
                 </svg>
@@ -183,7 +184,7 @@ export default function DashboardPage() {
             </button>
           </div>
         ) : visibleProjects.length === 0 ? (
-          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f0f0f] to-[#161616] p-16 text-center relative overflow-hidden">
+          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[var(--bg-panel)] to-[var(--bg-elevated)] p-8 sm:p-16 text-center relative overflow-hidden">
             {/* Background decoration */}
             <div
               className="absolute inset-0 opacity-20"
@@ -196,10 +197,10 @@ export default function DashboardPage() {
             <div className="relative z-10">
               <div className="flex justify-center mb-6">
                 <div className="relative">
-                  <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-[#F5C518] to-[#FFDC40] flex items-center justify-center shadow-[0_20px_60px_rgba(245,197,24,0.4)]">
+                  <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-[0_20px_60px_rgba(245,197,24,0.4)]">
                     <Sparkles className="h-10 w-10 text-black" />
                   </div>
-                  <div className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-[#4ADE80] border-2 border-[#0f0f0f] flex items-center justify-center">
+                  <div className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-[var(--success-soft)] border-2 border-[var(--bg-panel)] flex items-center justify-center">
                     <Wand2 className="h-3 w-3 text-white" />
                   </div>
                 </div>
@@ -217,7 +218,7 @@ export default function DashboardPage() {
               {!search && (
                 <button
                   onClick={() => setOpenModal(true)}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F5C518] hover:bg-[#FFDC40] text-black text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_15px_40px_rgba(245,197,24,0.4)]"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_15px_40px_rgba(245,197,24,0.4)]"
                 >
                   <Sparkles className="h-4 w-4" />
                   Create Your First Project

@@ -151,7 +151,7 @@ interface LayerItemProps {
   onMoveDown: () => void
 }
 
-function LayerItem({ layer, index, total, onUpdate, onRemove, onDuplicate, onMoveUp, onMoveDown }: LayerItemProps) {
+function LayerItem({ layer, index: _index, total, onUpdate, onRemove, onDuplicate, onMoveUp: _onMoveUp, onMoveDown: _onMoveDown }: LayerItemProps) {
   return (
     <div className="group rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5 hover:border-white/[0.12] transition-colors">
       <div className="flex items-center gap-2 mb-2">

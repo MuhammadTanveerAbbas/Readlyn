@@ -8,7 +8,7 @@ export default function FinalCTA() {
   return (
     <section
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="relative flex flex-col items-center w-full py-32 md:py-40 px-6 text-center overflow-hidden bg-[#060606]"
+      className="relative flex flex-col items-center w-full py-32 md:py-40 px-6 text-center overflow-hidden bg-[var(--bg-base)]"
     >
       {/* Background layers */}
       <div
@@ -46,8 +46,8 @@ export default function FinalCTA() {
       {/* Badge */}
       <div className="relative inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-[#888888] text-[11px] font-medium tracking-[0.15em] uppercase mb-10">
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F5C518] opacity-60" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F5C518]" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-60" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
         </span>
         Ready to launch faster?
       </div>
@@ -64,7 +64,7 @@ export default function FinalCTA() {
         From concept to code.{" "}
         <span
           style={{
-            color: "#F5C518",
+            color: "var(--accent)",
             textShadow: "0 0 40px rgba(245,197,24,0.3)",
           }}
         >
@@ -73,7 +73,7 @@ export default function FinalCTA() {
       </h2>
 
       {/* Subtitle */}
-      <p className="font-ibm-mono text-[13px] text-[#555555] tracking-[0.5px] text-center max-w-[520px] mb-12 leading-[1.8]">
+      <p className="font-ibm-mono text-[13px] text-[var(--text-dim)] tracking-[0.5px] text-center max-w-[520px] mb-12 leading-[1.8]">
         We&apos;re building Readlyn in public. Try it free, no credit card
         needed, and tell us what to improve.
       </p>
@@ -83,7 +83,7 @@ export default function FinalCTA() {
         <a
           href="/signup"
           className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl font-grotesk text-[14px] font-bold text-black
-                     bg-[#F5C518] hover:bg-[#FFDC40]
+                     bg-[var(--accent)] hover:bg-[var(--accent-hover)]
                      shadow-[0_0_30px_rgba(245,197,24,0.35)]
                      hover:shadow-[0_0_50px_rgba(245,197,24,0.55)]
                      transition-all duration-200
@@ -119,7 +119,7 @@ export default function FinalCTA() {
       </div>
 
       {/* Honest note */}
-      <p className="font-ibm-mono text-[11px] text-[#444444] tracking-widest mt-10 text-center">
+      <p className="font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-widest mt-10 text-center">
         Early access · Built in public · Your feedback shapes the roadmap
       </p>
     </section>

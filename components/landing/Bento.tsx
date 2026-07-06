@@ -9,10 +9,10 @@ const items = [
     description:
       "Groq's Llama 3.3 70B writes real, structured content for your infographic  not filler text. Streamed live to the canvas.",
     tag: "GROQ AI",
-    tagColor: "#0A0A0A",
-    tagBg: "#F5C518",
-    accent: "#F5C518",
-    bg: "#F5C518",
+    tagColor: "var(--bg-subtle)",
+    tagBg: "var(--accent)",
+    accent: "var(--accent)",
+    bg: "var(--accent)",
     dark: false,
     size: "large",
   },
@@ -22,10 +22,10 @@ const items = [
     description:
       "Full layer management with visibility toggle, lock/unlock, and per-layer deletion. See every element at a glance.",
     tag: "EDITOR",
-    tagColor: "#F5C518",
+    tagColor: "var(--accent)",
     tagBg: "transparent",
-    accent: "#F5C518",
-    bg: "#0f0f0f",
+    accent: "var(--accent)",
+    bg: "var(--bg-panel)",
     dark: true,
     size: "normal",
   },
@@ -35,10 +35,10 @@ const items = [
     description:
       "Edit X, Y, width, height, rotation, opacity, fill, stroke, border radius, and typography per selected element.",
     tag: "INSPECT",
-    tagColor: "#FF6B35",
+    tagColor: "var(--orange)",
     tagBg: "transparent",
-    accent: "#FF6B35",
-    bg: "#0a0a0a",
+    accent: "var(--orange)",
+    bg: "var(--bg-subtle)",
     dark: true,
     size: "normal",
   },
@@ -48,10 +48,10 @@ const items = [
     description:
       "Download as high-res PNG or save the raw JSON schema to reload and continue editing. Your work stays yours.",
     tag: "EXPORT",
-    tagColor: "#A78BFA",
+    tagColor: "var(--purple)",
     tagBg: "transparent",
-    accent: "#A78BFA",
-    bg: "#0f0f0f",
+    accent: "var(--purple)",
+    bg: "var(--bg-panel)",
     dark: true,
     size: "normal",
   },
@@ -61,10 +61,10 @@ const items = [
     description:
       "Right-click any element to rewrite text, suggest a layout, pick a theme, or vary the element  all powered by Groq.",
     tag: "AI",
-    tagColor: "#FF6B35",
+    tagColor: "var(--orange)",
     tagBg: "transparent",
-    accent: "#FF6B35",
-    bg: "#0c0c0c",
+    accent: "var(--orange)",
+    bg: "var(--bg-subtle)",
     dark: true,
     size: "featured",
   },
@@ -74,10 +74,10 @@ const items = [
     description:
       "Every generation is saved per project. Browse past versions, restore a previous canvas, or compare iterations.",
     tag: "HISTORY",
-    tagColor: "#4ADE80",
+    tagColor: "var(--success-soft)",
     tagBg: "transparent",
-    accent: "#4ADE80",
-    bg: "#0a0a0a",
+    accent: "var(--success-soft)",
+    bg: "var(--bg-subtle)",
     dark: true,
     size: "normal",
   },
@@ -89,12 +89,12 @@ export default function Bento() {
   return (
     <section
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[#060606] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
+      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
     >
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
-          <span className="w-4 h-px bg-[#F5C518]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[#F5C518] tracking-[0.2em] uppercase">
+          <span className="w-4 h-px bg-[var(--accent)]" />
+          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             Capabilities
           </span>
         </div>
@@ -163,7 +163,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
 
       <span
         className="font-ibm-mono text-[11px] font-bold tracking-[2px]"
-        style={{ color: isYellow ? "#1A1A1A" : item.accent }}
+        style={{ color: isYellow ? "var(--bg-overlay)" : item.accent }}
       >
         [{item.id}]
       </span>
@@ -173,7 +173,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
         style={{
           fontSize: "clamp(1.4rem, 2vw, 1.75rem)",
           letterSpacing: "-0.02em",
-          color: isYellow ? "#0A0A0A" : "#F5F5F0",
+          color: isYellow ? "var(--bg-subtle)" : "var(--text-primary)",
         }}
       >
         {item.title}
@@ -181,7 +181,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
 
       <p
         className="font-ibm-mono text-[12px] tracking-[0.5px] leading-[1.7]"
-        style={{ color: isYellow ? "#1A1A1A" : "#666666" }}
+        style={{ color: isYellow ? "var(--bg-overlay)" : "var(--text-muted-val)" }}
       >
         {item.description}
       </p>
@@ -190,13 +190,13 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
         <div
           className="inline-flex items-center justify-center h-[26px] px-3 rounded-full"
           style={{
-            backgroundColor: isYellow ? "#0A0A0A" : `${item.accent}12`,
+            backgroundColor: isYellow ? "var(--bg-subtle)" : `${item.accent}12`,
             border: isYellow ? "none" : `1px solid ${item.accent}30`,
           }}
         >
           <span
             className="font-ibm-mono text-[10px] font-bold tracking-[2px]"
-            style={{ color: isYellow ? "#F5C518" : item.tagColor }}
+            style={{ color: isYellow ? "var(--accent)" : item.tagColor }}
           >
             [{item.tag}]
           </span>

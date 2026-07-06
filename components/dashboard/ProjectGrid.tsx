@@ -29,9 +29,9 @@ export default function ProjectGrid({
 
   const IconComponent = SECTION_ICONS[title];
   const iconColors: Record<string, string> = {
-    "Pinned Projects": "text-[#F5C518]",
-    "Recent Projects": "text-[#4ADE80]",
-    "All Projects": "text-[#60A5FA]",
+    "Pinned Projects": "text-[var(--accent)]",
+    "Recent Projects": "text-[var(--success-soft)]",
+    "All Projects": "text-[var(--blue)]",
   };
 
   return (

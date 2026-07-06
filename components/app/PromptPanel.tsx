@@ -70,28 +70,28 @@ export default function PromptPanel({
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-gradient-to-b from-[#0f0f0f] to-[#0a0a0a]">
+    <div className="flex-1 flex flex-col overflow-hidden bg-gradient-to-b from-[var(--bg-panel)] to-[var(--bg-subtle)]">
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
         {/* HEADER */}
         <div className="space-y-1">
           <h2 className="text-[13px] font-semibold text-white tracking-[-0.01em]">
             Create Infographic
           </h2>
-          <p className="text-[11px] text-[#666666]">
+          <p className="text-[11px] text-[var(--text-muted-val)]">
             Describe your content and customize the design
           </p>
         </div>
 
         {/* PROMPT SECTION */}
         <div className="space-y-2.5">
-          <label className="text-[11px] font-medium text-[#A3A3A3] uppercase tracking-[0.5px]">
+          <label className="text-[11px] font-medium text-[var(--text-body)] uppercase tracking-[0.5px]">
             Topic
           </label>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="e.g., Q4 2025 Sales Report, Product Roadmap, Market Analysis..."
-            className="w-full h-[80px] px-3 py-2.5 text-[11px] bg-[#161616] border border-white/8 rounded-lg text-white placeholder-[#555555] resize-none focus:outline-none focus:border-[#F5C518] focus:ring-1 focus:ring-[rgba(245,197,24,0.2)] transition-all"
+            className="w-full h-[80px] px-3 py-2.5 text-[11px] bg-[var(--bg-elevated)] border border-white/8 rounded-lg text-white placeholder-[var(--text-dim)] resize-none focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[rgba(245,197,24,0.2)] transition-all"
             style={{
               fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
               lineHeight: "1.5",
@@ -102,7 +102,7 @@ export default function PromptPanel({
           <button
             onClick={handleGenerate}
             disabled={isGenerating || !prompt.trim()}
-            className="w-full h-9 flex items-center justify-center gap-2 bg-[#F5C518] hover:bg-[#FFDC40] disabled:bg-[#F5C518]/50 disabled:cursor-not-allowed text-black text-[12px] font-semibold rounded-lg transition-all duration-200 active:scale-95 shadow-[0_0_20px_rgba(245,197,24,0.3)] hover:shadow-[0_0_30px_rgba(245,197,24,0.5)] disabled:shadow-none"
+            className="w-full h-9 flex items-center justify-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:bg-[var(--accent)]/50 disabled:cursor-not-allowed text-black text-[12px] font-semibold rounded-lg transition-all duration-200 active:scale-95 shadow-[0_0_20px_rgba(245,197,24,0.3)] hover:shadow-[0_0_30px_rgba(245,197,24,0.5)] disabled:shadow-none"
           >
             {isGenerating ? (
               <>
@@ -125,7 +125,7 @@ export default function PromptPanel({
         <div className="space-y-4">
           {/* Theme */}
           <div className="space-y-2.5">
-            <label className="text-[11px] font-medium text-[#A3A3A3] uppercase tracking-[0.5px]">
+            <label className="text-[11px] font-medium text-[var(--text-body)] uppercase tracking-[0.5px]">
               Color Theme
             </label>
             <div className="flex gap-2">
@@ -135,7 +135,7 @@ export default function PromptPanel({
                   onClick={() => setTheme(t)}
                   className={`w-7 h-7 rounded-full border-2 transition-all duration-200 hover:scale-110 ${
                     theme === t
-                      ? "ring-2 ring-offset-2 ring-offset-[#0f0f0f] border-white scale-110"
+                      ? "ring-2 ring-offset-2 ring-offset-[var(--bg-panel)] border-white scale-110"
                       : "border-transparent hover:border-white/30"
                   }`}
                   style={{ backgroundColor: THEME_COLORS[t].primary }}
@@ -147,13 +147,13 @@ export default function PromptPanel({
 
           {/* Size */}
           <div className="space-y-2.5">
-            <label className="text-[11px] font-medium text-[#A3A3A3] uppercase tracking-[0.5px]">
+            <label className="text-[11px] font-medium text-[var(--text-body)] uppercase tracking-[0.5px]">
               Canvas Size
             </label>
             <select
               value={size}
               onChange={(e) => setSize(e.target.value as CanvasSize)}
-              className="w-full h-8 px-2.5 text-[11px] rounded-lg outline-none cursor-pointer transition-all bg-[#161616] border border-white/8 text-[#E2E2E2] hover:border-white/15 focus:border-[#F5C518] focus:ring-1 focus:ring-[rgba(245,197,24,0.2)]"
+              className="w-full h-8 px-2.5 text-[11px] rounded-lg outline-none cursor-pointer transition-all bg-[var(--bg-elevated)] border border-white/8 text-[var(--text-secondary)] hover:border-white/15 focus:border-[var(--accent)] focus:ring-1 focus:ring-[rgba(245,197,24,0.2)]"
             >
               {(
                 Object.entries(CANVAS_SIZES) as [
@@ -170,7 +170,7 @@ export default function PromptPanel({
 
           {/* Layout */}
           <div className="space-y-2.5">
-            <label className="text-[11px] font-medium text-[#A3A3A3] uppercase tracking-[0.5px]">
+            <label className="text-[11px] font-medium text-[var(--text-body)] uppercase tracking-[0.5px]">
               Layout Style
             </label>
             <div className="grid grid-cols-3 gap-1.5">
@@ -180,8 +180,8 @@ export default function PromptPanel({
                   onClick={() => setStyle(s.id as LayoutStyle)}
                   className={`px-2 py-2 text-[10px] font-medium rounded-lg border transition-all duration-150 text-center ${
                     style === s.id
-                      ? "bg-[#F5C518]/15 border-[#F5C518]/50 text-[#F5C518] shadow-[0_0_12px_rgba(245,197,24,0.2)]"
-                      : "border-white/8 text-[#A3A3A3] hover:text-white hover:border-white/15 hover:bg-white/3"
+                      ? "bg-[var(--accent)]/15 border-[var(--accent)]/50 text-[var(--accent)] shadow-[0_0_12px_rgba(245,197,24,0.2)]"
+                      : "border-white/8 text-[var(--text-body)] hover:text-white hover:border-white/15 hover:bg-white/3"
                   }`}
                   title={s.desc}
                 >
@@ -197,7 +197,7 @@ export default function PromptPanel({
 
         {/* ELEMENTS SECTION */}
         <div className="space-y-2.5">
-          <label className="text-[11px] font-medium text-[#A3A3A3] uppercase tracking-[0.5px]">
+          <label className="text-[11px] font-medium text-[var(--text-body)] uppercase tracking-[0.5px]">
             Quick Add Elements
           </label>
           <div className="grid grid-cols-2 gap-1.5">
@@ -209,7 +209,7 @@ export default function PromptPanel({
                     el.id as "heading" | "text" | "rect" | "circle" | "stat" | "line",
                   )
                 }
-                className="h-8 flex items-center justify-center gap-2 rounded-lg text-[10px] font-medium transition-all duration-150 active:scale-95 bg-[#161616] border border-white/8 text-[#A3A3A3] hover:text-white hover:border-white/15 hover:bg-[#1c1c1c]"
+                className="h-8 flex items-center justify-center gap-2 rounded-lg text-[10px] font-medium transition-all duration-150 active:scale-95 bg-[var(--bg-elevated)] border border-white/8 text-[var(--text-body)] hover:text-white hover:border-white/15 hover:bg-[var(--bg-hover)]"
                 title={el.desc}
               >
                 <span className="text-[11px]">{el.icon}</span>

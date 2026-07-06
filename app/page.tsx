@@ -40,13 +40,13 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#060606]">
-        <div className="w-8 h-8 border-2 border-[#F5C518] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)]">
+        <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
   return (
-    <main className="relative flex flex-col w-full bg-[#060606] pt-[64px] overflow-hidden">
+    <main className="relative flex flex-col w-full bg-[var(--bg-base)] pt-[64px] overflow-hidden">
       <Navbar />
       <Hero />
       <PixelDivider />

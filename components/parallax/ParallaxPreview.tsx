@@ -10,7 +10,7 @@ interface ParallaxPreviewProps {
 
 export default function ParallaxPreview({ config, cinemaMode }: ParallaxPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [progress, setProgress] = useState(0)
+  const [_progress, setProgress] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 })
   const state = useRef({
     value: 0,

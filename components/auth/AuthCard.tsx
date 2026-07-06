@@ -11,7 +11,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
   return (
     <main
       className="relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden"
-      style={{ backgroundColor: "#060606" }}
+      style={{ backgroundColor: "var(--bg-base)" }}
     >
       {/* Background glows */}
       <div
@@ -65,7 +65,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
             <span className="font-grotesk text-[13px] font-bold text-white tracking-[2.5px]">
               READLYN
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#F5C518] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
           </Link>
         </div>
 
@@ -74,7 +74,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
           className="w-full rounded-2xl p-8"
           style={{
             background: "rgba(13,13,13,0.9)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            border: "1px solid var(--border-default)",
             boxShadow:
               "0 0 0 1px rgba(255,255,255,0.03), 0 24px 60px rgba(0,0,0,0.7), 0 0 40px rgba(245,197,24,0.03)",
             backdropFilter: "blur(20px)",
@@ -89,7 +89,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
               {title}
             </h1>
             {subtitle && (
-              <p className="mt-1.5 font-ibm-mono text-[12px] text-[#555] tracking-[0.4px] leading-relaxed">
+              <p className="mt-1.5 font-ibm-mono text-[12px] text-[var(--text-dim)] tracking-[0.4px] leading-relaxed">
                 {subtitle}
               </p>
             )}
@@ -102,18 +102,19 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
         <p className="mt-5 text-center font-ibm-mono text-[10px] text-[#333] tracking-[0.5px] leading-relaxed">
           By continuing, you agree to our{" "}
           <Link
-            href="#"
-            className="text-[#555] hover:text-[#A3A3A3] transition-colors"
+            href="/terms"
+            className="text-[var(--text-dim)] hover:text-[var(--text-body)] transition-colors"
           >
             Terms of Service
           </Link>{" "}
           and{" "}
           <Link
-            href="#"
-            className="text-[#555] hover:text-[#A3A3A3] transition-colors"
+            href="/privacy"
+            className="text-[var(--text-dim)] hover:text-[var(--text-body)] transition-colors"
           >
             Privacy Policy
           </Link>
+          .
         </p>
       </div>
     </main>

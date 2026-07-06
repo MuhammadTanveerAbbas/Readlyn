@@ -1,7 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
+import { checkCsrfOrigin } from "@/lib/csrf";
 
-export async function POST(_req: Request) {
+export async function POST(req: Request) {
   try {
+    const csrf = checkCsrfOrigin(req);
+    if (!csrf.valid) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const supabase = await createClient();
     const {
       data: { user },

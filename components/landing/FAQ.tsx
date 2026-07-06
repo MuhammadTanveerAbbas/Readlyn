@@ -44,15 +44,15 @@ export default function FAQ() {
     <section
       id="faq"
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[#080808] py-20 px-6 md:py-[120px] md:px-[120px]"
+      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[120px]"
     >
       <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
         {/* Left */}
         <div className="flex flex-col gap-6 w-full max-w-[520px]">
           <div className="flex flex-col gap-4">
             <div className="inline-flex items-center gap-2 w-fit">
-              <span className="w-4 h-px bg-[#F5C518]" />
-              <span className="font-ibm-mono text-[11px] font-semibold text-[#F5C518] tracking-[0.2em] uppercase">
+              <span className="w-4 h-px bg-[var(--accent)]" />
+              <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
                 FAQ
               </span>
             </div>
@@ -65,18 +65,18 @@ export default function FAQ() {
             >
               {"Got\nquestions?"}
             </h2>
-            <p className="font-ibm-mono text-[13px] text-[#666666] tracking-[0.3px] leading-[1.8]">
+            <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
               Honest answers about what Readlyn does and doesn't do today.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-white/[0.07] bg-[#0c0c0c] p-6 flex flex-col gap-4">
+          <div className="rounded-2xl border border-white/[0.07] bg-[var(--bg-subtle)] p-6 flex flex-col gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#F5C518]/10 border border-[#F5C518]/20 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path
                     d="M7 1a6 6 0 1 0 0 12A6 6 0 0 0 7 1zm0 9.5v-1m0-5.5v4"
-                    stroke="#F5C518"
+                    stroke="var(--accent)"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                   />
@@ -86,7 +86,7 @@ export default function FAQ() {
                 Something missing?
               </span>
             </div>
-            <p className="font-ibm-mono text-[12px] text-[#555555] leading-[1.7] tracking-[0.3px]">
+            <p className="font-ibm-mono text-[12px] text-[var(--text-dim)] leading-[1.7] tracking-[0.3px]">
               Open a GitHub issue or reach out directly. Early users shape what
               gets built next.
             </p>
@@ -94,7 +94,7 @@ export default function FAQ() {
               href="https://github.com/MuhammadTanveerAbbas/Readlyn/issues"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-ibm-mono text-[11px] tracking-[0.15em] text-[#F5C518] uppercase hover:underline"
+              className="inline-flex items-center gap-2 font-ibm-mono text-[11px] tracking-[0.15em] text-[var(--accent)] uppercase hover:underline"
             >
               Open an issue
               <span>→</span>
@@ -103,7 +103,7 @@ export default function FAQ() {
         </div>
 
         {/* Right: accordion */}
-        <div className="flex flex-col w-full rounded-2xl border border-white/[0.07] bg-[#0c0c0c] overflow-hidden">
+        <div className="flex flex-col w-full rounded-2xl border border-white/[0.07] bg-[var(--bg-subtle)] overflow-hidden">
           {faqs.map((faq, i) => {
             const isOpen = openIndex === i;
             return (
@@ -117,7 +117,7 @@ export default function FAQ() {
                 >
                   <span
                     className="font-grotesk text-[14px] font-medium transition-colors duration-200 leading-[1.4]"
-                    style={{ color: isOpen ? "#FFFFFF" : "#C0C0C0" }}
+                    style={{ color: isOpen ? "var(--text-primary)" : "var(--text-secondary)" }}
                   >
                     {faq.question}
                   </span>
@@ -144,7 +144,7 @@ export default function FAQ() {
                     >
                       <path
                         d="M5 1v8M1 5h8"
-                        stroke={isOpen ? "#F5C518" : "#888888"}
+                        stroke={isOpen ? "var(--accent)" : "#888888"}
                         strokeWidth="1.5"
                         strokeLinecap="round"
                       />
@@ -156,7 +156,7 @@ export default function FAQ() {
                   style={{ maxHeight: isOpen ? "200px" : "0px" }}
                 >
                   <div className="px-6 pb-5">
-                    <p className="font-ibm-mono text-[12px] text-[#666666] tracking-[0.3px] leading-[1.8]">
+                    <p className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
                       {faq.answer}
                     </p>
                   </div>

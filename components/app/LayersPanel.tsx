@@ -21,13 +21,13 @@ interface LayersPanelProps {
 }
 
 const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
-  text: { bg: "#1d4ed8", text: "#fff" },
-  rect: { bg: "#065f46", text: "#fff" },
-  circle: { bg: "#9a3412", text: "#fff" },
-  line: { bg: "#374151", text: "#fff" },
-  group: { bg: "#7c3aed", text: "#fff" },
-  stat: { bg: "#b45309", text: "#fff" },
-  icon: { bg: "#0369a1", text: "#fff" },
+  text: { bg: "var(--blue)", text: "#fff" },
+  rect: { bg: "var(--success)", text: "#fff" },
+  circle: { bg: "var(--orange)", text: "#fff" },
+  line: { bg: "var(--text-dim)", text: "#fff" },
+  group: { bg: "var(--purple-deep)", text: "#fff" },
+  stat: { bg: "var(--orange)", text: "#fff" },
+  icon: { bg: "var(--blue)", text: "#fff" },
 };
 
 export default function LayersPanel({
@@ -113,7 +113,7 @@ export default function LayersPanel({
   };
 
   const typeColor = (type: string) => {
-    return TYPE_COLORS[type] || TYPE_COLORS.group;
+    return TYPE_COLORS[type] ?? TYPE_COLORS.group!;
   };
 
   return (
@@ -125,11 +125,11 @@ export default function LayersPanel({
       <div className="px-4 py-3 flex items-center justify-between">
         <div
           className="text-[10px] font-semibold uppercase tracking-wide"
-          style={{ color: "#666666" }}
+          style={{ color: "var(--text-muted-val)" }}
         >
           Layers
         </div>
-        <div className="text-[10px] font-medium" style={{ color: "#666666" }}>
+        <div className="text-[10px] font-medium" style={{ color: "var(--text-muted-val)" }}>
           {layers.length}
         </div>
       </div>
@@ -137,7 +137,7 @@ export default function LayersPanel({
         <div className="px-3 pb-2">
           <button
             onClick={onAddMissingSection}
-            className="h-6 w-full rounded border border-white/10 text-[10px] text-white hover:border-[#F5C518]"
+            className="h-6 w-full rounded border border-white/10 text-[10px] text-white hover:border-[var(--accent)]"
           >
             ✦ Add Missing Section
           </button>
@@ -149,7 +149,7 @@ export default function LayersPanel({
         {layers.length === 0 ? (
           <div
             className="flex items-center justify-center h-20 text-[11px]"
-            style={{ color: "#666666" }}
+            style={{ color: "var(--text-muted-val)" }}
           >
             No layers
           </div>
@@ -165,7 +165,7 @@ export default function LayersPanel({
                   onClick={() => selectLayer(layer)}
                   className={`
                     group flex items-center gap-2 p-2 rounded text-[11px] transition-all duration-150 cursor-pointer
-                    ${isSelected ? "bg-[rgba(245,197,24,0.08)] border-l-2 border-[#F5C518]" : "hover:bg-white/5"}
+                    ${isSelected ? "bg-[rgba(245,197,24,0.08)] border-l-2 border-[var(--accent)]" : "hover:bg-white/5"}
                     ${layer.locked ? "opacity-60" : ""}
                   `}
                 >
@@ -180,7 +180,7 @@ export default function LayersPanel({
                   {/* Layer Name */}
                   <span
                     className="flex-1 truncate"
-                    style={{ color: "#E2E2E2" }}
+                    style={{ color: "var(--text-secondary)" }}
                   >
                     {layer.label}
                   </span>
@@ -193,11 +193,11 @@ export default function LayersPanel({
                       title={layer.visible ? "Hide" : "Show"}
                     >
                       {layer.visible ? (
-                        <Eye className="w-3 h-3" style={{ color: "#A3A3A3" }} />
+                        <Eye className="w-3 h-3" style={{ color: "var(--text-body)" }} />
                       ) : (
                         <EyeOff
                           className="w-3 h-3"
-                          style={{ color: "#666666" }}
+                          style={{ color: "var(--text-muted-val)" }}
                         />
                       )}
                     </button>
@@ -209,12 +209,12 @@ export default function LayersPanel({
                       {layer.locked ? (
                         <Lock
                           className="w-3 h-3"
-                          style={{ color: "#A3A3A3" }}
+                          style={{ color: "var(--text-body)" }}
                         />
                       ) : (
                         <LockOpen
                           className="w-3 h-3"
-                          style={{ color: "#A3A3A3" }}
+                          style={{ color: "var(--text-body)" }}
                         />
                       )}
                     </button>
@@ -225,7 +225,7 @@ export default function LayersPanel({
                     >
                       <Trash2
                         className="w-3 h-3"
-                        style={{ color: "#A3A3A3" }}
+                        style={{ color: "var(--text-body)" }}
                       />
                     </button>
                   </div>

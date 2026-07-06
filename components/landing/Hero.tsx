@@ -17,6 +17,7 @@ function Typewriter({ lines }: { lines: string[] }) {
 
   useEffect(() => {
     const cur = lines[li];
+    if (!cur) return;
     let ms = del ? 22 : 42;
     if (!del && ci === cur.length) ms = 1800;
     if (del && ci === 0) ms = 350;
@@ -33,10 +34,10 @@ function Typewriter({ lines }: { lines: string[] }) {
   }, [ci, del, li, lines]);
 
   return (
-    <span className="font-ibm-mono text-[#F5C518] text-[13px] tracking-[1px]">
-      {lines[li].slice(0, ci)}
+    <span className="font-ibm-mono text-[var(--accent)] text-[13px] tracking-[1px]">
+      {lines[li]?.slice(0, ci) ?? ""}
       <span
-        className="inline-block w-[2px] h-[13px] bg-[#F5C518] align-middle ml-px"
+        className="inline-block w-[2px] h-[13px] bg-[var(--accent)] align-middle ml-px"
         style={{ opacity: blink ? 1 : 0 }}
       />
     </span>
@@ -125,24 +126,24 @@ function Particles() {
 /* ── Canvas mock preview ── */
 function CanvasMock({ mounted }: { mounted: boolean }) {
   const layers = [
-    { label: "FRAME / HERO", color: "#F5C518", indent: 0, active: true },
-    { label: "NAVBAR", color: "#555", indent: 8 },
-    { label: "HEADLINE", color: "#4ADE80", indent: 8 },
-    { label: "SUBTEXT", color: "#555", indent: 8 },
-    { label: "CTA GROUP", color: "#FF6B35", indent: 8 },
-    { label: "BTN / PRIMARY", color: "#FF6B35", indent: 16 },
-    { label: "BTN / GHOST", color: "#555", indent: 16 },
-    { label: "MEDIA BLOCK", color: "#60A5FA", indent: 8 },
+    { label: "FRAME / HERO", color: "var(--accent)", indent: 0, active: true },
+    { label: "NAVBAR", color: "var(--text-dim)", indent: 8 },
+    { label: "HEADLINE", color: "var(--success-soft)", indent: 8 },
+    { label: "SUBTEXT", color: "var(--text-dim)", indent: 8 },
+    { label: "CTA GROUP", color: "var(--orange)", indent: 8 },
+    { label: "BTN / PRIMARY", color: "var(--orange)", indent: 16 },
+    { label: "BTN / GHOST", color: "var(--text-dim)", indent: 16 },
+    { label: "MEDIA BLOCK", color: "var(--blue)", indent: 8 },
   ];
 
   return (
     <div
       className="relative w-full rounded-2xl overflow-hidden"
       style={{
-        border: "1px solid rgba(255,255,255,0.08)",
+        border: "1px solid var(--border-default)",
         boxShadow:
           "0 0 0 1px rgba(255,255,255,0.03), 0 40px 100px rgba(0,0,0,0.9), 0 0 80px rgba(245,197,24,0.07)",
-        background: "#0D0D0D",
+        background: "var(--bg-subtle)",
       }}
     >
       {/* Animated top border glow */}
@@ -166,12 +167,12 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
         </div>
         <div
-          className="flex items-center gap-2 px-3 py-1 rounded-md font-ibm-mono text-[10px] text-[#444] tracking-[1px]"
-          style={{ background: "#0A0A0A", border: "1px solid #1E1E1E" }}
+          className="flex items-center gap-2 px-3 py-1 rounded-md font-ibm-mono text-[10px] text-[var(--text-dim)] tracking-[1px]"
+          style={{ background: "var(--bg-subtle)", border: "1px solid #1E1E1E" }}
         >
           <span
-            className="w-1.5 h-1.5 rounded-full bg-[#4ADE80]"
-            style={{ boxShadow: "0 0 6px #4ADE80" }}
+            className="w-1.5 h-1.5 rounded-full bg-[var(--success-soft)]"
+            style={{ boxShadow: "0 0 6px var(--success-soft)" }}
           />
           readlyn.app / canvas
         </div>
@@ -181,8 +182,8 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               key={t}
               className="font-ibm-mono text-[10px] px-2 py-0.5 rounded"
               style={{
-                background: i === 0 ? "#F5C518" : "#1A1A1A",
-                color: i === 0 ? "#000" : "#444",
+                background: i === 0 ? "var(--accent)" : "var(--bg-overlay)",
+                color: i === 0 ? "#000" : "var(--text-dim)",
               }}
             >
               {t}
@@ -198,11 +199,11 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           className="w-[155px] shrink-0 flex flex-col border-r"
           style={{
             borderColor: "rgba(255,255,255,0.06)",
-            background: "#0F0F0F",
+            background: "var(--bg-panel)",
           }}
         >
           <div
-            className="px-3 py-2 font-ibm-mono text-[8px] text-[#F5C518] tracking-[2px] border-b"
+            className="px-3 py-2 font-ibm-mono text-[8px] text-[var(--accent)] tracking-[2px] border-b"
             style={{ borderColor: "rgba(255,255,255,0.06)" }}
           >
             LAYERS
@@ -213,10 +214,10 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               className="flex items-center gap-2 py-[7px] font-ibm-mono text-[8px] tracking-[0.5px]"
               style={{
                 paddingLeft: `${12 + l.indent}px`,
-                background: l.active ? "#1A1A1A" : "transparent",
-                color: l.active ? "#E2E2E2" : "#3A3A3A",
+                background: l.active ? "var(--bg-overlay)" : "transparent",
+                color: l.active ? "var(--text-secondary)" : "var(--bg-active)",
                 borderLeft: l.active
-                  ? "2px solid #F5C518"
+                  ? "2px solid var(--accent)"
                   : "2px solid transparent",
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? "translateX(0)" : "translateX(-10px)",
@@ -235,7 +236,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
         {/* Canvas center */}
         <div
           className="flex-1 relative overflow-hidden"
-          style={{ background: "#0A0A0A" }}
+          style={{ background: "var(--bg-subtle)" }}
         >
           {/* Scan line */}
           <div
@@ -260,7 +261,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               borderRadius: "4px",
             }}
           >
-            <span className="absolute -top-5 left-0 font-ibm-mono text-[8px] text-[#F5C518] tracking-[1px]">
+            <span className="absolute -top-5 left-0 font-ibm-mono text-[8px] text-[var(--accent)] tracking-[1px]">
               INFOGRAPHIC / HERO
             </span>
             {[
@@ -271,7 +272,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
             ].map((pos, i) => (
               <span
                 key={i}
-                className="absolute w-[6px] h-[6px] bg-[#F5C518]"
+                className="absolute w-[6px] h-[6px] bg-[var(--accent)]"
                 style={{ ...pos }}
               />
             ))}
@@ -280,18 +281,18 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
             <div className="p-4 flex flex-col gap-2.5">
               {/* Title bar */}
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-sm bg-[#F5C518]" />
+                <div className="w-2 h-2 rounded-sm bg-[var(--accent)]" />
                 <div
-                  className="h-2.5 rounded bg-[#E2E2E2] opacity-70"
+                  className="h-2.5 rounded bg-[var(--text-secondary)] opacity-70"
                   style={{ width: "55%" }}
                 />
               </div>
               {/* Stat cards row */}
               <div className="grid grid-cols-3 gap-1.5 mt-1">
                 {[
-                  ["#F5C518", "42%"],
-                  ["#4ADE80", "8.4k"],
-                  ["#60A5FA", "$12k"],
+                  ["var(--accent)", "42%"],
+                  ["var(--success-soft)", "8.4k"],
+                  ["var(--blue)", "$12k"],
                 ].map(([c, v], i) => (
                   <div
                     key={i}
@@ -322,7 +323,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                     className="flex-1 rounded-sm"
                     style={{
                       height: `${h}%`,
-                      background: i === 7 ? "#F5C518" : "rgba(245,197,24,0.2)",
+                      background: i === 7 ? "var(--accent)" : "rgba(245,197,24,0.2)",
                       opacity: mounted ? 1 : 0,
                       transition: `opacity 0.4s ease ${0.4 + i * 0.04}s`,
                     }}
@@ -340,7 +341,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                       background:
                         i === 0
                           ? "rgba(255,255,255,0.12)"
-                          : "rgba(255,255,255,0.05)",
+                          : "var(--border-subtle-val)",
                     }}
                   />
                 ))}
@@ -350,7 +351,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
 
           {/* Blinking cursor */}
           <div
-            className="absolute bottom-8 right-10 w-[5px] h-[10px] bg-[#F5C518]"
+            className="absolute bottom-8 right-10 w-[5px] h-[10px] bg-[var(--accent)]"
             style={{ animation: "blink 1.1s step-end infinite" }}
           />
         </div>
@@ -360,11 +361,11 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           className="w-[145px] shrink-0 flex flex-col border-l"
           style={{
             borderColor: "rgba(255,255,255,0.06)",
-            background: "#0F0F0F",
+            background: "var(--bg-panel)",
           }}
         >
           <div
-            className="px-3 py-2 font-ibm-mono text-[8px] text-[#F5C518] tracking-[2px] border-b"
+            className="px-3 py-2 font-ibm-mono text-[8px] text-[var(--accent)] tracking-[2px] border-b"
             style={{ borderColor: "rgba(255,255,255,0.06)" }}
           >
             INSPECT
@@ -375,8 +376,8 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               { k: "H", v: "1100px" },
               { k: "THEME", v: "Violet" },
               { k: "LAYOUT", v: "Stats" },
-              { k: "FILL", v: "#0F0F0F", sw: "#0F0F0F" },
-              { k: "ACCENT", v: "#F5C518", sw: "#F5C518" },
+              { k: "FILL", v: "var(--bg-panel)", sw: "var(--bg-panel)" },
+              { k: "ACCENT", v: "var(--accent)", sw: "var(--accent)" },
               { k: "OPACITY", v: "100%" },
             ].map((p, i) => (
               <div
@@ -388,7 +389,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                   transition: `opacity 0.4s ease ${0.15 + i * 0.05}s`,
                 }}
               >
-                <span className="font-ibm-mono text-[8px] text-[#444] tracking-[1px]">
+                <span className="font-ibm-mono text-[8px] text-[var(--text-dim)] tracking-[1px]">
                   {p.k}
                 </span>
                 <div className="flex items-center gap-1">
@@ -398,7 +399,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                       style={{ background: p.sw }}
                     />
                   )}
-                  <span className="font-ibm-mono text-[8px] text-[#666]">
+                  <span className="font-ibm-mono text-[8px] text-[var(--text-muted-val)]">
                     {p.v}
                   </span>
                 </div>
@@ -414,10 +415,10 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
             }}
           >
             <span
-              className="w-1.5 h-1.5 rounded-full bg-[#F5C518]"
+              className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"
               style={{ animation: "pulse 2s ease-in-out infinite" }}
             />
-            <span className="font-ibm-mono text-[7px] text-[#F5C518] tracking-[1px]">
+            <span className="font-ibm-mono text-[7px] text-[var(--accent)] tracking-[1px]">
               AI GENERATING
             </span>
           </div>
@@ -427,12 +428,12 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
       {/* Status bar */}
       <div
         className="flex items-center justify-between px-4 h-8 border-t font-ibm-mono text-[8px] text-[#333] tracking-[1px]"
-        style={{ borderColor: "rgba(255,255,255,0.06)", background: "#0D0D0D" }}
+        style={{ borderColor: "rgba(255,255,255,0.06)", background: "var(--bg-subtle)" }}
       >
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <span
-              className="w-1.5 h-1.5 rounded-full bg-[#4ADE80]"
+              className="w-1.5 h-1.5 rounded-full bg-[var(--success-soft)]"
               style={{ animation: "pulse 2s ease-in-out infinite" }}
             />
             READY
@@ -442,7 +443,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
         </div>
         <div className="flex items-center gap-4">
           <span>POWERED BY AI</span>
-          <span className="text-[#F5C518] opacity-60">v2.0.1</span>
+          <span className="text-[var(--accent)] opacity-60">v2.0.1</span>
         </div>
       </div>
 
@@ -450,7 +451,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
       <div
         className="absolute bottom-0 inset-x-0 h-24 pointer-events-none z-10"
         style={{
-          background: "linear-gradient(to top, #060606 30%, transparent)",
+          background: "linear-gradient(to top, var(--bg-base) 30%, transparent)",
         }}
       />
     </div>
@@ -463,7 +464,7 @@ export default function Hero() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <section className="relative w-full bg-[#060606] overflow-hidden">
+    <section className="relative w-full bg-[var(--bg-base)] overflow-hidden">
       <style>{`
         @keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes scan     { 0%{top:-2px} 100%{top:100%} }
@@ -505,10 +506,10 @@ export default function Hero() {
           {/* Badge */}
           <div className="hero-enter-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] mb-6">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F5C518] opacity-70" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F5C518]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-70" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]" />
             </span>
-            <span className="font-ibm-mono text-[10px] text-[#888] tracking-[0.18em] uppercase">
+            <span className="font-ibm-mono text-[10px] text-[var(--text-muted-val)] tracking-[0.18em] uppercase">
               Early access open
             </span>
           </div>
@@ -527,7 +528,7 @@ export default function Hero() {
             <br />
             <span
               style={{
-                color: "#F5C518",
+                color: "var(--accent)",
                 textShadow: "0 0 50px rgba(245,197,24,0.3)",
               }}
             >
@@ -536,7 +537,7 @@ export default function Hero() {
           </h1>
 
           {/* Sub */}
-          <p className="hero-enter-2 font-ibm-mono text-[#555] text-[13px] leading-[1.9] tracking-[0.3px] mt-5 max-w-[400px]">
+          <p className="hero-enter-2 font-ibm-mono text-[var(--text-dim)] text-[13px] leading-[1.9] tracking-[0.3px] mt-5 max-w-[400px]">
             Type a topic, pick a layout and theme. Get a complete, editable
             infographic in seconds.
           </p>
@@ -561,7 +562,7 @@ export default function Hero() {
           <div className="hero-enter-4 flex flex-col sm:flex-row items-center lg:items-start gap-3 mt-8 w-full sm:w-auto">
             <a
               href="/signup"
-              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[#F5C518] hover:bg-[#FFDC40] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
+              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
             >
               Start free
               <svg
@@ -582,23 +583,23 @@ export default function Hero() {
             </a>
             <a
               href="/login"
-              className="flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-ibm-mono text-[12px] text-[#888] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
               Log in
             </a>
           </div>
 
-          <p className="hero-enter-4 font-ibm-mono text-[10px] text-[#2E2E2E] tracking-[2px] mt-3">
+          <p className="hero-enter-4 font-ibm-mono text-[10px] text-[var(--bg-active)] tracking-[2px] mt-3">
             No credit card · Free plan · Early access
           </p>
 
           {/* Stats row */}
           <div className="hero-enter-5 flex flex-wrap justify-center lg:justify-start gap-2.5 mt-8">
             {[
-              { v: "9", l: "Layouts", c: "#F5C518" },
-              { v: "5", l: "Themes", c: "#4ADE80" },
-              { v: "3", l: "Canvas sizes", c: "#60A5FA" },
-              { v: "Free", l: "To start", c: "#FF6B35" },
+              { v: "9", l: "Layouts", c: "var(--accent)" },
+              { v: "5", l: "Themes", c: "var(--success-soft)" },
+              { v: "3", l: "Canvas sizes", c: "var(--blue)" },
+              { v: "Free", l: "To start", c: "var(--orange)" },
             ].map(({ v, l, c }) => (
               <div
                 key={l}
@@ -610,7 +611,7 @@ export default function Hero() {
                 >
                   {v}
                 </span>
-                <span className="font-ibm-mono text-[9px] text-[#444] tracking-[1.5px] uppercase">
+                <span className="font-ibm-mono text-[9px] text-[var(--text-dim)] tracking-[1.5px] uppercase">
                   {l}
                 </span>
               </div>
@@ -629,7 +630,7 @@ export default function Hero() {
       <div
         className="absolute bottom-0 inset-x-0 h-28 pointer-events-none z-20"
         style={{
-          background: "linear-gradient(to top, #060606 0%, transparent 100%)",
+          background: "linear-gradient(to top, var(--bg-base) 0%, transparent 100%)",
         }}
       />
     </section>

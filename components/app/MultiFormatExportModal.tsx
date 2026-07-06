@@ -25,11 +25,11 @@ export default function MultiFormatExportModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="w-[520px] rounded-lg border border-white/[0.1] bg-[#0f0f0f] p-5">
+      <div className="w-[520px] rounded-lg border border-white/[0.1] bg-[var(--bg-panel)] p-5">
         <h3 className="mb-4 text-lg font-semibold text-white">Auto-Resize Export</h3>
         <div className="space-y-2">
           {EXPORT_TARGETS.map((target) => (
-            <label key={target.key} className="flex items-center justify-between rounded border border-white/[0.07] bg-[#161616] px-3 py-2 text-sm text-white">
+            <label key={target.key} className="flex items-center justify-between rounded border border-white/[0.07] bg-[var(--bg-elevated)] px-3 py-2 text-sm text-white">
               <span>{target.label} ({target.width}x{target.height})</span>
               <input type="checkbox" checked={selected.includes(target.key)} onChange={() => toggle(target.key)} />
             </label>
@@ -43,7 +43,7 @@ export default function MultiFormatExportModal({
               await exportMultiFormatZip(canvasJson, projectName, selected);
               onClose();
             }}
-            className="rounded bg-[#F5C518] px-3 py-2 text-sm font-semibold text-black disabled:opacity-60"
+            className="rounded bg-[var(--accent)] px-3 py-2 text-sm font-semibold text-black disabled:opacity-60"
           >
             Export All Selected
           </button>
