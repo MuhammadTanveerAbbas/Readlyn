@@ -110,7 +110,7 @@ export type StatElement = z.infer<typeof StatSchema>
 export type IconElement = z.infer<typeof IconSchema>
 export type LineElement = z.infer<typeof LineSchema>
 
-export type ThemePalette = 'violet' | 'ocean' | 'ember' | 'forest' | 'slate'
+export type ThemePalette = 'ocean' | 'ember' | 'forest' | 'slate' | 'midnight'
 export type CanvasSize = 'a4' | 'square' | 'wide'
 export type StylePreset = 'auto' | 'steps' | 'stats' | 'timeline' | 'compare' | 'list' | 'pyramid' | 'funnel' | 'cycle'
 
@@ -121,11 +121,11 @@ export const CANVAS_SIZES: Record<CanvasSize, { width: number; height: number; l
 }
 
 export const THEME_COLORS: Record<ThemePalette, { primary: string; secondary: string; accent: string }> = {
-  violet: { primary: '#7c3aed', secondary: '#4f46e5', accent: '#a855f7' },
   ocean: { primary: '#0284c7', secondary: '#0ea5e9', accent: '#38bdf8' },
   ember: { primary: '#ea580c', secondary: '#f97316', accent: '#fb923c' },
   forest: { primary: '#15803d', secondary: '#16a34a', accent: '#4ade80' },
   slate: { primary: '#475569', secondary: '#64748b', accent: '#94a3b8' },
+  midnight: { primary: '#1e293b', secondary: '#334155', accent: '#f5c518' },
 }
 
 export const FONT_FAMILIES = ['Arial', 'Georgia', 'Impact', 'Trebuchet MS', 'Courier New', 'Verdana'] as const

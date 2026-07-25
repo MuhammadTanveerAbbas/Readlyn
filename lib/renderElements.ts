@@ -85,7 +85,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         originY: 'center',
         top: -10,
       })
-      val.set('fill', el.valueFill || '#7c3aed')
+      val.set('fill', el.valueFill || '#f5c518')
       
       const lbl = new fabric.IText(el.label || '', {
         fontSize: 11,
@@ -111,7 +111,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         originX: 'center',
         originY: 'center',
       })
-      bg.set('fill', el.bgFill || '#7c3aed')
+      bg.set('fill', el.bgFill || '#f5c518')
       
       const emoji = new fabric.Text(el.emoji || '', {
         fontSize: el.emojiSize || 24,
@@ -202,7 +202,7 @@ export function addRectElement(canvas: fabric.Canvas): void {
     top: 100,
     width: 200,
     height: 150,
-    fill: '#7c3aed',
+    fill: '#f5c518',
     rx: 8,
     ry: 8,
     selectable: true,
@@ -219,7 +219,7 @@ export function addCircleElement(canvas: fabric.Canvas): void {
     left: 100,
     top: 100,
     radius: 75,
-    fill: '#4f46e5',
+    fill: '#f5c518',
     selectable: true,
     hasControls: true,
     hasBorders: true,
@@ -233,7 +233,7 @@ export function addStatBlockElement(canvas: fabric.Canvas): void {
   const bg = new fabric.Rect({
     width: 180,
     height: 100,
-    fill: '#1e1b4b',
+    fill: '#1c1c1c',
     rx: 12,
     ry: 12,
     originX: 'center',
@@ -243,7 +243,7 @@ export function addStatBlockElement(canvas: fabric.Canvas): void {
     fontSize: 48,
     fontWeight: '900',
     fontFamily: 'Impact',
-    fill: '#7c3aed',
+    fill: '#f5c518',
     originX: 'center',
     originY: 'center',
     top: -12,
@@ -252,7 +252,7 @@ export function addStatBlockElement(canvas: fabric.Canvas): void {
     fontSize: 14,
     fontWeight: 'normal',
     fontFamily: 'Arial',
-    fill: '#a5b4fc',
+    fill: '#94a3b8',
     originX: 'center',
     originY: 'center',
     top: 28,

@@ -52,11 +52,11 @@ interface ProjectCardProps {
 }
 
 const THEME_COLORS: Record<string, string> = {
-  violet: "var(--purple-deep)",
   ocean: "var(--blue)",
   ember: "var(--orange)",
   forest: "var(--success)",
   slate: "var(--text-muted-val)",
+  midnight: "var(--accent)",
 };
 
 const ARCHETYPE_ICONS: Record<
@@ -82,9 +82,9 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
   const router = useRouter();
   const supabase = createClient();
   const title = project.title?.trim() || "Untitled Project";
-  const theme = (project.theme || "violet").toLowerCase();
+  const theme = (project.theme || "ocean").toLowerCase();
   const archetype = (project.archetype || "auto").toLowerCase();
-  const themeColor = THEME_COLORS[theme] || "var(--purple-deep)";
+  const themeColor = THEME_COLORS[theme] || "var(--blue)";
   const ArchetypeIcon = ARCHETYPE_ICONS[archetype] || Wand2;
 
   const formatDate = (dateStr?: string | null) => {

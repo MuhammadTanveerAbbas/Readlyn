@@ -6,18 +6,56 @@
 }
 
 :root {
-  /* Legacy tokens kept for compatibility */
+  /* W3C Token System Mapping */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  --type-xs: 12px;
+  --type-sm: 14px;
+  --type-base: 16px;
+  --type-lg: 20px;
+  --type-xl: 25px;
+  --type-2xl: 31px;
+  --type-3xl: 39px;
+  --type-4xl: 49px;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --elevation-resting: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --elevation-raised: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --elevation-floating: 0 12px 32px rgba(0, 0, 0, 0.6);
+  --elevation-modal: 0 24px 60px rgba(0, 0, 0, 0.8);
+
+  --motion-micro: 100ms;
+  --motion-standard: 200ms;
+  --motion-complex: 350ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Legacy & Semantic Color Tokens */
   --yellow: #f5c518;
   --orange: #ff6b35;
   --bg-primary: #080808;
   --text-light: #e2e2e2;
   --text-gray: #a3a3a3;
   --text-muted: #666666;
-  --text-dim: #444444;
+  --text-dim: #6b7280;
   --border-dark: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.05);
 
-  /* Design tokens */
   --bg-base: #080808;
   --bg-subtle: #0f0f0f;
   --bg-elevated: #161616;
@@ -35,16 +73,14 @@
   --text-primary: #ffffff;
   --text-secondary: #e2e2e2;
   --text-body: #a3a3a3;
-  --text-muted-val: #666666;
+  --text-muted-val: #71717a;
 
   --success: #22c55e;
   --success-soft: #4ade80;
+  --warning: #f59e0b;
   --error: #ef4444;
-  --purple: #a78bfa;
-  --purple-deep: #7c3aed;
   --blue: #60a5fa;
 
-  /* App editor tokens */
   --bg-app: #080808;
   --bg-panel: #0f0f0f;
   --bg-hover: #1c1c1c;
@@ -55,6 +91,15 @@
   --accent-subtle: rgba(245, 197, 24, 0.09);
   --destructive: #ef4444;
   --destructive-subtle: rgba(239, 68, 68, 0.07);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @utility font-grotesk {
@@ -70,10 +115,10 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
 /* ── Animation keyframes ── */

@@ -12,6 +12,12 @@ import ZoomSlider from "@/components/app/ZoomSlider";
 import GenerationHistoryPanel from "@/components/app/GenerationHistoryPanel";
 import ContentAwarenessPanel from "@/components/app/ContentAwarenessPanel";
 import MultiFormatExportModal from "@/components/app/MultiFormatExportModal";
+import DesignTokensModal from "@/components/app/DesignTokensModal";
+import DevModeInspectModal from "@/components/app/DevModeInspectModal";
+import BrandKitModal from "@/components/app/BrandKitModal";
+import KeyboardShortcutsModal from "@/components/app/KeyboardShortcutsModal";
+import OnboardingModal from "@/components/app/OnboardingModal";
+import { useOfflineBuffer } from "@/hooks/use-offline-buffer";
 import { useCanvasHistory } from "@/hooks/use-canvas-history";
 import { useCanvasSelection } from "@/hooks/use-canvas-selection";
 import {
@@ -59,6 +65,12 @@ export default function EditorPage() {
   const [toolMode, setToolMode] = useState<"select" | "hand">("select");
   const [refresh, setRefresh] = useState(0);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [tokensOpen, setTokensOpen] = useState(false);
+  const [devInspectOpen, setDevInspectOpen] = useState(false);
+  const [brandKitOpen, setBrandKitOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
+
   const [historyItems, setHistoryItems] = useState<
     Array<{
       id: string;
@@ -85,6 +97,7 @@ export default function EditorPage() {
   const canvasRef = useRef<CanvasRef>(null);
 
   const { pushState, undo, redo, canUndo, canRedo } = useCanvasHistory(canvas);
+  const { isOffline, isSyncing } = useOfflineBuffer(canvas, projectId);
   const {
     selectedObject,
     properties,
@@ -95,6 +108,15 @@ export default function EditorPage() {
     deleteObject,
   } = useCanvasSelection(canvas);
   const { width, height } = CANVAS_SIZES[canvasSize];
+
+  // Show onboarding modal on first load if not seen
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem("readlyn_onboarding_seen");
+    if (!hasSeenOnboarding) {
+      setOnboardingOpen(true);
+      localStorage.setItem("readlyn_onboarding_seen", "true");
+    }
+  }, []);
 
   const loadProject = useCallback(async () => {
     const supabase = createClient();
@@ -162,7 +184,7 @@ export default function EditorPage() {
         prompt,
         archetype,
         theme,
-        model: "llama-3.3-70b-versatile",
+        model: "openai/gpt-oss-120b",
         thumbnail_url,
       });
       loadHistory();
@@ -283,7 +305,7 @@ export default function EditorPage() {
   useEffect(() => {
     if (searchParams.get("autogen") === "1") {
       const prompt = searchParams.get("prompt") || "";
-      const theme = (searchParams.get("theme") as ThemePalette) || "violet";
+      const theme = (searchParams.get("theme") as ThemePalette) || "slate";
       const size = (searchParams.get("size") as CanvasSize) || "a4";
       const style = (searchParams.get("style") as StylePreset) || "auto";
       if (prompt) handleGenerate(prompt, theme, size, style);
@@ -299,20 +321,19 @@ export default function EditorPage() {
       }
       if (event.key.toLowerCase() === "v") setToolMode("select");
       if (event.key.toLowerCase() === "h") setToolMode("hand");
+      if (event.key === "?") setShortcutsOpen(true);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [redo, undo]);
 
   const lastSavedRef = useRef(Date.now());
-  const [_saveStatus, _setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
 
   useEffect(() => {
     if (!canvas || !projectId) return;
     const interval = setInterval(async () => {
       const now = Date.now();
       if (now - lastSavedRef.current < 5000) return;
-      _setSaveStatus("saving");
       try {
         const supabase = createClient();
         const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -326,9 +347,8 @@ export default function EditorPage() {
           .eq("id", projectId)
           .eq("user_id", user.id);
         lastSavedRef.current = now;
-        _setSaveStatus("saved");
       } catch {
-        _setSaveStatus("unsaved");
+        // Handled by offline buffer hook
       }
     }, 8000);
     return () => clearInterval(interval);
@@ -336,6 +356,19 @@ export default function EditorPage() {
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-[var(--bg-base)]">
+      {/* Offline / Sync Banner */}
+      {isOffline && (
+        <div className="bg-amber-500/20 border-b border-amber-500/30 px-4 py-1 text-center font-ibm-mono text-xs text-amber-300 flex items-center justify-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          Offline mode active — changes are buffered locally and will sync when connected.
+        </div>
+      )}
+      {isSyncing && (
+        <div className="bg-blue-500/20 border-b border-blue-500/30 px-4 py-1 text-center font-ibm-mono text-xs text-blue-300">
+          Syncing buffered local edits to cloud...
+        </div>
+      )}
+
       <Toolbar
         canUndo={canUndo}
         canRedo={canRedo}
@@ -346,6 +379,10 @@ export default function EditorPage() {
         onRedo={redo}
         onOpenHistory={() => setHistoryOpen((v) => !v)}
         onOpenMultiExport={() => setExportOpen(true)}
+        onOpenDesignTokens={() => setTokensOpen(true)}
+        onOpenDevInspect={() => setDevInspectOpen(true)}
+        onOpenBrandKit={() => setBrandKitOpen(true)}
+        onOpenShortcuts={() => setShortcutsOpen(true)}
         onExportPNG={() => canvasRef.current?.exportPNG()}
         onExportJSON={() => canvasRef.current?.exportJSON()}
         onClearAll={() => {
@@ -415,7 +452,7 @@ export default function EditorPage() {
         }}
       />
       <div className="flex h-[calc(100vh-44px)]">
-        <div className="w-[260px] border-r border-white/[0.07] bg-[var(--bg-panel)]">
+        <div className="w-[240px] border-r border-white/[0.07] bg-[var(--bg-panel)] flex flex-col">
           <PromptPanel
             onGenerate={handleGenerate}
             onAddElement={handleAddElement}
@@ -427,7 +464,7 @@ export default function EditorPage() {
             refreshTrigger={refresh}
           />
         </div>
-        <div className="flex flex-1 items-center justify-center bg-[var(--bg-subtle)]">
+        <div className="flex flex-1 items-center justify-center bg-[color-mix(in_srgb,var(--bg-base)_85%,white_0.5%)] relative">
           <InfographicCanvas
             ref={canvasRef}
             width={width}
@@ -444,19 +481,9 @@ export default function EditorPage() {
           onFitToScreen={() => setZoom(0.6)}
         />
         <div
-          className="w-[280px] border-l border-white/[0.07] bg-[var(--bg-panel)] flex flex-col overflow-hidden"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(255,255,255,0.1) transparent",
-          }}
+          className="w-[260px] border-l border-white/[0.07] bg-[var(--bg-panel)] flex flex-col overflow-hidden"
         >
-          <div
-            className="flex-1 overflow-y-auto"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "var(--border-strong) transparent",
-            }}
-          >
+          <div className="flex-1 overflow-y-auto scrollbar-hide">
             <PropertiesPanel
               properties={properties}
               objectType={selectedObject?.type || null}
@@ -476,11 +503,34 @@ export default function EditorPage() {
           </div>
         </div>
       </div>
+
       <MultiFormatExportModal
         open={exportOpen}
         onClose={() => setExportOpen(false)}
         canvasJson={canvasRef.current?.canvas?.toJSON() || {}}
         projectName={projectId}
+      />
+      <DesignTokensModal
+        open={tokensOpen}
+        onClose={() => setTokensOpen(false)}
+      />
+      <DevModeInspectModal
+        open={devInspectOpen}
+        onClose={() => setDevInspectOpen(false)}
+        selectedObject={selectedObject}
+      />
+      <BrandKitModal
+        open={brandKitOpen}
+        onClose={() => setBrandKitOpen(false)}
+        canvas={canvas}
+      />
+      <KeyboardShortcutsModal
+        open={shortcutsOpen}
+        onClose={() => setShortcutsOpen(false)}
+      />
+      <OnboardingModal
+        open={onboardingOpen}
+        onClose={() => setOnboardingOpen(false)}
       />
     </div>
   );

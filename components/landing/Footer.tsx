@@ -169,29 +169,38 @@ export default function Footer() {
         style={{ borderTop: "1px solid var(--border-subtle-val)" }}
       >
         <div className="flex items-center gap-5">
-          <span className="font-ibm-mono text-[10px] text-[#333] tracking-[0.5px]">
+          <span className="font-ibm-mono text-[10px] text-[#555] tracking-[0.5px]">
             © 2026 Readlyn
           </span>
           <span
             className="hidden sm:block w-px h-3 self-center"
             style={{ background: "var(--border-default)" }}
           />
-          <span className="hidden sm:block font-ibm-mono text-[10px] text-[var(--bg-active)] tracking-[0.5px]">
+          <span className="hidden sm:block font-ibm-mono text-[10px] text-[var(--text-muted-val)] tracking-[0.5px]">
             Built in public
           </span>
         </div>
 
         <div className="flex items-center gap-5">
+          <a
+            href="https://themvpguy.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] hover:text-white hover:underline transition-colors cursor-pointer"
+          >
+            Made by The MVP Guy
+          </a>
+          <span className="w-px h-3" style={{ background: "rgba(255,255,255,0.1)" }} />
           <Link
             href="/privacy"
-            className="font-ibm-mono text-[10px] text-[#333] tracking-[0.5px] hover:text-[var(--text-muted-val)] transition-colors duration-200"
+            className="font-ibm-mono text-[10px] text-[#555] tracking-[0.5px] hover:text-[var(--text-muted-val)] transition-colors duration-200"
           >
             Privacy
           </Link>
-          <span className="w-px h-3" style={{ background: "rgba(255,255,255,0.07)" }} />
+          <span className="w-px h-3" style={{ background: "rgba(255,255,255,0.1)" }} />
           <Link
             href="/terms"
-            className="font-ibm-mono text-[10px] text-[#333] tracking-[0.5px] hover:text-[var(--text-muted-val)] transition-colors duration-200"
+            className="font-ibm-mono text-[10px] text-[#555] tracking-[0.5px] hover:text-[var(--text-muted-val)] transition-colors duration-200"
           >
             Terms
           </Link>

@@ -1,5 +1,5 @@
 import { generateText } from "ai";
-import { createGroq } from "@ai-sdk/groq";
+import { getGroqClient, getGroqModel } from "@/lib/groq";
 import {
   InfographicSchema,
   CANVAS_SIZES,
@@ -19,7 +19,7 @@ export const maxDuration = 60;
 
 const GenerateRequestSchema = z.object({
   prompt: z.string().min(1).max(500),
-  theme: z.enum(["violet", "ocean", "ember", "forest", "slate"]),
+  theme: z.enum(["ocean", "ember", "forest", "slate", "midnight"]),
   size: z.enum(["a4", "square", "wide"]),
   style: z.enum([
     "auto",
@@ -318,10 +318,10 @@ Make it look like it came from Venngage or Piktochart.
 
 Return ONLY a valid JSON object. No markdown fences. No explanation.`;
 
-    const groq = createGroq({ apiKey: process.env.GROQ_API_KEY! });
+    const groq = getGroqClient();
 
     const { text } = await generateText({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq(getGroqModel("reasoning")),
       system: systemPrompt,
       prompt: userPrompt,
       temperature: 0.7,

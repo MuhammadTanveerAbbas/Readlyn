@@ -47,17 +47,17 @@ export default function Navbar() {
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-      style={{
-        background: scrolled ? "rgba(6,6,6,0.88)" : "transparent",
-        backdropFilter: scrolled ? "blur(24px) saturate(180%)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(24px) saturate(180%)" : "none",
-        borderBottom: scrolled
-          ? "1px solid rgba(255,255,255,0.06)"
-          : "1px solid transparent",
-        boxShadow: scrolled
-          ? "0 1px 0 0 rgba(245,197,24,0.05), 0 4px 24px rgba(0,0,0,0.4)"
-          : "none",
-      }}
+        style={{
+          background: scrolled ? "rgba(8,8,8,0.92)" : "transparent",
+          backdropFilter: scrolled ? "blur(32px) saturate(200%)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(32px) saturate(200%)" : "none",
+          borderBottom: scrolled
+            ? "1px solid rgba(255,255,255,0.06)"
+            : "1px solid transparent",
+          boxShadow: scrolled
+            ? "0 1px 0 0 rgba(245,197,24,0.04), 0 8px 32px rgba(0,0,0,0.5)"
+            : "none",
+        }}
     >
       <div className="flex items-center justify-between h-[64px] px-6 md:px-[48px] max-w-[1400px] mx-auto">
         {/* Logo */}

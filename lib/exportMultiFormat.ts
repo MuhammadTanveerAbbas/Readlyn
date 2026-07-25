@@ -1,6 +1,8 @@
 "use client";
 
 import JSZip from "jszip";
+import designTokens from "@/lib/design-tokens.json";
+import { generateInfographicReactComponent } from "@/lib/code-generator";
 
 interface ExportTarget {
   key: string;
@@ -59,6 +61,13 @@ export async function exportMultiFormatZip(
     offscreen.dispose();
   }
 
+  // Include design-tokens.json & React component export in ZIP
+  zip.file("design-tokens.json", JSON.stringify(designTokens, null, 2));
+  zip.file(
+    "InfographicExport.tsx",
+    generateInfographicReactComponent((canvasJson as Record<string, unknown>) || {})
+  );
+
   const blob = await zip.generateAsync({ type: "blob" });
   const fileName = `readlyn-export-${projectName.replace(/\s+/g, "-").toLowerCase()}-${Date.now()}.zip`;
   const url = URL.createObjectURL(blob);
@@ -68,4 +77,3 @@ export async function exportMultiFormatZip(
   anchor.click();
   URL.revokeObjectURL(url);
 }
-

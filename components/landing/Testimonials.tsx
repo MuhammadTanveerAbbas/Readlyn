@@ -84,14 +84,14 @@ export default function Testimonials() {
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
                   d="M4 10h12M10 4l6 6-6 6"
-                  stroke="var(--purple)"
+                  stroke="var(--blue)"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
             ),
-            color: "var(--purple)",
+            color: "var(--blue)",
             title: "No lock-in, ever",
             body: "Export clean code you own. No proprietary formats, no vendor dependency. Your work stays yours.",
             cta: "See export formats →",

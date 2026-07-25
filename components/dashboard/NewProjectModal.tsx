@@ -32,11 +32,11 @@ interface NewProjectModalProps {
 }
 
 const THEME_COLORS: Record<ThemePalette, { primary: string; name: string }> = {
-  violet: { primary: "var(--purple-deep)", name: "Violet" },
   ocean: { primary: "var(--blue)", name: "Ocean" },
   ember: { primary: "var(--orange)", name: "Ember" },
   forest: { primary: "var(--success)", name: "Forest" },
   slate: { primary: "var(--text-muted-val)", name: "Slate" },
+  midnight: { primary: "#1e293b", name: "Midnight" },
 };
 
 const STYLE_ICONS: Record<
@@ -62,7 +62,7 @@ export default function NewProjectModal({
   const [tab, setTab] = useState<"ai" | "blank">("ai");
   const [prompt, setPrompt] = useState("");
   const [size, setSize] = useState<CanvasSize>("a4");
-  const [theme, setTheme] = useState<ThemePalette>("violet");
+  const [theme, setTheme] = useState<ThemePalette>("ocean");
   const [style, setStyle] = useState<StylePreset>("auto");
   const [pending, setPending] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");

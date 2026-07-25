@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Eye, EyeOff, Lock, LockOpen, Trash2 } from "lucide-react";
+import { Eye, EyeOff, Lock, LockOpen, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import type * as fabric from "fabric";
 
 interface LayerItem {
@@ -17,51 +17,57 @@ interface LayersPanelProps {
   canvas: fabric.Canvas | null;
   onSelectObject: (obj: fabric.FabricObject) => void;
   refreshTrigger?: number;
-  onAddMissingSection?: () => void;
 }
 
-const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
-  text: { bg: "var(--blue)", text: "#fff" },
-  rect: { bg: "var(--success)", text: "#fff" },
-  circle: { bg: "var(--orange)", text: "#fff" },
-  line: { bg: "var(--text-dim)", text: "#fff" },
-  group: { bg: "var(--purple-deep)", text: "#fff" },
-  stat: { bg: "var(--orange)", text: "#fff" },
-  icon: { bg: "var(--blue)", text: "#fff" },
+const TYPE_BADGE: Record<string, { color: string; abbr: string }> = {
+  text: { color: "#60a5fa", abbr: "T" },
+  rect: { color: "#34d399", abbr: "R" },
+  circle: { color: "#f97316", abbr: "C" },
+  line: { color: "#94a3b8", abbr: "L" },
+  group: { color: "#f5c518", abbr: "G" },
+  stat: { color: "#f97316", abbr: "S" },
+  icon: { color: "#60a5fa", abbr: "I" },
+  "i-text": { color: "#60a5fa", abbr: "T" },
 };
+
+function getObjectType(obj: fabric.FabricObject): string {
+  if (obj.type === "i-text" || obj.type === "text") return "text";
+  if (obj.type === "rect") return "rect";
+  if (obj.type === "circle") return "circle";
+  if (obj.type === "line") return "line";
+  if (obj.type === "group") return "group";
+  return obj.type || "shape";
+}
 
 export default function LayersPanel({
   canvas,
   onSelectObject,
   refreshTrigger,
-  onAddMissingSection,
 }: LayersPanelProps) {
   const [layers, setLayers] = useState<LayerItem[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
 
   const refreshLayers = useCallback(() => {
     if (!canvas) return;
-
     const objects = canvas.getObjects();
-    const layerItems: LayerItem[] = objects
+    const items: LayerItem[] = objects
       .map((obj, index) => {
-        const objWithMeta = obj as fabric.FabricObject & {
+        const o = obj as fabric.FabricObject & {
           _elementType?: string;
           _elementId?: string;
         };
-        const type = objWithMeta._elementType || getObjectType(obj);
+        const type = o._elementType || getObjectType(obj);
         return {
-          id: objWithMeta._elementId || `obj-${index}`,
+          id: o._elementId || `obj-${index}`,
           type,
-          label: `${type} ${objects.length - index}`,
+          label: getLabelFromObject(obj, type, index),
           visible: obj.visible !== false,
           locked: obj.selectable === false,
           object: obj,
         };
       })
       .reverse();
-
-    setLayers(layerItems);
+    setLayers(items);
   }, [canvas]);
 
   useEffect(() => {
@@ -70,15 +76,20 @@ export default function LayersPanel({
 
   useEffect(() => {
     if (!canvas) return;
-
-    const handleChange = () => refreshLayers();
-
-    canvas.on("object:added", handleChange);
-    canvas.on("object:removed", handleChange);
-
+    const handler = () => refreshLayers();
+    canvas.on("object:added", handler);
+    canvas.on("object:removed", handler);
+    canvas.on("selection:created", () => {
+      const active = canvas.getActiveObject();
+      if (active) {
+        const o = active as fabric.FabricObject & { _elementId?: string };
+        setSelected(o._elementId || null);
+      }
+    });
+    canvas.on("selection:cleared", () => setSelected(null));
     return () => {
-      canvas.off("object:added", handleChange);
-      canvas.off("object:removed", handleChange);
+      canvas.off("object:added", handler);
+      canvas.off("object:removed", handler);
     };
   }, [canvas, refreshLayers]);
 
@@ -104,6 +115,20 @@ export default function LayersPanel({
     refreshLayers();
   };
 
+  const moveLayerUp = (layer: LayerItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    canvas?.bringObjectForward(layer.object);
+    canvas?.renderAll();
+    refreshLayers();
+  };
+
+  const moveLayerDown = (layer: LayerItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    canvas?.sendObjectBackwards(layer.object);
+    canvas?.renderAll();
+    refreshLayers();
+  };
+
   const selectLayer = (layer: LayerItem) => {
     if (!canvas || layer.locked) return;
     canvas.setActiveObject(layer.object);
@@ -112,121 +137,97 @@ export default function LayersPanel({
     onSelectObject(layer.object);
   };
 
-  const typeColor = (type: string) => {
-    return TYPE_COLORS[type] ?? TYPE_COLORS.group!;
-  };
-
   return (
-    <div
-      className="flex-1 flex flex-col min-h-0"
-      style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-    >
-      {/* Header */}
-      <div className="px-4 py-3 flex items-center justify-between">
-        <div
-          className="text-[10px] font-semibold uppercase tracking-wide"
-          style={{ color: "var(--text-muted-val)" }}
-        >
+    <div className="flex flex-col min-h-0 border-t border-white/[0.06]">
+      <div className="px-3 py-2 flex items-center justify-between">
+        <span className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
           Layers
-        </div>
-        <div className="text-[10px] font-medium" style={{ color: "var(--text-muted-val)" }}>
-          {layers.length}
-        </div>
+        </span>
+        <span className="text-[10px] text-white/30 tabular-nums">{layers.length}</span>
       </div>
-      {onAddMissingSection && (
-        <div className="px-3 pb-2">
-          <button
-            onClick={onAddMissingSection}
-            className="h-6 w-full rounded border border-white/10 text-[10px] text-white hover:border-[var(--accent)]"
-          >
-            ✦ Add Missing Section
-          </button>
-        </div>
-      )}
 
-      {/* Layers List */}
-      <div className="flex-1 overflow-y-auto px-2 pb-2 min-h-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex-1 overflow-y-auto pb-2 scrollbar-hide">
         {layers.length === 0 ? (
-          <div
-            className="flex items-center justify-center h-20 text-[11px]"
-            style={{ color: "var(--text-muted-val)" }}
-          >
-            No layers
+          <div className="flex flex-col items-center justify-center py-8 px-3 gap-2">
+            <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/20">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M9 9h6M9 12h6M9 15h4" strokeLinecap="round" />
+              </svg>
+            </div>
+            <p className="text-[10px] text-white/25 text-center">
+              No layers yet.<br />Generate or add elements.
+            </p>
           </div>
         ) : (
-          <div className="space-y-0.5">
+          <div className="px-1.5 space-y-px">
             {layers.map((layer) => {
-              const color = typeColor(layer.type);
+              const badge = TYPE_BADGE[layer.type] ?? { color: "#94a3b8", abbr: "?" };
               const isSelected = selected === layer.id;
-
               return (
                 <div
                   key={layer.id}
                   onClick={() => selectLayer(layer)}
-                  className={`
-                    group flex items-center gap-2 p-2 rounded text-[11px] transition-all duration-150 cursor-pointer
-                    ${isSelected ? "bg-[rgba(245,197,24,0.08)] border-l-2 border-[var(--accent)]" : "hover:bg-white/5"}
-                    ${layer.locked ? "opacity-60" : ""}
-                  `}
+                  className={`group flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] cursor-pointer transition-all duration-100 ${
+                    isSelected
+                      ? "bg-[var(--accent)]/10 border border-[var(--accent)]/30"
+                      : "border border-transparent hover:bg-white/[0.04] hover:border-white/[0.06]"
+                  } ${layer.locked ? "opacity-50" : ""} ${!layer.visible ? "opacity-30" : ""}`}
                 >
-                  {/* Type Badge */}
                   <div
-                    className="px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase shrink-0 w-9 text-center"
-                    style={{ backgroundColor: color.bg, color: color.text }}
+                    className="w-4 h-4 rounded flex items-center justify-center text-[8px] font-bold text-white shrink-0"
+                    style={{ backgroundColor: badge.color + "22", border: `1px solid ${badge.color}44` }}
                   >
-                    {layer.type.slice(0, 4)}
+                    <span style={{ color: badge.color }}>{badge.abbr}</span>
                   </div>
 
-                  {/* Layer Name */}
-                  <span
-                    className="flex-1 truncate"
-                    style={{ color: "var(--text-secondary)" }}
-                  >
+                  <span className={`flex-1 truncate text-[11px] ${isSelected ? "text-white" : "text-white/60"}`}>
                     {layer.label}
                   </span>
 
-                  {/* Actions (visible on hover) */}
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                    <button
+                      onClick={(e) => moveLayerUp(layer, e)}
+                      className="w-4 h-4 flex items-center justify-center rounded hover:bg-white/10"
+                      title="Move up"
+                    >
+                      <ChevronUp className="w-2.5 h-2.5 text-white/50" />
+                    </button>
+                    <button
+                      onClick={(e) => moveLayerDown(layer, e)}
+                      className="w-4 h-4 flex items-center justify-center rounded hover:bg-white/10"
+                      title="Move down"
+                    >
+                      <ChevronDown className="w-2.5 h-2.5 text-white/50" />
+                    </button>
                     <button
                       onClick={(e) => toggleVisibility(layer, e)}
-                      className="p-1 rounded transition-colors hover:bg-white/10"
+                      className="w-4 h-4 flex items-center justify-center rounded hover:bg-white/10"
                       title={layer.visible ? "Hide" : "Show"}
                     >
                       {layer.visible ? (
-                        <Eye className="w-3 h-3" style={{ color: "var(--text-body)" }} />
+                        <Eye className="w-2.5 h-2.5 text-white/50" />
                       ) : (
-                        <EyeOff
-                          className="w-3 h-3"
-                          style={{ color: "var(--text-muted-val)" }}
-                        />
+                        <EyeOff className="w-2.5 h-2.5 text-white/30" />
                       )}
                     </button>
                     <button
                       onClick={(e) => toggleLock(layer, e)}
-                      className="p-1 rounded transition-colors hover:bg-white/10"
+                      className="w-4 h-4 flex items-center justify-center rounded hover:bg-white/10"
                       title={layer.locked ? "Unlock" : "Lock"}
                     >
                       {layer.locked ? (
-                        <Lock
-                          className="w-3 h-3"
-                          style={{ color: "var(--text-body)" }}
-                        />
+                        <Lock className="w-2.5 h-2.5 text-white/50" />
                       ) : (
-                        <LockOpen
-                          className="w-3 h-3"
-                          style={{ color: "var(--text-body)" }}
-                        />
+                        <LockOpen className="w-2.5 h-2.5 text-white/30" />
                       )}
                     </button>
                     <button
                       onClick={(e) => deleteLayer(layer, e)}
-                      className="p-1 rounded transition-colors hover:bg-[rgba(239,68,68,0.1)]"
+                      className="w-4 h-4 flex items-center justify-center rounded hover:bg-red-500/10"
                       title="Delete"
                     >
-                      <Trash2
-                        className="w-3 h-3"
-                        style={{ color: "var(--text-body)" }}
-                      />
+                      <Trash2 className="w-2.5 h-2.5 text-red-400/60" />
                     </button>
                   </div>
                 </div>
@@ -239,11 +240,20 @@ export default function LayersPanel({
   );
 }
 
-function getObjectType(obj: fabric.FabricObject): string {
-  if (obj.type === "i-text" || obj.type === "text") return "text";
-  if (obj.type === "rect") return "rect";
-  if (obj.type === "circle") return "circle";
-  if (obj.type === "line") return "line";
-  if (obj.type === "group") return "group";
-  return obj.type || "shape";
+function getLabelFromObject(obj: fabric.FabricObject, type: string, index: number): string {
+  const o = obj as fabric.FabricObject & { _elementId?: string; text?: string };
+  if ((type === "text" || type === "i-text") && o.text) {
+    return o.text.slice(0, 22) || `Text ${index + 1}`;
+  }
+  const names: Record<string, string> = {
+    text: "Text",
+    rect: "Rectangle",
+    circle: "Circle",
+    line: "Line",
+    group: "Group",
+    stat: "Stat Block",
+    icon: "Icon",
+    "i-text": "Text",
+  };
+  return `${names[type] || "Shape"} ${index + 1}`;
 }

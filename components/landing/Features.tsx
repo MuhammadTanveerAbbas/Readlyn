@@ -169,12 +169,12 @@ const features = [
         />
       </svg>
     ),
-    iconColor: "var(--purple)",
+    iconColor: "var(--blue)",
     title: "Interactive\ncanvas editor",
     description:
       "Drag, resize, rotate, and edit any element on the Fabric.js canvas. Layers panel, properties panel, undo/redo, zoom, and pan all included.",
     tag: "Editor",
-    tagColor: "var(--purple)",
+    tagColor: "var(--blue)",
   },
   {
     icon: (

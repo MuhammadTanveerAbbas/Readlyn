@@ -155,9 +155,9 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
       </nav>
 
       {/* Bottom section */}
-      <div className="absolute bottom-0 left-0 right-0 border-t border-white/[0.06] bg-[var(--bg-subtle)] p-4">
+      <div className="absolute bottom-0 left-0 right-0 border-t border-white/[0.06] bg-[var(--bg-subtle)] p-4 flex flex-col gap-2">
         <div className="rounded-lg border border-white/[0.08] bg-gradient-to-br from-[var(--accent)]/5 to-transparent p-3">
-          <div className="flex items-start gap-2 mb-2">
+          <div className="flex items-start gap-2 mb-1">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/20">
               <Sparkles className="h-4 w-4 text-[var(--accent)]" />
             </div>

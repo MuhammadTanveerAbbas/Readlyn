@@ -281,3 +281,64 @@ function updateParallax() {
 window.addEventListener('scroll', updateParallax, { passive: true });
 updateParallax();`
 }
+
+/**
+ * Generate standalone React component code from canvas JSON
+ */
+export function generateInfographicReactComponent(canvasJson: Record<string, unknown>): string {
+  const objects = (canvasJson.objects as Array<Record<string, unknown>>) || [];
+  
+  const jsxElements = objects.map((obj, i) => {
+    const left = Math.round(Number(obj.left || 0));
+    const top = Math.round(Number(obj.top || 0));
+    const width = Math.round(Number(obj.width || 100) * Number(obj.scaleX || 1));
+    const height = Math.round(Number(obj.height || 40) * Number(obj.scaleY || 1));
+    const fill = (obj.fill as string) || "#ffffff";
+    const text = (obj.text as string) || "";
+    
+    if (obj.type === "i-text" || obj.type === "text") {
+      return `      <div
+        key={${i}}
+        style={{
+          position: "absolute",
+          left: "${left}px",
+          top: "${top}px",
+          width: "${width}px",
+          color: "${fill}",
+          fontSize: "${obj.fontSize || 16}px",
+          fontFamily: "${obj.fontFamily || "Space Grotesk"}",
+          fontWeight: "${obj.fontWeight || "normal"}",
+        }}
+      >
+        ${text}
+      </div>`;
+    }
+    
+    return `      <div
+        key={${i}}
+        style={{
+          position: "absolute",
+          left: "${left}px",
+          top: "${top}px",
+          width: "${width}px",
+          height: "${height}px",
+          backgroundColor: "${fill}",
+          borderRadius: "${obj.rx || 0}px",
+        }}
+      />`;
+  }).join("\n");
+
+  return `import React from "react";
+
+export function InfographicExport() {
+  return (
+    <div
+      className="relative overflow-hidden shadow-2xl rounded-2xl bg-[var(--bg-base)]"
+      style={{ width: "800px", height: "1200px" }}
+    >
+${jsxElements}
+    </div>
+  );
+}
+`;
+}

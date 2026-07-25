@@ -52,7 +52,7 @@ export default function GenerationHistoryPanel({
                 {item.prompt || "Untitled generation"}
               </p>
               <p className="text-[10px] text-white/50">
-                {item.archetype || "auto"} · {item.theme || "violet"}
+                {item.archetype || "auto"} · {item.theme || "ocean"}
               </p>
               <div className="mt-2 flex gap-2">
                 <button

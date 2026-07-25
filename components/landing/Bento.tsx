@@ -48,9 +48,9 @@ const items = [
     description:
       "Download as high-res PNG or save the raw JSON schema to reload and continue editing. Your work stays yours.",
     tag: "EXPORT",
-    tagColor: "var(--purple)",
+    tagColor: "var(--accent)",
     tagBg: "transparent",
-    accent: "var(--purple)",
+    accent: "var(--accent)",
     bg: "var(--bg-panel)",
     dark: true,
     size: "normal",

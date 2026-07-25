@@ -10,7 +10,7 @@ export const DEFAULT_INFOGRAPHIC: InfographicData = {
     { id: 'bg', type: 'rect', x: 0, y: 0, width: 800, height: 1100, fill: '#ffffff', rx: 0, opacity: 1, stroke: null, strokeWidth: null, zIndex: 0 },
     
     // Header band
-    { id: 'header-bg', type: 'rect', x: 0, y: 0, width: 800, height: 200, fill: '#7c3aed', rx: 0, opacity: 1, stroke: null, strokeWidth: null, zIndex: 1 },
+    { id: 'header-bg', type: 'rect', x: 0, y: 0, width: 800, height: 200, fill: '#f5c518', rx: 0, opacity: 1, stroke: null, strokeWidth: null, zIndex: 1 },
     
     // Decorative circle top right
     { id: 'deco-1', type: 'circle', x: 680, y: -40, radius: 120, fill: '#ffffff', opacity: 0.1, stroke: null, strokeWidth: null, zIndex: 2 },
@@ -22,11 +22,11 @@ export const DEFAULT_INFOGRAPHIC: InfographicData = {
     { id: 'subtitle', type: 'text', x: 48, y: 175, text: 'From idea to your first 100 paying customers', fontSize: 14, fontWeight: 'normal', fontFamily: 'Arial', fill: '#e9d5ff', textAlign: 'left', width: 704, opacity: 1, zIndex: 10 },
 
     // Step 1
-    { id: 's1-accent', type: 'rect', x: 48, y: 230, width: 6, height: 130, fill: '#7c3aed', rx: 3, opacity: 1, stroke: null, strokeWidth: null, zIndex: 5 },
-    { id: 's1-num', type: 'text', x: 72, y: 238, text: '01', fontSize: 36, fontWeight: '900', fontFamily: 'Arial', fill: '#7c3aed', textAlign: 'left', width: 420, opacity: 0.2, zIndex: 6 },
+    { id: 's1-accent', type: 'rect', x: 48, y: 230, width: 6, height: 130, fill: '#f5c518', rx: 3, opacity: 1, stroke: null, strokeWidth: null, zIndex: 5 },
+    { id: 's1-num', type: 'text', x: 72, y: 238, text: '01', fontSize: 36, fontWeight: '900', fontFamily: 'Arial', fill: '#f5c518', textAlign: 'left', width: 420, opacity: 0.2, zIndex: 6 },
     { id: 's1-title', type: 'text', x: 72, y: 280, text: 'Validate Your Idea', fontSize: 22, fontWeight: 'bold', fontFamily: 'Arial', fill: '#1a1a2e', textAlign: 'left', width: 420, opacity: 1, zIndex: 10 },
     { id: 's1-body', type: 'text', x: 72, y: 310, text: 'Talk to 20+ potential customers. Find a burning problem worth solving.', fontSize: 14, fontWeight: 'normal', fontFamily: 'Arial', fill: '#64748b', textAlign: 'left', width: 420, opacity: 1, zIndex: 10 },
-    { id: 's1-stat', type: 'stat', x: 620, y: 250, width: 130, height: 90, bgFill: '#f3e8ff', valueFill: '#7c3aed', labelFill: '#64748b', value: '42%', label: 'fail due to no market need', rx: 10, zIndex: 8 },
+    { id: 's1-stat', type: 'stat', x: 620, y: 250, width: 130, height: 90, bgFill: '#f3e8ff', valueFill: '#f5c518', labelFill: '#64748b', value: '42%', label: 'fail due to no market need', rx: 10, zIndex: 8 },
 
     // Step 2
     { id: 's2-accent', type: 'rect', x: 48, y: 390, width: 6, height: 130, fill: '#f97316', rx: 3, opacity: 1, stroke: null, strokeWidth: null, zIndex: 5 },

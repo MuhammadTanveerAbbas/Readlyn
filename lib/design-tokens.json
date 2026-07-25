@@ -1,0 +1,94 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "name": "Readlyn Design Tokens",
+  "version": "3.0.0",
+  "color": {
+    "primary": {
+      "50": { "$type": "color", "$value": "#fffbeb" },
+      "100": { "$type": "color", "$value": "#fef3c7" },
+      "200": { "$type": "color", "$value": "#fde047" },
+      "300": { "$type": "color", "$value": "#facc15" },
+      "400": { "$type": "color", "$value": "#f5c518" },
+      "500": { "$type": "color", "$value": "#eab308" },
+      "600": { "$type": "color", "$value": "#ca8a04" },
+      "700": { "$type": "color", "$value": "#a16207" },
+      "800": { "$type": "color", "$value": "#854d0e" },
+      "900": { "$type": "color", "$value": "#713f12" }
+    },
+    "neutral": {
+      "50": { "$type": "color", "$value": "#fafafa" },
+      "100": { "$type": "color", "$value": "#f4f4f5" },
+      "200": { "$type": "color", "$value": "#e4e4e7" },
+      "300": { "$type": "color", "$value": "#d4d4d8" },
+      "400": { "$type": "color", "$value": "#a1a1aa" },
+      "500": { "$type": "color", "$value": "#71717a" },
+      "600": { "$type": "color", "$value": "#52525b" },
+      "700": { "$type": "color", "$value": "#3f3f46" },
+      "800": { "$type": "color", "$value": "#27272a" },
+      "900": { "$type": "color", "$value": "#080808" }
+    },
+    "semantic": {
+      "success": { "$type": "color", "$value": "#22c55e" },
+      "warning": { "$type": "color", "$value": "#f59e0b" },
+      "danger": { "$type": "color", "$value": "#ef4444" },
+      "info": { "$type": "color", "$value": "#3b82f6" }
+    }
+  },
+  "spacing": {
+    "1": { "$type": "dimension", "$value": "4px" },
+    "2": { "$type": "dimension", "$value": "8px" },
+    "3": { "$type": "dimension", "$value": "12px" },
+    "4": { "$type": "dimension", "$value": "16px" },
+    "6": { "$type": "dimension", "$value": "24px" },
+    "8": { "$type": "dimension", "$value": "32px" },
+    "12": { "$type": "dimension", "$value": "48px" },
+    "16": { "$type": "dimension", "$value": "64px" },
+    "24": { "$type": "dimension", "$value": "96px" }
+  },
+  "typography": {
+    "scale": {
+      "xs": { "$type": "dimension", "$value": "12px" },
+      "sm": { "$type": "dimension", "$value": "14px" },
+      "base": { "$type": "dimension", "$value": "16px" },
+      "lg": { "$type": "dimension", "$value": "20px" },
+      "xl": { "$type": "dimension", "$value": "25px" },
+      "2xl": { "$type": "dimension", "$value": "31px" },
+      "3xl": { "$type": "dimension", "$value": "39px" },
+      "4xl": { "$type": "dimension", "$value": "49px" }
+    },
+    "fontFamily": {
+      "sans": { "$type": "fontFamily", "$value": "Space Grotesk, sans-serif" },
+      "mono": { "$type": "fontFamily", "$value": "IBM Plex Mono, monospace" }
+    },
+    "lineHeight": {
+      "body": { "$type": "number", "$value": 1.5 },
+      "heading": { "$type": "number", "$value": 1.2 }
+    }
+  },
+  "radius": {
+    "xs": { "$type": "dimension", "$value": "4px" },
+    "sm": { "$type": "dimension", "$value": "8px" },
+    "md": { "$type": "dimension", "$value": "12px" },
+    "lg": { "$type": "dimension", "$value": "16px" },
+    "xl": { "$type": "dimension", "$value": "24px" },
+    "full": { "$type": "dimension", "$value": "9999px" }
+  },
+  "elevation": {
+    "resting": { "$type": "shadow", "$value": "0 1px 2px rgba(0, 0, 0, 0.4)" },
+    "raised": { "$type": "shadow", "$value": "0 4px 12px rgba(0, 0, 0, 0.5)" },
+    "floating": { "$type": "shadow", "$value": "0 12px 32px rgba(0, 0, 0, 0.6)" },
+    "modal": { "$type": "shadow", "$value": "0 24px 60px rgba(0, 0, 0, 0.8)" }
+  },
+  "motion": {
+    "duration": {
+      "micro": { "$type": "duration", "$value": "100ms" },
+      "standard": { "$type": "duration", "$value": "200ms" },
+      "complex": { "$type": "duration", "$value": "350ms" }
+    },
+    "easing": {
+      "easeOut": { "$type": "cubic-bezier", "$value": [0, 0, 0.2, 1] },
+      "easeIn": { "$type": "cubic-bezier", "$value": [0.4, 0, 1, 1] },
+      "easeInOut": { "$type": "cubic-bezier", "$value": [0.4, 0, 0.2, 1] }
+    }
+  }
+}

@@ -4,6 +4,9 @@ import {
   RectSchema,
   TextSchema,
 } from "@/types/infographic";
+import { GROQ_MODELS, getGroqModel } from "@/lib/groq";
+import { PLANS, getPlanById } from "@/config/plans";
+import designTokens from "@/lib/design-tokens.json";
 
 describe("Infographic Schemas", () => {
   describe("RectSchema", () => {
@@ -131,5 +134,44 @@ describe("Infographic Schemas", () => {
       });
       expect(result.success).toBe(false);
     });
+  });
+});
+
+describe("Groq Model Routing", () => {
+  it("should return the default reasoning model", () => {
+    const model = getGroqModel("reasoning");
+    expect(model).toBeDefined();
+    expect(typeof model).toBe("string");
+    expect(model.length).toBeGreaterThan(0);
+  });
+
+  it("should route to vision and fast models properly", () => {
+    expect(getGroqModel("vision")).toBe(GROQ_MODELS.vision);
+    expect(getGroqModel("fast")).toBe(GROQ_MODELS.fast);
+  });
+});
+
+describe("Plans and Monetization", () => {
+  it("should define Free, Pro, and Team plan tiers", () => {
+    expect(PLANS.free).toBeDefined();
+    expect(PLANS.pro).toBeDefined();
+    expect(PLANS.team).toBeDefined();
+  });
+
+  it("should return plan details by id", () => {
+    const pro = getPlanById("pro");
+    expect(pro.name).toBe("Pro");
+    expect(pro.limits.aiCreditsMonthly).toBe(3000);
+  });
+});
+
+describe("W3C Design Tokens", () => {
+  it("should contain standard token categories", () => {
+    expect(designTokens.color).toBeDefined();
+    expect(designTokens.spacing).toBeDefined();
+    expect(designTokens.typography).toBeDefined();
+    expect(designTokens.radius).toBeDefined();
+    expect(designTokens.elevation).toBeDefined();
+    expect(designTokens.motion).toBeDefined();
   });
 });

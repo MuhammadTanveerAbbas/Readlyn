@@ -104,7 +104,7 @@ const CURSORS = [
   },
   {
     name: "Mila V.",
-    color: "var(--purple)",
+    color: "var(--blue)",
     textColor: "var(--text-primary)",
     animName: "cursor-mila",
     duration: "30s",

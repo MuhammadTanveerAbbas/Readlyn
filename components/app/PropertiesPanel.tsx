@@ -177,7 +177,7 @@ export default function PropertiesPanel({
               {
                 label: "Fill",
                 key: "fill" as const,
-                val: properties.fill || "var(--purple-deep)",
+                val: properties.fill || "#0284c7",
               },
               {
                 label: "Stroke",
@@ -376,36 +376,11 @@ export default function PropertiesPanel({
             <button
               key={label}
               onClick={onClick}
-              className="h-6 flex items-center justify-center gap-1 rounded text-[10px] transition-all active:scale-95"
-              style={{
-                backgroundColor: danger ? "rgba(239,68,68,0.07)" : "var(--bg-elevated)",
-                border: danger
-                  ? "1px solid transparent"
-                  : "1px solid var(--border-default)",
-                color: danger ? "var(--destructive)" : "var(--text-body)",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                if (danger) {
-                  el.style.borderColor = "var(--destructive)";
-                  el.style.backgroundColor = "var(--destructive)";
-                  el.style.color = "var(--text-primary)";
-                } else {
-                  el.style.borderColor = "rgba(245,197,24,0.3)";
-                  el.style.color = "var(--text-primary)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                if (danger) {
-                  el.style.borderColor = "transparent";
-                  el.style.backgroundColor = "rgba(239,68,68,0.07)";
-                  el.style.color = "var(--destructive)";
-                } else {
-                  el.style.borderColor = "var(--border-default)";
-                  el.style.color = "var(--text-body)";
-                }
-              }}
+              className={`h-6 flex items-center justify-center gap-1 rounded text-[10px] transition-all active:scale-95 ${
+                danger
+                  ? "bg-red-500/10 border border-transparent text-[var(--destructive)] hover:bg-[var(--destructive)] hover:text-white hover:border-[var(--destructive)]"
+                  : "border border-[var(--border-default)] text-[var(--text-body)] hover:border-[rgba(245,197,24,0.3)] hover:text-white"
+              }`}
             >
               <Icon className="w-3 h-3" />
               {label}

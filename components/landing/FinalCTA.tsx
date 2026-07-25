@@ -32,7 +32,7 @@ export default function FinalCTA() {
         className="absolute -left-32 top-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(124,139,255,0.08) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(245,197,24,0.06) 0%, transparent 70%)",
         }}
       />
       <div
@@ -107,7 +107,7 @@ export default function FinalCTA() {
           </svg>
         </a>
         <a
-          href="https://github.com"
+          href="https://github.com/MuhammadTanveerAbbas/Readlyn"
           className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl
                      border border-white/10 text-[#888888]
                      hover:border-white/25 hover:text-white

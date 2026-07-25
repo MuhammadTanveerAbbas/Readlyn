@@ -374,7 +374,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
             {[
               { k: "W", v: "800px" },
               { k: "H", v: "1100px" },
-              { k: "THEME", v: "Violet" },
+              { k: "THEME", v: "Ocean" },
               { k: "LAYOUT", v: "Stats" },
               { k: "FILL", v: "var(--bg-panel)", sw: "var(--bg-panel)" },
               { k: "ACCENT", v: "var(--accent)", sw: "var(--accent)" },

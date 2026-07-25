@@ -22,10 +22,10 @@ const slides = [
     title: "Component Library",
     description:
       "Full design systems with tokens, variants, and documentation  exported as clean React or Vue code.",
-    accent: "var(--purple)",
+    accent: "var(--accent)",
     bg: "var(--bg-subtle)",
-    border: "rgba(167,139,250,0.12)",
-    glow: "rgba(167,139,250,0.07)",
+    border: "rgba(245,197,24,0.12)",
+    glow: "rgba(245,197,24,0.07)",
   },
   {
     tag: "Mobile UI",

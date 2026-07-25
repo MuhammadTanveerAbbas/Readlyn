@@ -99,7 +99,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
         </div>
 
         {/* Footer note */}
-        <p className="mt-5 text-center font-ibm-mono text-[10px] text-[#333] tracking-[0.5px] leading-relaxed">
+        <p className="mt-5 text-center font-ibm-mono text-[10px] text-[#555] tracking-[0.5px] leading-relaxed">
           By continuing, you agree to our{" "}
           <Link
             href="/terms"
@@ -116,6 +116,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
           </Link>
           .
         </p>
+
       </div>
     </main>
   );

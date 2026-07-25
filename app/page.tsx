@@ -46,7 +46,7 @@ export default function Home() {
     );
   }
   return (
-    <main className="relative flex flex-col w-full bg-[var(--bg-base)] pt-[64px] overflow-hidden">
+    <main className="relative flex flex-col w-full bg-[var(--bg-base)] pt-[64px]">
       <Navbar />
       <Hero />
       <PixelDivider />
