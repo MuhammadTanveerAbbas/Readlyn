@@ -73,59 +73,62 @@ export default function NewProjectModal({
   const createProject = async (withAI: boolean) => {
     setErrorMsg("");
     setPending(true);
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      setPending(false);
-      setErrorMsg("You need to be logged in to create projects.");
-      return;
-    }
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setPending(false);
+        setErrorMsg("You need to be logged in to create projects.");
+        return;
+      }
 
-    const { count: projectCount } = await supabase
-      .from("projects")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .eq("is_trashed", false);
+      const { count: projectCount } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("is_trashed", false);
 
-    if ((projectCount ?? 0) >= FREE_PLAN.limits.projects) {
+      if ((projectCount ?? 0) >= FREE_PLAN.limits.projects) {
+        setPending(false);
+        setErrorMsg(
+          `Project limit reached (${FREE_PLAN.limits.projects} projects on the free plan). Delete a project to create a new one.`,
+        );
+        return;
+      }
+
+      const title =
+        withAI && prompt.trim() ? prompt.slice(0, 70) : "Untitled Project";
+
+      const { data, error } = await supabase
+        .from("projects")
+        .insert({
+          title,
+          user_id: user.id,
+          theme,
+          archetype: style,
+          tool_type: "infographic",
+        })
+        .select("id")
+        .single();
+
+      if (error || !data?.id) {
+        setPending(false);
+        setErrorMsg(error?.message || "Failed to create project.");
+        return;
+      }
+
       setPending(false);
-      setErrorMsg(
-        `Project limit reached (${FREE_PLAN.limits.projects} projects on the free plan). Delete a project to create a new one.`,
+      await onCreated?.();
+      onClose();
+      router.push(
+        `/editor/${data.id}${withAI ? `?autogen=1&prompt=${encodeURIComponent(prompt.trim())}&theme=${theme}&size=${size}&style=${style}` : ""}`,
       );
-      return;
-    }
-
-    const title =
-      withAI && prompt.trim() ? prompt.slice(0, 70) : "Untitled Project";
-
-    const { data, error } = await supabase
-      .from("projects")
-      .insert({ title, user_id: user.id })
-      .select("id")
-      .single();
-
-    if (error || !data?.id) {
+    } catch (err) {
       setPending(false);
-      setErrorMsg(error?.message || "Failed to create project.");
-      return;
+      setErrorMsg(err instanceof Error ? err.message : "An unexpected error occurred.");
     }
-
-    await supabase
-      .from("projects")
-      .update({
-        theme,
-        archetype: style,
-      })
-      .eq("id", data.id);
-
-    setPending(false);
-    await onCreated?.();
-    onClose();
-    router.push(
-      `/editor/${data.id}${withAI ? `?autogen=1&prompt=${encodeURIComponent(prompt)}&theme=${theme}&size=${size}&style=${style}` : ""}`,
-    );
   };
 
   return (

@@ -1,5 +1,5 @@
 import { generateText } from "ai";
-import { getGroqClient, getGroqModel } from "@/lib/groq";
+import { getGroqClient, executeGroqWithSelfHealing } from "@/lib/groq";
 import {
   InfographicSchema,
   CANVAS_SIZES,
@@ -320,30 +320,54 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
 
     const groq = getGroqClient();
 
-    const { text } = await generateText({
-      model: groq(getGroqModel("reasoning")),
-      system: systemPrompt,
-      prompt: userPrompt,
-      temperature: 0.7,
-    });
+    let text = "";
+    try {
+      const response = await executeGroqWithSelfHealing(
+        async (modelName) => {
+          return await generateText({
+            model: groq(modelName),
+            system: systemPrompt,
+            prompt: userPrompt,
+            temperature: 0.7,
+          });
+        },
+        { task: "reasoning" },
+      );
+      text = response.text;
+    } catch (aiErr) {
+      console.warn(
+        "[generate] AI generation degraded to fallback template:",
+        aiErr instanceof Error ? aiErr.message : "Unknown error",
+      );
+    }
 
     let payload: InfographicData;
-    try {
-      const normalizedJson = extractFirstJsonObject(text).replace(
-        /:\s*undefined(\s*[,}])/g,
-        ": null$1",
-      );
-      const parsed = InfographicSchema.safeParse(JSON.parse(normalizedJson));
-      payload = parsed.success
-        ? parsed.data
-        : buildFallbackInfographic({
-            prompt,
-            width: w,
-            height: h,
-            colors,
-            slots,
-          });
-    } catch {
+    if (text) {
+      try {
+        const normalizedJson = extractFirstJsonObject(text).replace(
+          /:\s*undefined(\s*[,}])/g,
+          ": null$1",
+        );
+        const parsed = InfographicSchema.safeParse(JSON.parse(normalizedJson));
+        payload = parsed.success
+          ? parsed.data
+          : buildFallbackInfographic({
+              prompt,
+              width: w,
+              height: h,
+              colors,
+              slots,
+            });
+      } catch {
+        payload = buildFallbackInfographic({
+          prompt,
+          width: w,
+          height: h,
+          colors,
+          slots,
+        });
+      }
+    } else {
       payload = buildFallbackInfographic({
         prompt,
         width: w,

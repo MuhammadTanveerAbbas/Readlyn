@@ -41,6 +41,7 @@ export interface ProjectItem {
   title?: string | null;
   theme?: string | null;
   archetype?: string | null;
+  created_at?: string | null;
   updated_at?: string | null;
   is_pinned?: boolean;
   thumbnail_url?: string | null;
@@ -48,6 +49,7 @@ export interface ProjectItem {
 
 interface ProjectCardProps {
   project: ProjectItem;
+  viewMode?: "grid" | "list";
   onProjectsChanged?: () => Promise<void> | void;
 }
 
@@ -74,7 +76,11 @@ const ARCHETYPE_ICONS: Record<
   auto: Wand2,
 };
 
-export default function ProjectCard({ project, onProjectsChanged }: ProjectCardProps) {
+export default function ProjectCard({
+  project,
+  viewMode = "grid",
+  onProjectsChanged,
+}: ProjectCardProps) {
   const [imageError, setImageError] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -103,203 +109,319 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
-  const handleRename = async () => {
+  const handleRename = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     setMenuOpen(false);
     const nextTitle = window.prompt("Rename project", title);
-    if (!nextTitle || !nextTitle.trim()) return;
-    const { error } = await supabase
-      .from("projects")
-      .update({ title: nextTitle.trim() })
-      .eq("id", project.id);
-    if (!error) await onProjectsChanged?.();
+    if (!nextTitle || !nextTitle.trim() || nextTitle.trim() === title) return;
+    try {
+      const { error } = await supabase
+        .from("projects")
+        .update({ title: nextTitle.trim() })
+        .eq("id", project.id);
+      if (!error) await onProjectsChanged?.();
+    } catch (err) {
+      console.error("[ProjectCard] Rename error:", err);
+    }
   };
 
-  const handleDuplicate = async () => {
+  const handleDuplicate = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     setMenuOpen(false);
-    const { data: source, error: fetchError } = await supabase
-      .from("projects")
-      .select("title,theme,archetype,canvas_json,thumbnail_url,user_id")
-      .eq("id", project.id)
-      .single();
-    if (fetchError || !source) return;
-    const { error } = await supabase.from("projects").insert({
-      ...source,
-      title: `${source.title || "Untitled Project"} (Copy)`,
-    });
-    if (!error) await onProjectsChanged?.();
+    try {
+      const { data: source, error: fetchError } = await supabase
+        .from("projects")
+        .select("title,theme,archetype,canvas_json,thumbnail_url,user_id")
+        .eq("id", project.id)
+        .single();
+      if (fetchError || !source) return;
+      const { error } = await supabase.from("projects").insert({
+        ...source,
+        title: `${source.title || "Untitled Project"} (Copy)`,
+        is_pinned: false,
+      });
+      if (!error) await onProjectsChanged?.();
+    } catch (err) {
+      console.error("[ProjectCard] Duplicate error:", err);
+    }
   };
 
-  const handleTogglePin = async () => {
+  const handleTogglePin = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     setMenuOpen(false);
-    const { error } = await supabase
-      .from("projects")
-      .update({ is_pinned: !project.is_pinned })
-      .eq("id", project.id);
-    if (!error) await onProjectsChanged?.();
+    try {
+      const { error } = await supabase
+        .from("projects")
+        .update({ is_pinned: !project.is_pinned })
+        .eq("id", project.id);
+      if (!error) await onProjectsChanged?.();
+    } catch (err) {
+      console.error("[ProjectCard] Toggle pin error:", err);
+    }
   };
 
   const handleDelete = async () => {
     setDeleting(true);
-    const { error } = await supabase.from("projects").delete().eq("id", project.id);
-    setDeleting(false);
-    if (!error) {
-      setDeleteDialogOpen(false);
-      await onProjectsChanged?.();
-      router.refresh();
+    try {
+      const { error } = await supabase.from("projects").delete().eq("id", project.id);
+      if (!error) {
+        setDeleteDialogOpen(false);
+        await onProjectsChanged?.();
+        router.refresh();
+      }
+    } catch (err) {
+      console.error("[ProjectCard] Delete error:", err);
+    } finally {
+      setDeleting(false);
     }
   };
 
-  return (
-    <Link
-      href={`/editor/${project.id}`}
-      className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[var(--bg-panel)] transition-all duration-300 hover:scale-[1.02] hover:border-white/[0.15] hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(245,197,24,0.1)]"
+  // Actions dropdown component
+  const ActionsDropdown = (
+    <div
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      className="shrink-0"
     >
-      {/* Top accent line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${themeColor}, transparent)`,
-        }}
-      />
+      <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+        <DropdownMenuTrigger asChild>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-black/60 opacity-80 backdrop-blur-sm transition-opacity hover:bg-black/80 hover:opacity-100"
+            aria-label="Project actions"
+          >
+            <MoreHorizontal className="h-3.5 w-3.5 text-white/70" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          sideOffset={8}
+          className="z-[100] w-44 border-white/10 bg-[var(--bg-panel)] text-white"
+        >
+          <DropdownMenuItem onSelect={() => handleRename()}>
+            Rename project
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => handleDuplicate()}>
+            Duplicate project
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => handleTogglePin()}>
+            {project.is_pinned ? "Unpin project" : "Pin project"}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={(event) => {
+              event.preventDefault();
+              setMenuOpen(false);
+              setDeleteDialogOpen(true);
+            }}
+            className="text-red-400 focus:bg-red-500/10 focus:text-red-300"
+          >
+            Delete project
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-      {/* Thumbnail */}
-      <div className="relative aspect-[4/3] bg-gradient-to-br from-[var(--bg-elevated)] via-[var(--bg-elevated)] to-[var(--bg-panel)] overflow-hidden">
-        {project.thumbnail_url && !imageError ? (
-          <img
-            src={project.thumbnail_url}
-            alt={title}
-            onError={() => setImageError(true)}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex h-full flex-col items-center justify-center gap-3 p-6">
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent
+          onClick={(e) => e.stopPropagation()}
+          className="border-white/10 bg-[var(--bg-panel)] text-white"
+        >
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete project?</AlertDialogTitle>
+            <AlertDialogDescription className="text-white/60">
+              This action permanently deletes &quot;{title}&quot; and cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={(e) => {
+                e.stopPropagation();
+                setDeleteDialogOpen(false);
+              }}
+              className="border-white/10 bg-transparent text-white hover:bg-white/5"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete();
+              }}
+              disabled={deleting}
+              className="bg-red-500 text-white hover:bg-red-600"
+            >
+              {deleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+
+  // List View Mode
+  if (viewMode === "list") {
+    return (
+      <div className="relative group rounded-xl border border-white/[0.08] bg-[var(--bg-panel)] transition-all hover:border-white/[0.15] hover:bg-[var(--bg-elevated)] p-3">
+        <div className="flex items-center gap-4">
+          <Link
+            href={`/editor/${project.id}`}
+            className="flex flex-1 items-center gap-4 min-w-0"
+          >
+            {/* Small icon thumbnail */}
             <div
-              className="flex h-16 w-16 items-center justify-center rounded-2xl border transition-all duration-300 group-hover:scale-110"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border overflow-hidden"
               style={{
                 borderColor: `${themeColor}40`,
                 background: `${themeColor}15`,
               }}
             >
-              <ArchetypeIcon
-                className="h-8 w-8"
-                style={{ color: themeColor }}
-              />
+              {project.thumbnail_url && !imageError ? (
+                <img
+                  src={project.thumbnail_url}
+                  alt={title}
+                  onError={() => setImageError(true)}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <ArchetypeIcon
+                  className="h-5 w-5"
+                  style={{ color: themeColor }}
+                />
+              )}
             </div>
-            <div className="text-center">
-              <p className="text-xs font-medium text-white/60">
-                No preview yet
-              </p>
-              <p className="text-[10px] text-white/30 mt-1">Click to edit</p>
+
+            {/* Title & metadata */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h3 className="truncate text-sm font-semibold text-white group-hover:text-[var(--accent)] transition-colors">
+                  {title}
+                </h3>
+                {project.is_pinned && (
+                  <Pin className="h-3 w-3 shrink-0 text-[var(--accent)] fill-[var(--accent)]" />
+                )}
+              </div>
+              <div className="flex items-center gap-3 text-xs text-white/40 mt-0.5">
+                <span className="capitalize">{archetype} layout</span>
+                <span>•</span>
+                <span className="capitalize">{theme}</span>
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-        {/* Top right badges */}
-        <div className="absolute right-2 top-2 flex gap-1.5">
-          {project.is_pinned && (
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm border border-[var(--accent)]/30">
-              <Pin className="h-3.5 w-3.5 text-[var(--accent)] fill-[var(--accent)]" />
+            {/* Date */}
+            <div className="hidden sm:flex items-center gap-1.5 text-xs text-white/40 shrink-0">
+              <Calendar className="h-3.5 w-3.5" />
+              <span>{formatDate(project.updated_at)}</span>
             </div>
-          )}
-          <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
-            <DropdownMenuTrigger asChild>
-              <button
-                onClick={(e) => e.preventDefault()}
-                className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-black/60 opacity-0 backdrop-blur-sm transition-opacity hover:bg-black/80 group-hover:opacity-100"
-                aria-label="Project actions"
-              >
-                <MoreHorizontal className="h-3.5 w-3.5 text-white/70" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              sideOffset={8}
-              className="z-[100] w-44 border-white/10 bg-[var(--bg-panel)] text-white"
-            >
-              <DropdownMenuItem onSelect={handleRename}>
-                Rename project
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={handleDuplicate}>
-                Duplicate project
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={handleTogglePin}>
-                {project.is_pinned ? "Unpin project" : "Pin project"}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={(event) => {
-                  event.preventDefault();
-                  setMenuOpen(false);
-                  setDeleteDialogOpen(true);
-                }}
-                className="text-red-400 focus:bg-red-500/10 focus:text-red-300"
-              >
-                Delete project
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <AlertDialogContent className="border-white/10 bg-[var(--bg-panel)] text-white">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete project?</AlertDialogTitle>
-                    <AlertDialogDescription className="text-white/60">
-                      This action permanently deletes this project and cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className="border-white/10 bg-transparent text-white hover:bg-white/5">
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={handleDelete}
-                      disabled={deleting}
-                      className="bg-red-500 text-white hover:bg-red-600"
-                    >
-                      {deleting ? "Deleting..." : "Delete"}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-          </AlertDialog>
-        </div>
+          </Link>
 
-        {/* Bottom left theme badge */}
-        <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div
-            className="h-2 w-2 rounded-full"
-            style={{ background: themeColor }}
-          />
-          <span className="text-[10px] font-medium text-white/80 uppercase tracking-wider">
-            {theme}
-          </span>
+          {/* Actions */}
+          {ActionsDropdown}
         </div>
       </div>
+    );
+  }
 
-      {/* Content */}
-      <div className="p-3.5">
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-white group-hover:text-[var(--accent)] transition-colors">
-            {title}
-          </h3>
-          <Sparkles className="h-3.5 w-3.5 text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-        </div>
+  // Grid View Mode (Default)
+  return (
+    <div className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[var(--bg-panel)] transition-all duration-300 hover:scale-[1.02] hover:border-white/[0.15] hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(245,197,24,0.1)]">
+      {/* Top accent line */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${themeColor}, transparent)`,
+        }}
+      />
 
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
-            <ArchetypeIcon className="h-3.5 w-3.5 text-white/50" />
-            <span className="text-[11px] font-medium text-white/50 uppercase tracking-wide">
-              {archetype}
+      <Link href={`/editor/${project.id}`} className="block">
+        {/* Thumbnail */}
+        <div className="relative aspect-[4/3] bg-gradient-to-br from-[var(--bg-elevated)] via-[var(--bg-elevated)] to-[var(--bg-panel)] overflow-hidden">
+          {project.thumbnail_url && !imageError ? (
+            <img
+              src={project.thumbnail_url}
+              alt={title}
+              onError={() => setImageError(true)}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full flex-col items-center justify-center gap-3 p-6">
+              <div
+                className="flex h-16 w-16 items-center justify-center rounded-2xl border transition-all duration-300 group-hover:scale-110"
+                style={{
+                  borderColor: `${themeColor}40`,
+                  background: `${themeColor}15`,
+                }}
+              >
+                <ArchetypeIcon
+                  className="h-8 w-8"
+                  style={{ color: themeColor }}
+                />
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-medium text-white/60">
+                  No preview yet
+                </p>
+                <p className="text-[10px] text-white/30 mt-1">Click to edit</p>
+              </div>
+            </div>
+          )}
+
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+          {/* Bottom left theme badge */}
+          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div
+              className="h-2 w-2 rounded-full"
+              style={{ background: themeColor }}
+            />
+            <span className="text-[10px] font-medium text-white/80 uppercase tracking-wider">
+              {theme}
             </span>
           </div>
+        </div>
 
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3 w-3 text-white/30" />
-            <span className="text-[10px] text-white/40">
-              {formatDate(project.updated_at)}
-            </span>
+        {/* Content */}
+        <div className="p-3.5">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-white group-hover:text-[var(--accent)] transition-colors">
+              {title}
+            </h3>
+            <Sparkles className="h-3.5 w-3.5 text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+          </div>
+
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              <ArchetypeIcon className="h-3.5 w-3.5 text-white/50" />
+              <span className="text-[11px] font-medium text-white/50 uppercase tracking-wide">
+                {archetype}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <Calendar className="h-3 w-3 text-white/30" />
+              <span className="text-[10px] text-white/40">
+                {formatDate(project.updated_at)}
+              </span>
+            </div>
           </div>
         </div>
+      </Link>
+
+      {/* Top right badges & actions */}
+      <div className="absolute right-2 top-2 z-20 flex items-center gap-1.5">
+        {project.is_pinned && (
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm border border-[var(--accent)]/30">
+            <Pin className="h-3.5 w-3.5 text-[var(--accent)] fill-[var(--accent)]" />
+          </div>
+        )}
+        {ActionsDropdown}
       </div>
 
       {/* Hover glow effect */}
@@ -309,6 +431,6 @@ export default function ProjectCard({ project, onProjectsChanged }: ProjectCardP
           background: `radial-gradient(circle at 50% 0%, ${themeColor}08, transparent 70%)`,
         }}
       />
-    </Link>
+    </div>
   );
 }

@@ -8,6 +8,7 @@ import { Pin, Clock, FolderOpen } from "lucide-react";
 interface ProjectGridProps {
   title: string;
   projects: ProjectItem[];
+  viewMode?: "grid" | "list";
   onProjectsChanged?: () => Promise<void> | void;
 }
 
@@ -23,6 +24,7 @@ const SECTION_ICONS: Record<
 export default function ProjectGrid({
   title,
   projects,
+  viewMode = "grid",
   onProjectsChanged,
 }: ProjectGridProps) {
   if (projects.length === 0) return null;
@@ -50,15 +52,30 @@ export default function ProjectGrid({
           {projects.length} {projects.length === 1 ? "project" : "projects"}
         </span>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onProjectsChanged={onProjectsChanged}
-          />
-        ))}
-      </div>
+
+      {viewMode === "list" ? (
+        <div className="flex flex-col gap-2.5">
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              viewMode="list"
+              onProjectsChanged={onProjectsChanged}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              viewMode="grid"
+              onProjectsChanged={onProjectsChanged}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

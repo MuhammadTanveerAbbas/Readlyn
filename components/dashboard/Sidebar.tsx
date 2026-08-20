@@ -13,7 +13,7 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) {
+export default function Sidebar({ onNewProject, isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -49,9 +49,15 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
   ];
 
   const handleSignOut = async () => {
+    setShowUserMenu(false);
+    onClose?.();
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/");
+  };
+
+  const handleNavClick = () => {
+    onClose?.();
   };
 
   return (
@@ -93,6 +99,7 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
                   <button
                     onClick={() => {
                       setShowUserMenu(false);
+                      onClose?.();
                       router.push("/settings");
                     }}
                     className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-white/70 hover:bg-white/[0.05] hover:text-white transition-colors"
@@ -115,7 +122,10 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
         </div>
 
         <button
-          onClick={onNewProject}
+          onClick={() => {
+            onClose?.();
+            onNewProject();
+          }}
           className="group relative flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)] transition-all hover:bg-[var(--accent-hover)] hover:shadow-[0_15px_40px_rgba(245,197,24,0.4)] hover:scale-[1.02] active:scale-[0.98]"
         >
           <Plus className="h-4 w-4" />
@@ -136,6 +146,7 @@ export default function Sidebar({ onNewProject, isOpen = false }: SidebarProps) 
             <Link
               key={href}
               href={href}
+              onClick={handleNavClick}
               className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                 active
                   ? "bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20"

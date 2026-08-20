@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { discoverGroqModels, sanitizeLogMessage } from "@/lib/groq";
 
 export const dynamic = "force-dynamic";
 
@@ -35,23 +36,50 @@ export async function GET() {
   let dbConnected = false;
   try {
     const supabase = await createClient();
-    const { error } = await supabase
+    
+    // Bounded 4-second timeout for database health check
+    const dbPromise = supabase
       .from("projects")
       .select("id", { count: "exact", head: true });
+
+    const timeoutPromise = new Promise<{ error: { message: string } }>((_, reject) =>
+      setTimeout(() => reject(new Error("Database health check timed out")), 4000),
+    );
+
+    const { error } = await Promise.race([dbPromise, timeoutPromise]);
 
     if (!error) {
       dbConnected = true;
       checks.database = "ok";
     } else {
-      checks.database = `error: ${error.message}`;
+      checks.database = `error: ${sanitizeLogMessage(error.message)}`;
     }
-  } catch {
-    checks.database = "unreachable";
+  } catch (err) {
+    checks.database = `unreachable: ${sanitizeLogMessage(err instanceof Error ? err.message : "timed out")}`;
+  }
+
+  // Check Groq models availability without consuming token generation quota
+  let aiConnected = false;
+  if (process.env.GROQ_API_KEY) {
+    try {
+      const models = await discoverGroqModels(false);
+      if (models.length > 0) {
+        aiConnected = true;
+        checks.ai = `ok (${models.length} models)`;
+      } else {
+        checks.ai = "no models discovered";
+      }
+    } catch (err) {
+      checks.ai = `degraded: ${sanitizeLogMessage(err instanceof Error ? err.message : "unavailable")}`;
+    }
+  } else {
+    checks.ai = "missing api key";
   }
 
   const productionReady =
     requiredOk &&
     dbConnected &&
+    aiConnected &&
     PRODUCTION_ENV_VARS.every((key) => process.env[key]);
 
   const status = requiredOk && dbConnected ? "ok" : "degraded";

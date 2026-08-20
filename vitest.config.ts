@@ -1,7 +1,6 @@
-import { defineConfig } from "vitest/config";
 import path from "path";
 
-export default defineConfig({
+export default {
   test: {
     globals: true,
     environment: "node",
@@ -11,4 +10,4 @@ export default defineConfig({
       "@": path.resolve(__dirname),
     },
   },
-});
+};

@@ -1,13 +1,14 @@
 "use client";
 
 import { Search, SlidersHorizontal, Grid3x3, LayoutGrid } from "lucide-react";
-import { useState } from "react";
 
 interface SearchFilterBarProps {
   search: string;
   setSearch: (value: string) => void;
   sort: string;
   setSort: (value: string) => void;
+  viewMode: "grid" | "list";
+  setViewMode: (mode: "grid" | "list") => void;
 }
 
 export default function SearchFilterBar({
@@ -15,8 +16,9 @@ export default function SearchFilterBar({
   setSearch,
   sort,
   setSort,
+  viewMode,
+  setViewMode,
 }: SearchFilterBarProps) {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   return (
     <div className="mb-6 pb-2">

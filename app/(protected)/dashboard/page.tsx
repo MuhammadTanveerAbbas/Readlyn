@@ -22,35 +22,44 @@ export default function DashboardPage() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("updated");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [openModal, setOpenModal] = useState(false);
   const searchParams = useSearchParams();
 
   const loadProjects = async () => {
     setLoading(true);
     setError("");
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setProjects([]);
+        setLoading(false);
+        setError("Not authenticated.");
+        return;
+      }
+      const { data, error: queryError } = await supabase
+        .from("projects")
+        .select("id,title,theme,archetype,created_at,updated_at,is_pinned,thumbnail_url,is_trashed")
+        .eq("user_id", user.id)
+        .eq("is_trashed", false)
+        .order("updated_at", { ascending: false });
+
+      if (queryError) {
+        setError(queryError.message || "Failed to load projects.");
+        setProjects([]);
+        setLoading(false);
+        return;
+      }
+      setProjects((data || []) as ProjectItem[]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load projects.");
       setProjects([]);
+    } finally {
       setLoading(false);
-      setError("Not authenticated.");
-      return;
     }
-    const { data, error: queryError } = await supabase
-      .from("projects")
-      .select("id,title,theme,archetype,updated_at,is_pinned,thumbnail_url")
-      .eq("user_id", user.id)
-      .order("updated_at", { ascending: false });
-    if (queryError) {
-      setError(queryError.message || "Failed to load projects.");
-      setProjects([]);
-      setLoading(false);
-      return;
-    }
-    setProjects((data || []) as ProjectItem[]);
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -58,20 +67,29 @@ export default function DashboardPage() {
   }, []);
 
   const filtered = useMemo(() => {
+    const query = search.trim().toLowerCase();
     const base = projects.filter((project) =>
-      (project.title || "").toLowerCase().includes(search.toLowerCase()),
+      (project.title || "").toLowerCase().includes(query),
     );
+
     if (sort === "name") {
       return [...base].sort((a, b) =>
         (a.title || "").localeCompare(b.title || ""),
       );
     }
     if (sort === "created") {
-      return [...base].sort((a, b) =>
-        (a.updated_at || "").localeCompare(b.updated_at || ""),
-      );
+      return [...base].sort((a, b) => {
+        const timeA = new Date(a.created_at || a.updated_at || 0).getTime();
+        const timeB = new Date(b.created_at || b.updated_at || 0).getTime();
+        return timeB - timeA;
+      });
     }
-    return base;
+    // Default: "updated"
+    return [...base].sort((a, b) => {
+      const timeA = new Date(a.updated_at || 0).getTime();
+      const timeB = new Date(b.updated_at || 0).getTime();
+      return timeB - timeA;
+    });
   }, [projects, search, sort]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -150,6 +168,8 @@ export default function DashboardPage() {
           setSearch={setSearch}
           sort={sort}
           setSort={setSort}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
         />
 
         {loading ? (
@@ -237,6 +257,7 @@ export default function DashboardPage() {
                     : "All Projects"
               }
               projects={visibleProjects}
+              viewMode={viewMode}
               onProjectsChanged={loadProjects}
             />
           </>
