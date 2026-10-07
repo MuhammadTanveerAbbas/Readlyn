@@ -102,12 +102,13 @@ export default function PromptPanel({
         <div className="relative">
           <textarea
             ref={textareaRef}
+            id="prompt-input"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Describe your infographic topic..."
             rows={3}
-            className="w-full px-3 py-2.5 pr-8 text-[12px] bg-[var(--bg-elevated)] border border-white/[0.08] rounded-lg text-white placeholder:text-white/25 resize-none focus:outline-none focus:border-[var(--accent)]/60 focus:ring-1 focus:ring-[var(--accent)]/20 transition-all font-ibm-mono leading-relaxed"
+            className="w-full px-3 py-2.5 pr-8 text-[12px] bg-[var(--bg-elevated)] border border-white/[0.08] rounded-lg text-white placeholder:text-white/25 resize-none focus:outline-none focus:border-[var(--accent)]/60 focus:ring-1 focus:ring-[var(--accent)]/20 transition-all font-sans leading-relaxed"
           />
           {prompt.length > 0 && (
             <button
@@ -118,10 +119,10 @@ export default function PromptPanel({
             </button>
           )}
           <div className="flex items-center justify-between mt-1.5 px-0.5">
-            <span className="text-[9px] text-white/20 font-ibm-mono">
+            <span className="text-[9px] text-white/20 font-sans">
               {prompt.length > 0 ? `${prompt.length} chars` : ""}
             </span>
-            <span className="text-[9px] text-white/20 font-ibm-mono">⌘+↵ generate</span>
+            <span className="text-[9px] text-white/20 font-sans">⌘+↵ generate</span>
           </div>
         </div>
 

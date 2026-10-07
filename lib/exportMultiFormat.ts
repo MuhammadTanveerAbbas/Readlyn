@@ -3,12 +3,35 @@
 import JSZip from "jszip";
 import designTokens from "@/lib/design-tokens.json";
 import { generateInfographicReactComponent } from "@/lib/code-generator";
+import { ensureCanvasFontsLoaded } from "@/lib/canvas-fonts";
 
 interface ExportTarget {
   key: string;
   label: string;
   width: number;
   height: number;
+}
+
+export interface ExportSourceSize {
+  width: number;
+  height: number;
+}
+
+/**
+ * Pure math for fitting one artboard into another frame. Kept separate so it
+ * can be unit tested without a DOM canvas.
+ */
+export function computeExportTransform(
+  source: ExportSourceSize,
+  target: { width: number; height: number },
+): { ratio: number; offsetX: number; offsetY: number } {
+  const ratio = Math.min(
+    target.width / source.width,
+    target.height / source.height,
+  );
+  const offsetX = (target.width - source.width * ratio) / 2;
+  const offsetY = (target.height - source.height * ratio) / 2;
+  return { ratio, offsetX, offsetY };
 }
 
 export const EXPORT_TARGETS: ExportTarget[] = [
@@ -23,11 +46,20 @@ export async function exportMultiFormatZip(
   canvasJson: unknown,
   projectName: string,
   selectedKeys: string[],
+  sourceSize: ExportSourceSize,
 ) {
   const zip = new JSZip();
   const targets = EXPORT_TARGETS.filter((target) => selectedKeys.includes(target.key));
+
+  // Webfonts must be resident before any text is painted, otherwise the
+  // offscreen canvases silently render in a fallback face.
+  await ensureCanvasFontsLoaded();
+
   const fabricModule = await import("fabric");
   const { StaticCanvas } = fabricModule;
+
+  const sourceWidth = sourceSize.width;
+  const sourceHeight = sourceSize.height;
 
   for (const target of targets) {
     const el = document.createElement("canvas");
@@ -37,27 +69,32 @@ export async function exportMultiFormatZip(
       backgroundColor: "#ffffff",
     });
 
-    await offscreen.loadFromJSON(canvasJson as any);
+    await offscreen.loadFromJSON(canvasJson as never);
+    offscreen.backgroundColor = "#ffffff";
 
-    const sourceWidth = offscreen.width || target.width;
-    const sourceHeight = offscreen.height || target.height;
-    const scaleX = target.width / sourceWidth;
-    const scaleY = target.height / sourceHeight;
-    const ratio = Math.min(scaleX, scaleY);
+    // Scale the whole artboard so it fits inside the target frame, then center
+    // it. Scaling each object keeps text, strokes plus layout proportional.
+    const { ratio, offsetX, offsetY } = computeExportTransform(
+      { width: sourceWidth, height: sourceHeight },
+      target,
+    );
 
-    offscreen.getObjects().forEach((obj) => {
-      obj.scaleX = (obj.scaleX || 1) * ratio;
-      obj.scaleY = (obj.scaleY || 1) * ratio;
-      obj.left = (obj.left || 0) * ratio;
-      obj.top = (obj.top || 0) * ratio;
+    for (const obj of offscreen.getObjects()) {
+      obj.set({
+        left: (obj.left || 0) * ratio + offsetX,
+        top: (obj.top || 0) * ratio + offsetY,
+        scaleX: (obj.scaleX || 1) * ratio,
+        scaleY: (obj.scaleY || 1) * ratio,
+      });
       obj.setCoords();
-    });
+    }
 
-    offscreen.setDimensions({ width: target.width, height: target.height });
     offscreen.renderAll();
     const data = offscreen.toDataURL({ format: "png", multiplier: 1 });
     const base64 = data.split(",")[1];
-    zip.file(`${target.key}.png`, base64, { base64: true });
+    zip.file(`${target.key}-${target.width}x${target.height}.png`, base64, {
+      base64: true,
+    });
     offscreen.dispose();
   }
 

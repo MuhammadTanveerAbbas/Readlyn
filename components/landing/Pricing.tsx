@@ -15,12 +15,12 @@ export default function Pricing() {
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
           <span className="w-4 h-[1px] bg-[var(--accent)]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             Monetization & Plans
           </span>
         </div>
         <h2
-          className="font-grotesk font-bold text-white leading-[1.05]"
+          className="font-sans font-bold text-white leading-[1.05]"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -28,8 +28,9 @@ export default function Pricing() {
         >
           Simple, transparent credit pricing.
         </h2>
-        <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
-          Start free with daily AI generation credits. Upgrade anytime for unlimited projects, code exports, and team collaboration.
+        <p className="font-sans text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+          Every feature is unlocked for everyone during early access. Paid tiers
+          arrive with the collaboration features marked coming soon.
         </p>
       </div>
 
@@ -54,7 +55,7 @@ export default function Pricing() {
                   }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-                  <span className="font-ibm-mono text-[9px] tracking-[0.12em] uppercase font-bold text-[var(--accent)]">
+                  <span className="font-sans text-[9px] tracking-[0.12em] uppercase font-bold text-[var(--accent)]">
                     Most Popular
                   </span>
                 </div>
@@ -62,22 +63,22 @@ export default function Pricing() {
 
               <div>
                 <div className="flex flex-col gap-1 mb-4">
-                  <span className="font-grotesk text-xl font-bold text-white">
+                  <span className="font-sans text-xl font-bold text-white">
                     {plan.name}
                   </span>
-                  <p className="font-ibm-mono text-[11px] text-[var(--text-dim)] leading-[1.6]">
+                  <p className="font-sans text-[11px] text-[var(--text-dim)] leading-[1.6]">
                     {plan.description}
                   </p>
                 </div>
 
                 <div className="flex items-baseline gap-1 my-6">
                   <span
-                    className="font-grotesk font-black text-white leading-none"
+                    className="font-sans font-black text-white leading-none"
                     style={{ fontSize: "2.8rem", letterSpacing: "-0.04em" }}
                   >
                     {plan.price}
                   </span>
-                  <span className="font-ibm-mono text-[11px] text-[var(--text-dim)]">
+                  <span className="font-sans text-[11px] text-[var(--text-dim)]">
                     /{plan.period}
                   </span>
                 </div>
@@ -104,7 +105,7 @@ export default function Pricing() {
                           />
                         </svg>
                       </div>
-                      <span className="font-ibm-mono text-[11px] text-[var(--text-body)]">
+                      <span className="font-sans text-[11px] text-[var(--text-body)]">
                         {feature}
                       </span>
                     </div>
@@ -114,14 +115,14 @@ export default function Pricing() {
 
               <div className="mt-8">
                 <a
-                  href="/signup"
-                  className={`w-full block py-3 rounded-xl font-grotesk text-[13px] font-bold text-center transition-all duration-200 ${
+                  href={plan.id === "free" ? "/signup" : "https://github.com/MuhammadTanveerAbbas/Readlyn"}
+                  className={`w-full block py-3 rounded-xl font-sans text-[13px] font-bold text-center transition-all duration-200 ${
                     isPro
                       ? "bg-[var(--accent)] text-black hover:bg-[var(--accent-hover)] shadow-[0_0_24px_rgba(245,197,24,0.3)]"
                       : "bg-white/10 text-white hover:bg-white/15 border border-white/10"
                   }`}
                 >
-                  {plan.id === "free" ? "Start Free" : `Upgrade to ${plan.name}`}
+                  {plan.id === "free" ? "Start Free" : "Follow the build"}
                 </a>
               </div>
             </div>

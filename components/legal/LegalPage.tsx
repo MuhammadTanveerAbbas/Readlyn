@@ -12,19 +12,19 @@ export default function LegalPage({ title, updated, children }: LegalPageProps) 
       <div className="mx-auto max-w-3xl">
         <Link
           href="/"
-          className="mb-8 inline-flex items-center gap-2 font-ibm-mono text-[11px] tracking-[0.15em] uppercase text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
+          className="mb-8 inline-flex items-center gap-2 font-sans text-[11px] tracking-[0.15em] uppercase text-[var(--text-dim)] hover:text-[var(--accent)] transition-colors"
         >
           ← Back to Readlyn
         </Link>
 
-        <h1 className="font-grotesk text-3xl md:text-4xl font-bold text-white tracking-[-0.03em] mb-2">
+        <h1 className="font-sans text-3xl md:text-4xl font-bold text-white tracking-[-0.03em] mb-2">
           {title}
         </h1>
-        <p className="font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.1em] mb-10">
+        <p className="font-sans text-[11px] text-[var(--text-dim)] tracking-[0.1em] mb-10">
           Last updated: {updated}
         </p>
 
-        <div className="prose-legal flex flex-col gap-6 font-ibm-mono text-[13px] text-[var(--text-body)] leading-[1.8] tracking-[0.2px]">
+        <div className="prose-legal flex flex-col gap-6 font-sans text-[13px] text-[var(--text-body)] leading-[1.8] tracking-[0.2px]">
           {children}
         </div>
       </div>

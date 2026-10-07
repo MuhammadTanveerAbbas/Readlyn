@@ -7,7 +7,7 @@ const items = [
     id: "01",
     title: "AI Content\nGeneration",
     description:
-      "Groq's Llama 3.3 70B writes real, structured content for your infographic  not filler text. Streamed live to the canvas.",
+      "Groq's Llama 3.3 70B writes real, structured content for your infographic, not filler text. Streamed live to the canvas.",
     tag: "GROQ AI",
     tagColor: "var(--bg-subtle)",
     tagBg: "var(--accent)",
@@ -20,7 +20,7 @@ const items = [
     id: "02",
     title: "Layers\nPanel",
     description:
-      "Full layer management with visibility toggle, lock/unlock, and per-layer deletion. See every element at a glance.",
+      "Full layer management with visibility toggle, lock/unlock, plus per-layer deletion. See every element at a glance.",
     tag: "EDITOR",
     tagColor: "var(--accent)",
     tagBg: "transparent",
@@ -33,7 +33,7 @@ const items = [
     id: "03",
     title: "Properties\nPanel",
     description:
-      "Edit X, Y, width, height, rotation, opacity, fill, stroke, border radius, and typography per selected element.",
+      "Edit X, Y, width, height, rotation, opacity, fill, stroke, border radius, plus typography per selected element.",
     tag: "INSPECT",
     tagColor: "var(--orange)",
     tagBg: "transparent",
@@ -46,7 +46,7 @@ const items = [
     id: "04",
     title: "Export\nPNG or JSON",
     description:
-      "Download as high-res PNG or save the raw JSON schema to reload and continue editing. Your work stays yours.",
+      "Download as high-res PNG or save the raw JSON schema to reload plus continue editing. Your work stays yours.",
     tag: "EXPORT",
     tagColor: "var(--accent)",
     tagBg: "transparent",
@@ -59,7 +59,7 @@ const items = [
     id: "05",
     title: "AI Context\nActions",
     description:
-      "Right-click any element to rewrite text, suggest a layout, pick a theme, or vary the element  all powered by Groq.",
+      "Right-click any element to rewrite text, suggest a layout, pick a theme, or vary the element, all powered by Groq.",
     tag: "AI",
     tagColor: "var(--orange)",
     tagBg: "transparent",
@@ -94,12 +94,12 @@ export default function Bento() {
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
           <span className="w-4 h-px bg-[var(--accent)]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             Capabilities
           </span>
         </div>
         <h2
-          className="font-grotesk font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -162,14 +162,14 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
       )}
 
       <span
-        className="font-ibm-mono text-[11px] font-bold tracking-[2px]"
+        className="font-sans text-[11px] font-bold tracking-[2px]"
         style={{ color: isYellow ? "var(--bg-overlay)" : item.accent }}
       >
         [{item.id}]
       </span>
 
       <h3
-        className="font-grotesk font-bold leading-[1.1] whitespace-pre-line"
+        className="font-sans font-bold leading-[1.1] whitespace-pre-line"
         style={{
           fontSize: "clamp(1.4rem, 2vw, 1.75rem)",
           letterSpacing: "-0.02em",
@@ -180,7 +180,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
       </h3>
 
       <p
-        className="font-ibm-mono text-[12px] tracking-[0.5px] leading-[1.7]"
+        className="font-sans text-[12px] tracking-[0.5px] leading-[1.7]"
         style={{ color: isYellow ? "var(--bg-overlay)" : "var(--text-muted-val)" }}
       >
         {item.description}
@@ -195,7 +195,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
           }}
         >
           <span
-            className="font-ibm-mono text-[10px] font-bold tracking-[2px]"
+            className="font-sans text-[10px] font-bold tracking-[2px]"
             style={{ color: isYellow ? "var(--accent)" : item.tagColor }}
           >
             [{item.tag}]

@@ -7,13 +7,13 @@ const stats = [
     value: "9",
     suffix: "",
     label: "Layout archetypes",
-    description: "Steps, Stats, Timeline, Compare, and more",
+    description: "Steps, Stats, Timeline, Compare, plus more",
   },
   {
     value: "5",
     suffix: "",
     label: "Color themes",
-    description: "Violet, Ocean, Ember, Forest, Slate",
+    description: "Ocean, Ember, Forest, Slate, Midnight",
   },
   {
     value: "3",
@@ -56,7 +56,7 @@ export default function Stats() {
               `}
             >
               <span
-                className="font-grotesk font-black text-white leading-none"
+                className="font-sans font-black text-white leading-none"
                 style={{
                   fontSize: "clamp(2.8rem, 5vw, 4rem)",
                   letterSpacing: "-0.04em",
@@ -65,10 +65,10 @@ export default function Stats() {
                 {stat.value}
                 <span className="text-[var(--accent)]">{stat.suffix}</span>
               </span>
-              <span className="font-grotesk text-[14px] font-semibold text-[var(--text-secondary)] tracking-[-0.01em]">
+              <span className="font-sans text-[14px] font-semibold text-[var(--text-secondary)] tracking-[-0.01em]">
                 {stat.label}
               </span>
-              <span className="font-ibm-mono text-[10px] text-[var(--text-dim)] tracking-[0.1em] text-center">
+              <span className="font-sans text-[10px] text-[var(--text-dim)] tracking-[0.1em] text-center">
                 {stat.description}
               </span>
             </div>

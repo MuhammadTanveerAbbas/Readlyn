@@ -6,12 +6,12 @@ interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export default function AuthInput({ label, error, ...props }: AuthInputProps) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[1px] uppercase">
+      <label className="font-sans text-[11px] text-[var(--text-dim)] tracking-[1px] uppercase">
         {label}
       </label>
       <input
         {...props}
-        className={`w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border text-white text-[13px] font-ibm-mono placeholder:text-[#333]
+        className={`w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border text-white text-[13px] font-sans placeholder:text-[#333]
           focus:outline-none transition-all duration-200
           ${
             error
@@ -20,7 +20,7 @@ export default function AuthInput({ label, error, ...props }: AuthInputProps) {
           }`}
       />
       {error && (
-        <p className="font-ibm-mono text-[11px] text-[var(--destructive)] tracking-[0.3px]">
+        <p className="font-sans text-[11px] text-[var(--destructive)] tracking-[0.3px]">
           {error}
         </p>
       )}

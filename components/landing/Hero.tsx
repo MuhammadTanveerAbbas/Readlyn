@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import CollabCursors from "@/components/landing/CollabCursors";
 
-/* ── Typewriter ── */
+/* Typewriter */
 function Typewriter({ lines }: { lines: string[] }) {
   const [li, setLi] = useState(0);
   const [ci, setCi] = useState(0);
@@ -34,7 +34,7 @@ function Typewriter({ lines }: { lines: string[] }) {
   }, [ci, del, li, lines]);
 
   return (
-    <span className="font-ibm-mono text-[var(--accent)] text-[13px] tracking-[1px]">
+    <span className="font-sans text-[var(--accent)] text-[13px] tracking-[1px]">
       {lines[li]?.slice(0, ci) ?? ""}
       <span
         className="inline-block w-[2px] h-[13px] bg-[var(--accent)] align-middle ml-px"
@@ -44,7 +44,7 @@ function Typewriter({ lines }: { lines: string[] }) {
   );
 }
 
-/* ── Floating particles ── */
+/* Floating particles */
 function Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -123,7 +123,7 @@ function Particles() {
   );
 }
 
-/* ── Canvas mock preview ── */
+/* Canvas mock preview */
 function CanvasMock({ mounted }: { mounted: boolean }) {
   const layers = [
     { label: "FRAME / HERO", color: "var(--accent)", indent: 0, active: true },
@@ -167,7 +167,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
         </div>
         <div
-          className="flex items-center gap-2 px-3 py-1 rounded-md font-ibm-mono text-[10px] text-[var(--text-dim)] tracking-[1px]"
+          className="flex items-center gap-2 px-3 py-1 rounded-md font-sans text-[10px] text-[var(--text-dim)] tracking-[1px]"
           style={{ background: "var(--bg-subtle)", border: "1px solid #1E1E1E" }}
         >
           <span
@@ -180,7 +180,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           {["V", "F", "T", "P"].map((t, i) => (
             <span
               key={t}
-              className="font-ibm-mono text-[10px] px-2 py-0.5 rounded"
+              className="font-sans text-[10px] px-2 py-0.5 rounded"
               style={{
                 background: i === 0 ? "var(--accent)" : "var(--bg-overlay)",
                 color: i === 0 ? "#000" : "var(--text-dim)",
@@ -203,7 +203,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           }}
         >
           <div
-            className="px-3 py-2 font-ibm-mono text-[8px] text-[var(--accent)] tracking-[2px] border-b"
+            className="px-3 py-2 font-sans text-[8px] text-[var(--accent)] tracking-[2px] border-b"
             style={{ borderColor: "rgba(255,255,255,0.06)" }}
           >
             LAYERS
@@ -211,7 +211,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           {layers.map((l, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 py-[7px] font-ibm-mono text-[8px] tracking-[0.5px]"
+              className="flex items-center gap-2 py-[7px] font-sans text-[8px] tracking-[0.5px]"
               style={{
                 paddingLeft: `${12 + l.indent}px`,
                 background: l.active ? "var(--bg-overlay)" : "transparent",
@@ -261,7 +261,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               borderRadius: "4px",
             }}
           >
-            <span className="absolute -top-5 left-0 font-ibm-mono text-[8px] text-[var(--accent)] tracking-[1px]">
+            <span className="absolute -top-5 left-0 font-sans text-[8px] text-[var(--accent)] tracking-[1px]">
               INFOGRAPHIC / HERO
             </span>
             {[
@@ -303,7 +303,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                     }}
                   >
                     <span
-                      className="font-ibm-mono text-[9px] font-bold"
+                      className="font-sans text-[9px] font-bold"
                       style={{ color: c }}
                     >
                       {v}
@@ -365,7 +365,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           }}
         >
           <div
-            className="px-3 py-2 font-ibm-mono text-[8px] text-[var(--accent)] tracking-[2px] border-b"
+            className="px-3 py-2 font-sans text-[8px] text-[var(--accent)] tracking-[2px] border-b"
             style={{ borderColor: "rgba(255,255,255,0.06)" }}
           >
             INSPECT
@@ -389,7 +389,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                   transition: `opacity 0.4s ease ${0.15 + i * 0.05}s`,
                 }}
               >
-                <span className="font-ibm-mono text-[8px] text-[var(--text-dim)] tracking-[1px]">
+                <span className="font-sans text-[8px] text-[var(--text-dim)] tracking-[1px]">
                   {p.k}
                 </span>
                 <div className="flex items-center gap-1">
@@ -399,7 +399,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                       style={{ background: p.sw }}
                     />
                   )}
-                  <span className="font-ibm-mono text-[8px] text-[var(--text-muted-val)]">
+                  <span className="font-sans text-[8px] text-[var(--text-muted-val)]">
                     {p.v}
                   </span>
                 </div>
@@ -418,7 +418,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"
               style={{ animation: "pulse 2s ease-in-out infinite" }}
             />
-            <span className="font-ibm-mono text-[7px] text-[var(--accent)] tracking-[1px]">
+            <span className="font-sans text-[7px] text-[var(--accent)] tracking-[1px]">
               AI GENERATING
             </span>
           </div>
@@ -427,7 +427,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
 
       {/* Status bar */}
       <div
-        className="flex items-center justify-between px-4 h-8 border-t font-ibm-mono text-[8px] text-[#333] tracking-[1px]"
+        className="flex items-center justify-between px-4 h-8 border-t font-sans text-[8px] text-[#333] tracking-[1px]"
         style={{ borderColor: "rgba(255,255,255,0.06)", background: "var(--bg-subtle)" }}
       >
         <div className="flex items-center gap-4">
@@ -458,7 +458,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
   );
 }
 
-/* ── Main Hero ── */
+/* Main Hero */
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -501,7 +501,7 @@ export default function Hero() {
 
       {/* Two-column layout */}
       <div className="relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-16 w-full max-w-[1200px] mx-auto px-6 md:px-12 pt-16 pb-10">
-        {/* ── Left: text ── */}
+        {/* Left: text */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-[480px] shrink-0">
           {/* Badge */}
           <div className="hero-enter-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] mb-6">
@@ -509,14 +509,14 @@ export default function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-70" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]" />
             </span>
-            <span className="font-ibm-mono text-[10px] text-[var(--text-muted-val)] tracking-[0.18em] uppercase">
+            <span className="font-sans text-[10px] text-[var(--text-muted-val)] tracking-[0.18em] uppercase">
               Early access open
             </span>
           </div>
 
           {/* Headline */}
           <h1
-            className="hero-enter-1 font-grotesk text-white"
+            className="hero-enter-1 font-sans text-white"
             style={{
               fontSize: "clamp(2.8rem, 5.5vw, 4.2rem)",
               fontWeight: 800,
@@ -537,14 +537,14 @@ export default function Hero() {
           </h1>
 
           {/* Sub */}
-          <p className="hero-enter-2 font-ibm-mono text-[var(--text-dim)] text-[13px] leading-[1.9] tracking-[0.3px] mt-5 max-w-[400px]">
-            Type a topic, pick a layout and theme. Get a complete, editable
+          <p className="hero-enter-2 font-sans text-[var(--text-dim)] text-[13px] leading-[1.9] tracking-[0.3px] mt-5 max-w-[400px]">
+            Type a topic, pick a layout plus theme. Get a complete, editable
             infographic in seconds.
           </p>
 
           {/* Typewriter */}
           <div className="hero-enter-3 flex items-center gap-2 mt-4">
-            <span className="font-ibm-mono text-[11px] text-[#333] tracking-[1px]">
+            <span className="font-sans text-[11px] text-[#333] tracking-[1px]">
               Generating:
             </span>
             <Typewriter
@@ -562,7 +562,7 @@ export default function Hero() {
           <div className="hero-enter-4 flex flex-col sm:flex-row items-center lg:items-start gap-3 mt-8 w-full sm:w-auto">
             <a
               href="/signup"
-              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
+              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
             >
               Start free
               <svg
@@ -583,13 +583,13 @@ export default function Hero() {
             </a>
             <a
               href="/login"
-              className="flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[12px] text-[var(--text-muted-val)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
               Log in
             </a>
           </div>
 
-          <p className="hero-enter-4 font-ibm-mono text-[10px] text-[var(--bg-active)] tracking-[2px] mt-3">
+          <p className="hero-enter-4 font-sans text-[10px] text-[var(--bg-active)] tracking-[2px] mt-3">
             No credit card · Free plan · Early access
           </p>
 
@@ -606,12 +606,12 @@ export default function Hero() {
                 className="flex flex-col gap-0.5 px-4 py-3 rounded-xl border border-white/[0.07] bg-white/[0.02]"
               >
                 <span
-                  className="font-grotesk text-[20px] font-bold leading-none"
+                  className="font-sans text-[20px] font-bold leading-none"
                   style={{ color: c }}
                 >
                   {v}
                 </span>
-                <span className="font-ibm-mono text-[9px] text-[var(--text-dim)] tracking-[1.5px] uppercase">
+                <span className="font-sans text-[9px] text-[var(--text-dim)] tracking-[1.5px] uppercase">
                   {l}
                 </span>
               </div>
@@ -619,7 +619,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── Right: canvas mock ── */}
+        {/* Right: canvas mock */}
         <div className="hero-canvas relative flex-1 w-full min-w-0">
           <CanvasMock mounted={mounted} />
           <CollabCursors />

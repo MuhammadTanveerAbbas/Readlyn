@@ -103,7 +103,7 @@ export default function UpdatePasswordPage() {
                 strokeLinecap="round"
               />
             </svg>
-            <p className="font-ibm-mono text-[11px] text-[var(--destructive)] tracking-[0.3px] leading-relaxed">
+            <p className="font-sans text-[11px] text-[var(--destructive)] tracking-[0.3px] leading-relaxed">
               {error}
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function UpdatePasswordPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+          className="w-full py-3 rounded-xl font-sans text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -145,7 +145,7 @@ export default function UpdatePasswordPage() {
         </button>
       </form>
 
-      <p className="mt-6 text-center font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.3px]">
+      <p className="mt-6 text-center font-sans text-[11px] text-[var(--text-dim)] tracking-[0.3px]">
         <Link
           href="/login"
           className="text-[var(--text-body)] hover:text-white transition-colors"

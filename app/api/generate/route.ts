@@ -1,5 +1,5 @@
 import { generateText } from "ai";
-import { getGroqClient, executeGroqWithSelfHealing } from "@/lib/groq";
+import { getGroqClient, getBestGroqModel, executeGroqWithSelfHealing } from "@/lib/groq";
 import {
   InfographicSchema,
   CANVAS_SIZES,
@@ -7,8 +7,9 @@ import {
   type InfographicElement,
   type InfographicData,
 } from "@/types/infographic";
+import { BODY_FONT, DISPLAY_FONT } from "@/types/infographic";
 import { computeLayout, type SlotPosition } from "@/lib/archetypeLayouts";
-import { FREE_PLAN } from "@/config/plans";
+import { FAIR_USE_DAILY_GENERATIONS } from "@/config/plans";
 import { createClient } from "@/lib/supabase/server";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { checkCsrfOrigin } from "@/lib/csrf";
@@ -77,7 +78,7 @@ function buildFallbackInfographic(args: {
       text: prompt.slice(0, 90),
       fontSize: 44,
       fontWeight: "900",
-      fontFamily: "Arial",
+      fontFamily: DISPLAY_FONT,
       fill: colors.primary,
       textAlign: "left",
       width: Math.max(280, width - 96),
@@ -97,7 +98,7 @@ function buildFallbackInfographic(args: {
         text: "Insight",
         fontSize: 24,
         fontWeight: "bold",
-        fontFamily: "Arial",
+        fontFamily: BODY_FONT,
         fill: colors.secondary,
         textAlign: "left",
         width: slot.width ?? 300,
@@ -222,13 +223,15 @@ export async function POST(req: Request) {
     }
     const { prompt, theme, size, style } = parsed.data;
 
+    // Fair use safety net, so a single account cannot exhaust the provider
+    // quota for everyone else. This is not a plan gate, everyone shares it.
     const { count: generationsToday } = await supabase
       .from("generation_history")
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
       .gte("created_at", new Date(Date.now() - 86400000).toISOString());
 
-    const dailyLimit = FREE_PLAN.limits.generationsPerDay;
+    const dailyLimit = FAIR_USE_DAILY_GENERATIONS;
     if ((generationsToday ?? 0) >= dailyLimit) {
       return Response.json(
         { error: `Daily generation limit reached (${dailyLimit}/day). Try again tomorrow.` },
@@ -246,7 +249,7 @@ export async function POST(req: Request) {
       slots.length > 0
         ? `
 ═══════════════════════════════════════════
-PRE-COMPUTED LAYOUT MANIFEST — USE EXACTLY
+PRE-COMPUTED LAYOUT MANIFEST, USE EXACTLY
 ═══════════════════════════════════════════
 The following element slots have been mathematically pre-computed.
 YOU MUST place elements at these EXACT x, y, width, height, radius values.
@@ -272,14 +275,14 @@ For each slot above, generate a matching element in the output JSON using:
 - The EXACT zIndex from the slot
 - YOUR CHOICE of: fill color, text content, fontSize, fontWeight, emoji, opacity
 
-text_slot → generate a 'text' element with real content
-stat_slot → generate a 'stat' element with a value and label
-icon_slot → generate an 'icon' element with emoji
-rect/circle/line → generate that exact type
+text_slot ➔ generate a 'text' element with real content
+stat_slot ➔ generate a 'stat' element with a value, plus label
+icon_slot ➔ generate an 'icon' element with emoji
+rect/circle/line ➔ generate that exact type
 
 You MAY add extra decorative depth elements (circles, texture dots) at zIndex 1-4,
 but NEVER move or resize a pre-computed slot.`
-        : `No layout manifest — use your best creative judgment for auto-layout based on the topic.`;
+        : `No layout manifest, use your best creative judgment for auto-layout based on the topic.`;
 
     const systemPrompt = `You are a senior infographic art director generating Fabric.js-ready JSON.
 
@@ -295,16 +298,16 @@ ${layoutManifest}
 QUALITY RULES:
 1) Output ONLY a valid JSON object with keys: canvasWidth, canvasHeight, background, elements.
 2) NEVER output markdown fences, prose, preamble, or explanation.
-3) If style=auto, choose the best archetype for the topic based on information density and narrative flow.
-4) Build strong hierarchy: clear title, section headers, body text, and supporting visual accents.
-5) Maintain high contrast between text and backgrounds.
-6) Respect spacing rhythm: avoid overlaps, preserve gutters, and keep breathing room between groups.
+3) If style=auto, choose the best archetype for the topic based on information density, plus narrative flow.
+4) Build strong hierarchy: clear title, section headers, body text, plus supporting visual accents.
+5) Maintain high contrast between text, plus backgrounds.
+6) Respect spacing rhythm: avoid overlaps, preserve gutters, plus keep breathing room between groups.
 7) Use statistically meaningful, concrete facts where possible (no placeholder copy).
-8) Use realistic typography values and bounded widths so text remains readable.
+8) Use realistic typography values, plus bounded widths so text remains readable.
 9) Include decorative depth intentionally (subtle circles/lines) without harming readability.
-10) Sort elements by zIndex ascending and include a full-canvas background rect at zIndex 0.
+10) Sort elements by zIndex ascending, plus include a full-canvas background rect at zIndex 0.
 11) Keep output valid for schema types only: rect, circle, text, stat, icon, line.
-12) Keep total element count between 28 and 60 for balanced complexity.`;
+12) Keep total element count between 28, plus 60 for balanced complexity.`;
 
     const userPrompt = `Create a professional, visually stunning ${style === "auto" ? "auto-layout" : `${style.toUpperCase()}-style`} infographic about: "${sanitizedPrompt}"
 
@@ -312,8 +315,8 @@ Canvas: ${w}×${h}px
 Theme: ${theme}
 Style: ${style}
 
-Generate REAL facts, statistics, and data about this topic. The visual structure must match 
-the ${style === "auto" ? "selected" : style} archetype — pyramid shapes for pyramid, cycle rings for cycle, etc. 
+Generate REAL facts, statistics, plus data about this topic. The visual structure must match
+the ${style === "auto" ? "selected" : style} archetype, pyramid shapes for pyramid, cycle rings for cycle, etc.
 Make it look like it came from Venngage or Piktochart.
 
 Return ONLY a valid JSON object. No markdown fences. No explanation.`;
@@ -321,9 +324,11 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
     const groq = getGroqClient();
 
     let text = "";
+    let usedModel = await getBestGroqModel("reasoning");
     try {
       const response = await executeGroqWithSelfHealing(
         async (modelName) => {
+          usedModel = modelName;
           return await generateText({
             model: groq(modelName),
             system: systemPrompt,
@@ -411,6 +416,7 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
         "Transfer-Encoding": "chunked",
+        "x-readlyn-model": usedModel,
       },
     });
   } catch (error) {

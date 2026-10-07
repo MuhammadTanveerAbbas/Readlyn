@@ -5,9 +5,16 @@ import type * as fabric from "fabric";
 
 const MAX_HISTORY = 30;
 
+interface HistorySnapshot {
+  stack: string[];
+  redo: string[];
+}
+
 export function useCanvasHistory(canvas: fabric.Canvas | null) {
-  const [historyStack, setHistoryStack] = useState<string[]>([]);
-  const [redoStack, setRedoStack] = useState<string[]>([]);
+  const [history, setHistory] = useState<HistorySnapshot>({
+    stack: [],
+    redo: [],
+  });
   const isRestoring = useRef(false);
 
   // Seed the history with the initial canvas state once canvas is ready
@@ -17,8 +24,7 @@ export function useCanvasHistory(canvas: fabric.Canvas | null) {
     const timer = setTimeout(() => {
       if (isRestoring.current) return;
       const json = JSON.stringify(canvas.toJSON());
-      setHistoryStack([json]);
-      setRedoStack([]);
+      setHistory({ stack: [json], redo: [] });
     }, 200);
     return () => clearTimeout(timer);
   }, [canvas]);
@@ -26,51 +32,54 @@ export function useCanvasHistory(canvas: fabric.Canvas | null) {
   const pushState = useCallback(() => {
     if (!canvas || isRestoring.current) return;
     const json = JSON.stringify(canvas.toJSON());
-    setHistoryStack((prev) => {
-      // Avoid duplicate consecutive states
-      if (prev[prev.length - 1] === json) return prev;
-      const next = [...prev, json];
-      if (next.length > MAX_HISTORY) next.shift();
-      return next;
+    setHistory((prev) => {
+      // Avoid duplicate consecutive states. Keep the redo trail when the
+      // snapshot matches the current top of the stack, so an undo followed
+      // by a debounced snapshot does not wipe the redo history.
+      if (prev.stack[prev.stack.length - 1] === json) return prev;
+      const nextStack = [...prev.stack, json];
+      if (nextStack.length > MAX_HISTORY) nextStack.shift();
+      return { stack: nextStack, redo: [] };
     });
-    setRedoStack([]);
   }, [canvas]);
 
   const undo = useCallback(() => {
-    if (!canvas || historyStack.length <= 1) return;
+    if (!canvas || history.stack.length <= 1) return;
+
+    const current = history.stack[history.stack.length - 1];
+    const previous = history.stack[history.stack.length - 2];
 
     isRestoring.current = true;
-    const newStack = [...historyStack];
-    const current = newStack.pop()!;
-    const previous = newStack[newStack.length - 1];
-
-    setHistoryStack(newStack);
-    setRedoStack((prev) => [...prev, current]);
+    setHistory({
+      stack: history.stack.slice(0, -1),
+      redo: [...history.redo, current],
+    });
 
     canvas.loadFromJSON(previous).then(() => {
-      canvas.renderAll();
+      canvas.requestRenderAll();
       isRestoring.current = false;
     });
-  }, [canvas, historyStack]);
+  }, [canvas, history]);
 
   const redo = useCallback(() => {
-    if (!canvas || redoStack.length === 0) return;
+    if (!canvas || history.redo.length === 0) return;
+
+    const next = history.redo[history.redo.length - 1];
 
     isRestoring.current = true;
-    const newRedoStack = [...redoStack];
-    const state = newRedoStack.pop()!;
+    setHistory({
+      stack: [...history.stack, next],
+      redo: history.redo.slice(0, -1),
+    });
 
-    setRedoStack(newRedoStack);
-    setHistoryStack((prev) => [...prev, state]);
-
-    canvas.loadFromJSON(state).then(() => {
-      canvas.renderAll();
+    canvas.loadFromJSON(next).then(() => {
+      canvas.requestRenderAll();
       isRestoring.current = false;
     });
-  }, [canvas, redoStack]);
+  }, [canvas, history]);
 
-  const canUndo = historyStack.length > 1;
-  const canRedo = redoStack.length > 0;
+  const canUndo = history.stack.length > 1;
+  const canRedo = history.redo.length > 0;
 
   return {
     pushState,

@@ -61,7 +61,7 @@ export default function GlitchText({
       className={className}
       style={{ position: "relative", display: "inline-block" }}
     >
-      {/* Ghost text  always here, reserves width + height, never visible */}
+      {/* Ghost text, always here, reserves width + height, never visible */}
       <span
         aria-hidden="true"
         style={{ visibility: "hidden", whiteSpace: "pre" }}
@@ -69,7 +69,7 @@ export default function GlitchText({
         {text}
       </span>
 
-      {/* Animated text  absolutely overlaid, same position */}
+      {/* Animated text, absolutely overlaid, same position */}
       <span
         aria-live="polite"
         style={{

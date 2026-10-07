@@ -111,20 +111,20 @@ export default function SignupPage() {
             </svg>
           </div>
           <div className="text-center">
-            <p className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-relaxed">
+            <p className="font-sans text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-relaxed">
               A confirmation email was sent to
             </p>
-            <p className="font-ibm-mono text-[13px] text-[var(--text-body)] mt-1">
+            <p className="font-sans text-[13px] text-[var(--text-body)] mt-1">
               {email}
             </p>
           </div>
-          <p className="font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.3px] text-center leading-relaxed">
+          <p className="font-sans text-[11px] text-[var(--text-dim)] tracking-[0.3px] text-center leading-relaxed">
             Click the link in the email to activate your account. Check your
             spam folder if you don&apos;t see it.
           </p>
           <Link
             href="/login"
-            className="font-ibm-mono text-[11px] text-[var(--accent)] opacity-70 hover:opacity-100 transition-opacity tracking-[0.5px]"
+            className="font-sans text-[11px] text-[var(--accent)] opacity-70 hover:opacity-100 transition-opacity tracking-[0.5px]"
           >
             ← Back to sign in
           </Link>
@@ -147,7 +147,7 @@ export default function SignupPage() {
           className="flex-1 h-px"
           style={{ background: "rgba(255,255,255,0.06)" }}
         />
-        <span className="font-ibm-mono text-[10px] text-[#333] tracking-[1px]">
+        <span className="font-sans text-[10px] text-[#333] tracking-[1px]">
           OR
         </span>
         <div
@@ -228,7 +228,7 @@ export default function SignupPage() {
                 />
               );
             })}
-            <span className="font-ibm-mono text-[10px] text-[var(--text-dim)] tracking-[0.5px] shrink-0">
+            <span className="font-sans text-[10px] text-[var(--text-dim)] tracking-[0.5px] shrink-0">
               {password.length >= 12 &&
               /[A-Z]/.test(password) &&
               /[0-9]/.test(password) &&
@@ -268,7 +268,7 @@ export default function SignupPage() {
                 strokeLinecap="round"
               />
             </svg>
-            <p className="font-ibm-mono text-[11px] text-[var(--destructive)] tracking-[0.3px] leading-relaxed">
+            <p className="font-sans text-[11px] text-[var(--destructive)] tracking-[0.3px] leading-relaxed">
               {error}
             </p>
           </div>
@@ -277,7 +277,7 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 rounded-xl font-grotesk text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+          className="w-full py-3 rounded-xl font-sans text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -310,7 +310,7 @@ export default function SignupPage() {
         </button>
       </form>
 
-      <p className="mt-6 text-center font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.3px]">
+      <p className="mt-6 text-center font-sans text-[11px] text-[var(--text-dim)] tracking-[0.3px]">
         Already have an account?{" "}
         <Link
           href="/login"

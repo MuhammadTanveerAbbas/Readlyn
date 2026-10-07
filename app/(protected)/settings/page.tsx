@@ -140,7 +140,7 @@ export default function SettingsPage() {
             <h1 className="text-lg font-semibold text-[var(--text-primary)]">Settings</h1>
           </div>
           <p className="text-sm text-[var(--text-body)]">
-            Manage your account and security preferences.
+            Manage your account, plus security preferences.
           </p>
         </div>
 
@@ -215,7 +215,7 @@ export default function SettingsPage() {
               </div>
               <p className="text-xs text-red-300/70 mb-4">
                 Once you delete your account, all your projects, generation history,
-                and data will be permanently removed. This action cannot be undone.
+                plus data will be permanently removed. This action cannot be undone.
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -230,7 +230,7 @@ export default function SettingsPage() {
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-[var(--text-primary)]">Delete your account?</AlertDialogTitle>
                     <AlertDialogDescription className="text-[var(--text-body)]">
-                      This will permanently delete your account and all projects. You will not be able to recover any data.
+                      This will permanently delete your account, plus all projects. You will not be able to recover any data.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

@@ -7,7 +7,7 @@ const steps = [
     number: "01",
     title: "Describe your topic",
     description:
-      "Type any topic or paste your content. Pick a layout archetype (Steps, Stats, Timeline, etc.) and a color theme.",
+      "Type any topic or paste your content. Pick a layout archetype (Steps, Stats, Timeline, etc.) plus a color theme.",
     color: "var(--accent)",
     detail: "~10 seconds",
   },
@@ -22,9 +22,9 @@ const steps = [
   },
   {
     number: "03",
-    title: "Edit and export",
+    title: "Edit plus export",
     description:
-      "Drag, resize, recolor, and fine-tune any element on the Fabric.js canvas. Export as PNG or save the JSON to continue later.",
+      "Drag, resize, recolor, plus fine-tune any element on the Fabric.js canvas. Export as PNG or save the JSON to continue later.",
     color: "var(--success-soft)",
     detail: "PNG export",
   },
@@ -41,12 +41,12 @@ export default function HowItWorks() {
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
           <span className="w-4 h-px bg-[var(--accent)]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             How it works
           </span>
         </div>
         <h2
-          className="font-grotesk font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -54,7 +54,7 @@ export default function HowItWorks() {
         >
           {"Three steps.\nPrompt to PNG."}
         </h2>
-        <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+        <p className="font-sans text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
           No design skills needed. Just describe what you want.
         </p>
       </div>
@@ -82,7 +82,7 @@ export default function HowItWorks() {
 
             <div className="flex items-center gap-3">
               <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold font-grotesk z-10 transition-all duration-300 group-hover:scale-110"
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold font-sans z-10 transition-all duration-300 group-hover:scale-110"
                 style={{
                   border: `1px solid ${step.color}30`,
                   backgroundColor: `${step.color}12`,
@@ -93,7 +93,7 @@ export default function HowItWorks() {
                 {step.number}
               </div>
               <span
-                className="font-ibm-mono text-[10px] tracking-[0.15em] uppercase"
+                className="font-sans text-[10px] tracking-[0.15em] uppercase"
                 style={{ color: `${step.color}80` }}
               >
                 {step.detail}
@@ -102,12 +102,12 @@ export default function HowItWorks() {
 
             <div className="flex flex-col gap-3 z-10">
               <h3
-                className="font-grotesk font-bold text-white leading-[1.2]"
+                className="font-sans font-bold text-white leading-[1.2]"
                 style={{ fontSize: "1.15rem", letterSpacing: "-0.02em" }}
               >
                 {step.title}
               </h3>
-              <p className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+              <p className="font-sans text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
                 {step.description}
               </p>
             </div>

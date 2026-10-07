@@ -63,7 +63,7 @@ let modelCache: ModelCache | null = null;
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 /**
- * Remove sensitive credentials from error messages and logs
+ * Remove sensitive credentials from error messages, plus logs
  */
 export function sanitizeLogMessage(message: string): string {
   return message
@@ -151,28 +151,75 @@ export async function resolveGroqModel(
   const availableModels = await discoverGroqModels(forceRefresh);
   const candidates = MODEL_FALLBACK_CANDIDATES[task] || MODEL_FALLBACK_CANDIDATES.reasoning;
 
-  // 1. Check priority candidates in order
-  for (const candidate of candidates) {
-    if (!excludedModels.has(candidate) && availableModels.includes(candidate)) {
-      return candidate;
-    }
+  // 1. Quality ranked priority candidates that are active right now
+  const activeCandidates = candidates
+    .filter((candidate) => !excludedModels.has(candidate))
+    .filter((candidate) => availableModels.includes(candidate))
+    .sort((a, b) => scoreModel(b) - scoreModel(a));
+  if (activeCandidates.length > 0) {
+    return activeCandidates[0];
   }
 
-  // 2. If no exact candidate is active, pick any non-excluded candidate from task defaults
+  // 2. If no exact candidate is active, use any non excluded candidate from task defaults
   for (const candidate of candidates) {
     if (!excludedModels.has(candidate)) {
       return candidate;
     }
   }
 
-  // 3. Pick any available non-excluded model
-  for (const model of availableModels) {
-    if (!excludedModels.has(model)) {
-      return model;
-    }
+  // 3. Quality ranked available non excluded model from the live catalog
+  const rankedCatalog = [...availableModels]
+    .filter((model) => !excludedModels.has(model))
+    .sort((a, b) => scoreModel(b) - scoreModel(a));
+  if (rankedCatalog.length > 0) {
+    return rankedCatalog[0];
   }
 
   return candidates[0] || "openai/gpt-oss-120b";
+}
+
+/** Quality tiers used to rank discovered models, higher is better. */
+const MODEL_QUALITY_TIERS: Array<{ pattern: RegExp, score: number }> = [
+  { pattern: /gpt-oss-120b/i, score: 100 },
+  { pattern: /llama-3\.3-70b/i, score: 90 },
+  { pattern: /llama-3\.1-70b/i, score: 80 },
+  { pattern: /qwen/i, score: 70 },
+  { pattern: /llama-3\.2/i, score: 60 },
+  { pattern: /llama-3\.1-8b/i, score: 50 },
+  { pattern: /mixtral/i, score: 40 },
+];
+
+function scoreModel(modelId: string): number {
+  const hit = MODEL_QUALITY_TIERS.find((tier) => tier.pattern.test(modelId));
+  return hit ? hit.score : 10;
+}
+
+/**
+ * Pick the single best model from the live active catalog.
+ * Preference order: env override, quality ranked candidates, quality ranked catalog.
+ * When Groq retires a model it disappears from the catalog, so the next best wins.
+ */
+export async function getBestGroqModel(
+  task: GroqTaskType = "reasoning",
+): Promise<string> {
+  const availableModels = await discoverGroqModels(false);
+  const envOverride = process.env.GROQ_MODEL;
+  if (envOverride && availableModels.includes(envOverride)) {
+    return envOverride;
+  }
+
+  const activeCandidates = MODEL_FALLBACK_CANDIDATES[task].filter((candidate) =>
+    availableModels.includes(candidate),
+  );
+  if (activeCandidates.length > 0) {
+    return [...activeCandidates].sort(
+      (a, b) => scoreModel(b) - scoreModel(a),
+    )[0];
+  }
+
+  return [...availableModels].sort((a, b) => scoreModel(b) - scoreModel(a))[0] ||
+    MODEL_FALLBACK_CANDIDATES[task][0] ||
+    "openai/gpt-oss-120b";
 }
 
 /**
@@ -259,7 +306,7 @@ export interface SelfHealingOptions {
 }
 
 /**
- * Execute Groq operation with automatic model discovery, fallback, rate limit backoff, and transient failure recovery
+ * Execute Groq operation with automatic model discovery, fallback, rate limit backoff, plus transient failure recovery
  */
 export async function executeGroqWithSelfHealing<T>(
   fn: (modelName: string) => Promise<T>,
@@ -276,7 +323,7 @@ export async function executeGroqWithSelfHealing<T>(
   let currentModel = options.preferredModel || (await resolveGroqModel(task, false, excludedModels));
   let lastError: unknown = null;
   let modelFallbackCount = 0;
-  const maxModelFallbacks = 2;
+  const maxModelFallbacks = 8;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
@@ -287,12 +334,12 @@ export async function executeGroqWithSelfHealing<T>(
         err instanceof Error ? err.message : String(err),
       );
 
-      // 1. Model unavailable / deprecated -> fallback to next candidate
+      // 1. Model unavailable / deprecated -> fallback to next best catalog model
       if (isModelUnavailableError(err) && modelFallbackCount < maxModelFallbacks) {
         modelFallbackCount++;
         excludedModels.add(currentModel);
         console.warn(
-          `[groq-self-heal] Model "${currentModel}" unavailable (${safeErrorMsg}). Refreshing catalog and falling back...`,
+          `[groq-self-heal] Model "${currentModel}" unavailable (${safeErrorMsg}). Refreshing catalog plus falling back...`,
         );
         currentModel = await resolveGroqModel(task, true, excludedModels);
         continue;

@@ -9,6 +9,8 @@ interface MultiFormatExportModalProps {
   onClose: () => void;
   canvasJson: unknown;
   projectName: string;
+  sourceWidth: number;
+  sourceHeight: number;
 }
 
 export default function MultiFormatExportModal({
@@ -16,6 +18,8 @@ export default function MultiFormatExportModal({
   onClose,
   canvasJson,
   projectName,
+  sourceWidth,
+  sourceHeight,
 }: MultiFormatExportModalProps) {
   const [selected, setSelected] = useState<string[]>(["a4", "square", "wide", "story"]);
   if (!open) return null;
@@ -28,7 +32,7 @@ export default function MultiFormatExportModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
       <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl">
         <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-          <h3 className="font-grotesk text-lg font-bold text-white">Auto-Resize Export</h3>
+          <h3 className="font-sans text-lg font-bold text-white">Auto-Resize Export</h3>
           <button
             onClick={onClose}
             className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/60 hover:bg-white/10 hover:text-white shrink-0"
@@ -39,7 +43,7 @@ export default function MultiFormatExportModal({
         <div className="space-y-2">
           {EXPORT_TARGETS.map((target) => (
             <label key={target.key} className="flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white cursor-pointer hover:bg-white/10 transition-colors">
-              <span className="font-ibm-mono text-xs">{target.label} ({target.width}x{target.height})</span>
+              <span className="font-mono text-xs">{target.label} ({target.width}x{target.height})</span>
               <input type="checkbox" checked={selected.includes(target.key)} onChange={() => toggle(target.key)} className="accent-[var(--accent)]" />
             </label>
           ))}
@@ -51,7 +55,10 @@ export default function MultiFormatExportModal({
           <button
             disabled={selected.length === 0}
             onClick={async () => {
-              await exportMultiFormatZip(canvasJson, projectName, selected);
+              await exportMultiFormatZip(canvasJson, projectName, selected, {
+                width: sourceWidth,
+                height: sourceHeight,
+              });
               onClose();
             }}
             className="rounded-lg bg-[var(--accent)] px-4 py-2 text-xs font-bold text-black disabled:opacity-50 hover:bg-[var(--accent-hover)] transition-all"

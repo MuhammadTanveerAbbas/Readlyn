@@ -58,7 +58,7 @@ export function generateHtml(config: ParallaxConfig): string {
     body {
       background: ${backgroundColor};
       overflow-x: hidden;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: Geist, system-ui, sans-serif;
     }
 
     .parallax-container {
@@ -306,7 +306,7 @@ export function generateInfographicReactComponent(canvasJson: Record<string, unk
           width: "${width}px",
           color: "${fill}",
           fontSize: "${obj.fontSize || 16}px",
-          fontFamily: "${obj.fontFamily || "Space Grotesk"}",
+          fontFamily: "${obj.fontFamily || "Geist"}",
           fontWeight: "${obj.fontWeight || "normal"}",
         }}
       >

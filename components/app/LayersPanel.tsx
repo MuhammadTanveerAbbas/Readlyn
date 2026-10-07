@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Eye, EyeOff, Lock, LockOpen, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import type * as fabric from "fabric";
 
@@ -17,6 +17,7 @@ interface LayersPanelProps {
   canvas: fabric.Canvas | null;
   onSelectObject: (obj: fabric.FabricObject) => void;
   refreshTrigger?: number;
+  onCanvasChanged?: () => void;
 }
 
 const TYPE_BADGE: Record<string, { color: string; abbr: string }> = {
@@ -43,9 +44,11 @@ export default function LayersPanel({
   canvas,
   onSelectObject,
   refreshTrigger,
+  onCanvasChanged,
 }: LayersPanelProps) {
   const [layers, setLayers] = useState<LayerItem[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
+  const dragIndexRef = useRef<number | null>(null);
 
   const refreshLayers = useCallback(() => {
     if (!canvas) return;
@@ -98,6 +101,7 @@ export default function LayersPanel({
     layer.object.set("visible", !layer.visible);
     canvas?.renderAll();
     refreshLayers();
+    onCanvasChanged?.();
   };
 
   const toggleLock = (layer: LayerItem, e: React.MouseEvent) => {
@@ -106,6 +110,7 @@ export default function LayersPanel({
     layer.object.set("evented", layer.locked);
     canvas?.renderAll();
     refreshLayers();
+    onCanvasChanged?.();
   };
 
   const deleteLayer = (layer: LayerItem, e: React.MouseEvent) => {
@@ -113,6 +118,7 @@ export default function LayersPanel({
     canvas?.remove(layer.object);
     canvas?.renderAll();
     refreshLayers();
+    onCanvasChanged?.();
   };
 
   const moveLayerUp = (layer: LayerItem, e: React.MouseEvent) => {
@@ -120,6 +126,7 @@ export default function LayersPanel({
     canvas?.bringObjectForward(layer.object);
     canvas?.renderAll();
     refreshLayers();
+    onCanvasChanged?.();
   };
 
   const moveLayerDown = (layer: LayerItem, e: React.MouseEvent) => {
@@ -127,6 +134,39 @@ export default function LayersPanel({
     canvas?.sendObjectBackwards(layer.object);
     canvas?.renderAll();
     refreshLayers();
+    onCanvasChanged?.();
+  };
+
+  // Native drag reorder for the layer list. The top item renders first in the
+  // reversed list, so dropping onto a row moves the dragged object behind that
+  // row in the canvas stack.
+  const handleDragStart = (index: number) => {
+    dragIndexRef.current = index;
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (index: number, e: React.DragEvent) => {
+    e.preventDefault();
+    const from = dragIndexRef.current;
+    dragIndexRef.current = null;
+    if (from === null || from === index || !canvas) return;
+    const source = layers[from];
+    const target = layers[index];
+    if (!source || !target) return;
+
+    // Moving up in the list means forward in the canvas stack, plus vice versa.
+    const steps = Math.abs(from - index);
+    const forward = from > index;
+    for (let i = 0; i < steps; i++) {
+      if (forward) canvas.bringObjectForward(source.object);
+      else canvas.sendObjectBackwards(source.object);
+    }
+    canvas.requestRenderAll();
+    refreshLayers();
+    onCanvasChanged?.();
   };
 
   const selectLayer = (layer: LayerItem) => {
@@ -167,6 +207,10 @@ export default function LayersPanel({
               return (
                 <div
                   key={layer.id}
+                  draggable
+                  onDragStart={() => handleDragStart(layers.indexOf(layer))}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(layers.indexOf(layer), e)}
                   onClick={() => selectLayer(layer)}
                   className={`group flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] cursor-pointer transition-all duration-100 ${
                     isSelected
@@ -185,7 +229,7 @@ export default function LayersPanel({
                     {layer.label}
                   </span>
 
-                  <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                  <div className="flex items-center gap-0.5 shrink-0 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={(e) => moveLayerUp(layer, e)}
                       className="w-4 h-4 flex items-center justify-center rounded hover:bg-white/10"

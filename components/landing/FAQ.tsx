@@ -7,27 +7,27 @@ const faqs = [
   {
     question: "Is Readlyn really free to start?",
     answer:
-      "Yes. The free plan requires no credit card. You can generate infographics, use the canvas editor, and export PNG right away. Paid plans add more projects and storage.",
+      "Yes. The free plan requires no credit card. You can generate infographics, use the canvas editor, plus export PNG right away. Paid plans add more projects plus storage.",
   },
   {
     question: "What AI model powers the generation?",
     answer:
-      "Readlyn uses Groq's Llama 3.3 70B model. It generates structured infographic content with real element positions streamed live to your canvas  not just placeholder text.",
+      "Readlyn uses Groq's Llama 3.3 70B model. It generates structured infographic content with real element positions streamed live to your canvas, not just placeholder text.",
   },
   {
     question: "What can I export?",
     answer:
-      "You can export your infographic as a high-resolution PNG, or save the raw JSON schema to reload and continue editing later. Code export (React, Vue, etc.) is not currently supported.",
+      "You can export your infographic as a high-resolution PNG, or save the raw JSON schema to reload plus continue editing later. Code export (React, Vue, etc.) is not currently supported.",
   },
   {
     question: "What layout types are available?",
     answer:
-      "There are 9 layout archetypes: Steps, Stats, Timeline, Compare, List, Pyramid, Funnel, Cycle, and Auto. Each has pre-computed element positions so the AI output is always structured.",
+      "There are 9 layout archetypes: Steps, Stats, Timeline, Compare, List, Pyramid, Funnel, Cycle, plus Auto. Each has pre-computed element positions so the AI output is always structured.",
   },
   {
     question: "Can I edit the generated infographic?",
     answer:
-      "Yes. Every element is editable on the Fabric.js canvas  drag, resize, rotate, recolor, change typography, adjust opacity, and more. The Layers and Properties panels give you full control.",
+      "Yes. Every element is editable on the Fabric.js canvas. Drag, resize, rotate, recolor, change typography, adjust opacity, plus more. The Layers panel, plus the Properties panel, give you full control.",
   },
   {
     question: "Is there team collaboration?",
@@ -52,12 +52,12 @@ export default function FAQ() {
           <div className="flex flex-col gap-4">
             <div className="inline-flex items-center gap-2 w-fit">
               <span className="w-4 h-px bg-[var(--accent)]" />
-              <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+              <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
                 FAQ
               </span>
             </div>
             <h2
-              className="font-grotesk font-bold text-white leading-[1.05] whitespace-pre-line"
+              className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
               style={{
                 fontSize: "clamp(2rem, 3.5vw, 3rem)",
                 letterSpacing: "-0.03em",
@@ -65,8 +65,8 @@ export default function FAQ() {
             >
               {"Got\nquestions?"}
             </h2>
-            <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
-              Honest answers about what Readlyn does and doesn't do today.
+            <p className="font-sans text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+              Honest answers about what Readlyn does today, plus what it doesn&apos;t.
             </p>
           </div>
 
@@ -82,11 +82,11 @@ export default function FAQ() {
                   />
                 </svg>
               </div>
-              <span className="font-grotesk text-[13px] font-semibold text-white">
+              <span className="font-sans text-[13px] font-semibold text-white">
                 Something missing?
               </span>
             </div>
-            <p className="font-ibm-mono text-[12px] text-[var(--text-dim)] leading-[1.7] tracking-[0.3px]">
+            <p className="font-sans text-[12px] text-[var(--text-dim)] leading-[1.7] tracking-[0.3px]">
               Open a GitHub issue or reach out directly. Early users shape what
               gets built next.
             </p>
@@ -94,10 +94,10 @@ export default function FAQ() {
               href="https://github.com/MuhammadTanveerAbbas/Readlyn/issues"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-ibm-mono text-[11px] tracking-[0.15em] text-[var(--accent)] uppercase hover:underline"
+              className="inline-flex items-center gap-2 font-sans text-[11px] tracking-[0.15em] text-[var(--accent)] uppercase hover:underline"
             >
               Open an issue
-              <span>→</span>
+              <span>➔</span>
             </a>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function FAQ() {
                   onClick={() => setOpenIndex(isOpen ? -1 : i)}
                 >
                   <span
-                    className="font-grotesk text-[14px] font-medium transition-colors duration-200 leading-[1.4]"
+                    className="font-sans text-[14px] font-medium transition-colors duration-200 leading-[1.4]"
                     style={{ color: isOpen ? "var(--text-primary)" : "var(--text-secondary)" }}
                   >
                     {faq.question}
@@ -156,7 +156,7 @@ export default function FAQ() {
                   style={{ maxHeight: isOpen ? "200px" : "0px" }}
                 >
                   <div className="px-6 pb-5">
-                    <p className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+                    <p className="font-sans text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
                       {faq.answer}
                     </p>
                   </div>

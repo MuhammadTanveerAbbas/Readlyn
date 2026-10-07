@@ -86,7 +86,7 @@ export default function ImagePicker({ value, onChange }: ImagePickerProps) {
             <X className="h-3 w-3 text-white/70" />
           </button>
           {isBuiltin && (
-            <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-[8px] text-white/60 font-mono">
+            <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-[8px] text-white/60 font-sans">
               Built-in
             </span>
           )}
@@ -122,7 +122,7 @@ export default function ImagePicker({ value, onChange }: ImagePickerProps) {
                 }`}
               >
                 <img src={img.src} alt={img.label} className="w-full h-full object-cover" />
-                <span className="absolute bottom-0 inset-x-0 bg-black/70 text-[6px] text-white/70 text-center truncate px-0.5 py-0.5 font-mono">
+                <span className="absolute bottom-0 inset-x-0 bg-black/70 text-[6px] text-white/70 text-center truncate px-0.5 py-0.5 font-sans">
                   {img.label}
                 </span>
               </button>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import * as fabric from "fabric";
 import { X } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { FONT_FAMILIES, BODY_FONT } from "@/types/infographic";
 
 interface BrandKitModalProps {
   open: boolean;
@@ -16,7 +17,7 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
   const [primaryColor, setPrimaryColor] = useState("#f5c518");
   const [secondaryColor, setSecondaryColor] = useState("#0f172a");
   const [accentColor, setAccentColor] = useState("#38bdf8");
-  const [fontFamily, setFontFamily] = useState("Space Grotesk");
+  const [fontFamily, setFontFamily] = useState<string>(BODY_FONT);
 
   useEffect(() => {
     const saved = localStorage.getItem("readlyn_brand_kit");
@@ -40,8 +41,8 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
     const kit = { brandName, primaryColor, secondaryColor, accentColor, fontFamily };
     localStorage.setItem("readlyn_brand_kit", JSON.stringify(kit));
     toast({
-      title: "Brand Memory Saved",
-      description: "Brand kit colors and typography stored locally for future generations.",
+      title: "Brand kit saved",
+      description: "Stored in this browser only. Nothing is uploaded.",
     });
   };
 
@@ -89,12 +90,12 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
       <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl flex flex-col">
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
-            <h3 className="font-grotesk text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="font-sans text-lg font-bold text-white flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
-              Persistent Brand Memory
+              Brand Kit
             </h3>
-            <p className="font-ibm-mono text-xs text-[var(--text-dim)]">
-              Store logo, palette, and fonts auto-applied across projects
+            <p className="font-sans text-xs text-[var(--text-dim)]">
+              Palette plus typography stored in this browser.
             </p>
           </div>
           <button
@@ -107,20 +108,20 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
 
         <div className="py-4 space-y-4">
           <div>
-            <label className="block font-ibm-mono text-xs text-white/70 mb-1">
+            <label className="block font-sans text-xs text-white/70 mb-1">
               Brand Name
             </label>
             <input
               type="text"
               value={brandName}
               onChange={(e) => setBrandName(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 font-ibm-mono text-xs text-white focus:outline-none focus:border-[var(--accent)]"
+              className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 font-sans text-xs text-white focus:outline-none focus:border-[var(--accent)]"
             />
           </div>
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block font-ibm-mono text-[10px] text-white/60 mb-1">
+              <label className="block font-sans text-[10px] text-white/60 mb-1">
                 Primary Color
               </label>
               <div className="flex items-center gap-2">
@@ -130,11 +131,11 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
                   onChange={(e) => setPrimaryColor(e.target.value)}
                   className="w-8 h-8 rounded border border-white/10 cursor-pointer bg-transparent"
                 />
-                <span className="font-ibm-mono text-[10px] text-white/80">{primaryColor}</span>
+                <span className="font-mono text-[10px] text-white/80">{primaryColor}</span>
               </div>
             </div>
             <div>
-              <label className="block font-ibm-mono text-[10px] text-white/60 mb-1">
+              <label className="block font-sans text-[10px] text-white/60 mb-1">
                 Secondary Color
               </label>
               <div className="flex items-center gap-2">
@@ -144,11 +145,11 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
                   onChange={(e) => setSecondaryColor(e.target.value)}
                   className="w-8 h-8 rounded border border-white/10 cursor-pointer bg-transparent"
                 />
-                <span className="font-ibm-mono text-[10px] text-white/80">{secondaryColor}</span>
+                <span className="font-mono text-[10px] text-white/80">{secondaryColor}</span>
               </div>
             </div>
             <div>
-              <label className="block font-ibm-mono text-[10px] text-white/60 mb-1">
+              <label className="block font-sans text-[10px] text-white/60 mb-1">
                 Accent Color
               </label>
               <div className="flex items-center gap-2">
@@ -158,25 +159,29 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
                   onChange={(e) => setAccentColor(e.target.value)}
                   className="w-8 h-8 rounded border border-white/10 cursor-pointer bg-transparent"
                 />
-                <span className="font-ibm-mono text-[10px] text-white/80">{accentColor}</span>
+                <span className="font-mono text-[10px] text-white/80">{accentColor}</span>
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block font-ibm-mono text-xs text-white/70 mb-1">
+            <label className="block font-sans text-xs text-white/70 mb-1">
               Primary Font Family
             </label>
             <select
               value={fontFamily}
               onChange={(e) => setFontFamily(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 font-ibm-mono text-xs text-white focus:outline-none focus:border-[var(--accent)]"
+              className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 font-sans text-xs text-white focus:outline-none focus:border-[var(--accent)]"
             >
-              <option value="Space Grotesk" className="bg-[var(--bg-panel)] text-white">Space Grotesk</option>
-              <option value="Inter" className="bg-[var(--bg-panel)] text-white">Inter</option>
-              <option value="IBM Plex Mono" className="bg-[var(--bg-panel)] text-white">IBM Plex Mono</option>
-              <option value="Arial" className="bg-[var(--bg-panel)] text-white">Arial</option>
-              <option value="Georgia" className="bg-[var(--bg-panel)] text-white">Georgia</option>
+              {FONT_FAMILIES.map((family) => (
+                <option
+                  key={family}
+                  value={family}
+                  className="bg-[var(--bg-panel)] text-white"
+                >
+                  {family}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -184,13 +189,13 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
         <div className="border-t border-white/10 pt-4 flex justify-end gap-2">
           <button
             onClick={saveBrandKit}
-            className="px-4 py-2 rounded-lg border border-white/10 font-grotesk text-xs font-semibold text-white hover:bg-white/10 transition-all"
+            className="px-4 py-2 rounded-lg border border-white/10 font-sans text-xs font-semibold text-white hover:bg-white/10 transition-all"
           >
-            Save Memory
+            Save Brand Kit
           </button>
           <button
             onClick={applyBrandToCanvas}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-grotesk text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
           >
             Apply to Canvas
           </button>

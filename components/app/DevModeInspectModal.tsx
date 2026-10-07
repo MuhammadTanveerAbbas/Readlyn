@@ -80,11 +80,11 @@ export function InfographicElement() {
       <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl flex flex-col">
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
-            <h3 className="font-grotesk text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="font-sans text-lg font-bold text-white flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
-              Dev Mode — CSS & Code Inspect
+              Dev Mode, CSS plus Code Inspect
             </h3>
-            <p className="font-ibm-mono text-xs text-[var(--text-dim)]">
+            <p className="font-sans text-xs text-[var(--text-dim)]">
               {selectedObject ? `Inspecting ${selectedObject.type} element` : "No element selected (showing canvas item)"}
             </p>
           </div>
@@ -99,20 +99,20 @@ export function InfographicElement() {
         {/* Measurements box */}
         <div className="grid grid-cols-4 gap-3 my-4">
           <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 text-center">
-            <span className="block font-ibm-mono text-[10px] text-white/50">X Position</span>
-            <span className="font-grotesk font-bold text-xs text-white">{left}px</span>
+            <span className="block font-sans text-[10px] text-white/50">X Position</span>
+            <span className="font-mono font-bold text-xs text-white">{left}px</span>
           </div>
           <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 text-center">
-            <span className="block font-ibm-mono text-[10px] text-white/50">Y Position</span>
-            <span className="font-grotesk font-bold text-xs text-white">{top}px</span>
+            <span className="block font-sans text-[10px] text-white/50">Y Position</span>
+            <span className="font-mono font-bold text-xs text-white">{top}px</span>
           </div>
           <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 text-center">
-            <span className="block font-ibm-mono text-[10px] text-white/50">Width</span>
-            <span className="font-grotesk font-bold text-xs text-white">{width}px</span>
+            <span className="block font-sans text-[10px] text-white/50">Width</span>
+            <span className="font-mono font-bold text-xs text-white">{width}px</span>
           </div>
           <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 text-center">
-            <span className="block font-ibm-mono text-[10px] text-white/50">Height</span>
-            <span className="font-grotesk font-bold text-xs text-white">{height}px</span>
+            <span className="block font-sans text-[10px] text-white/50">Height</span>
+            <span className="font-mono font-bold text-xs text-white">{height}px</span>
           </div>
         </div>
 
@@ -120,7 +120,7 @@ export function InfographicElement() {
         <div className="flex items-center gap-2 border-b border-white/10 pb-3">
           <button
             onClick={() => setActiveTab("css")}
-            className={`px-3 py-1 rounded-lg text-xs font-ibm-mono transition-all ${
+            className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "css"
                 ? "bg-[var(--accent)] text-black font-bold"
                 : "text-white/70 hover:bg-white/5"
@@ -130,7 +130,7 @@ export function InfographicElement() {
           </button>
           <button
             onClick={() => setActiveTab("react")}
-            className={`px-3 py-1 rounded-lg text-xs font-ibm-mono transition-all ${
+            className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "react"
                 ? "bg-[var(--accent)] text-black font-bold"
                 : "text-white/70 hover:bg-white/5"
@@ -140,7 +140,7 @@ export function InfographicElement() {
           </button>
           <button
             onClick={() => setActiveTab("svg")}
-            className={`px-3 py-1 rounded-lg text-xs font-ibm-mono transition-all ${
+            className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "svg"
                 ? "bg-[var(--accent)] text-black font-bold"
                 : "text-white/70 hover:bg-white/5"
@@ -150,17 +150,17 @@ export function InfographicElement() {
           </button>
         </div>
 
-        <pre className="p-4 my-4 rounded-xl bg-black/60 border border-white/10 font-ibm-mono text-xs text-amber-300 overflow-x-auto max-h-56">
+        <pre className="p-4 my-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-amber-300 overflow-x-auto max-h-56">
           {activeCode}
         </pre>
 
         <div className="border-t border-white/10 pt-4 flex justify-between items-center">
-          <span className="font-ibm-mono text-[10px] text-[var(--text-dim)]">
+          <span className="font-sans text-[10px] text-[var(--text-dim)]">
             Developers can directly copy production ready code
           </span>
           <button
             onClick={copyCode}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-grotesk text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
           >
             Copy Snippet
           </button>

@@ -21,20 +21,20 @@ export const PLANS: Record<PlanId, Plan> = {
     name: "Free",
     price: "$0",
     period: "forever",
-    description: "Ideal for evaluating Readlyn and creating quick infographics",
+    description: "Everything you need to evaluate Readlyn plus ship visuals fast",
     features: [
-      "Up to 3 active projects",
-      "5 AI generations per day (150/mo)",
-      "All 9 layout archetypes & 5 themes",
-      "PNG, SVG, and JSON export",
-      "Canvas editing & basic layers",
-      "Generation history",
+      "Unlimited active projects",
+      "100 AI generations per day (fair use)",
+      "All 9 layout archetypes plus 5 themes",
+      "PNG, JSON plus multi size ZIP export",
+      "Canvas editing, layers plus generation history",
+      "Design tokens, brand kit plus dev mode inspect",
     ],
     limits: {
-      projects: 3,
-      generationsPerDay: 5,
-      exports: 50,
-      aiCreditsMonthly: 150,
+      projects: 9999,
+      generationsPerDay: 100,
+      exports: 9999,
+      aiCreditsMonthly: 3000,
     },
   },
   pro: {
@@ -42,16 +42,13 @@ export const PLANS: Record<PlanId, Plan> = {
     name: "Pro",
     price: "$15",
     period: "per month",
-    description: "For professionals who need unlimited projects and advanced code export",
+    description: "Early access tier while we build the collaboration toolkit",
     features: [
-      "Unlimited active projects",
-      "100 AI generations per day (3,000/mo)",
-      "React Component & HTML/CSS code export",
-      "Dev Mode / CSS inspect panel",
-      "Design Tokens JSON export",
-      "Version history & named checkpoints",
-      "Persistent Brand Memory kit",
-      "Priority Groq AI routing",
+      "Everything in Free",
+      "Priority Groq AI routing (coming soon)",
+      "Version history with named checkpoints (coming soon)",
+      "React component plus HTML/CSS code export (coming soon)",
+      "Advanced brand kits plus font presets (coming soon)",
     ],
     limits: {
       projects: 9999,
@@ -65,15 +62,14 @@ export const PLANS: Record<PlanId, Plan> = {
     name: "Team",
     price: "$35",
     period: "per user / month",
-    description: "For teams collaborating on brand graphics and multi-asset systems",
+    description: "Reserved for teams. Nothing here ships today, we label it honestly",
     features: [
       "Everything in Pro",
-      "Shared team libraries & brand kits",
-      "Real-time multi-cursor collaboration",
-      "Role-based access (Owner, Editor, Commenter)",
-      "Pooled team AI credit pool (10,000/mo)",
-      "Audit log & version restore",
-      "Dedicated priority support",
+      "Shared team libraries plus brand kits (coming soon)",
+      "Real time multi cursor collaboration (coming soon)",
+      "Role based access with Owner, Editor, Commenter (coming soon)",
+      "Audit log plus version restore (coming soon)",
+      "Dedicated priority support (coming soon)",
     ],
     limits: {
       projects: 99999,
@@ -85,6 +81,12 @@ export const PLANS: Record<PlanId, Plan> = {
 };
 
 export const FREE_PLAN: Plan = PLANS.free;
+
+/**
+ * Fair use safety net shared by every account. Not a plan gate, it only stops
+ * one account from exhausting the AI provider quota for everyone else.
+ */
+export const FAIR_USE_DAILY_GENERATIONS = 100;
 
 export function getPlanById(id: PlanId): Plan {
   return PLANS[id] || PLANS.free;

@@ -236,7 +236,7 @@ export default function ProjectCard({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete project?</AlertDialogTitle>
             <AlertDialogDescription className="text-white/60">
-              This action permanently deletes &quot;{title}&quot; and cannot be undone.
+              This action permanently deletes &quot;{title}&quot;, plus cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

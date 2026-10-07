@@ -129,7 +129,7 @@ export default function ParallaxStudioPage() {
     <TooltipProvider delayDuration={200}>
       <div className="h-screen w-screen flex flex-col bg-[var(--bg-base)] text-zinc-200 overflow-hidden font-sans">
         {/* HEADER */}
-        <header className="h-12 border-b border-white/[0.07] flex items-center justify-between px-3 gap-2 flex-shrink-0 bg-[var(--bg-subtle)]">
+        <header className="min-h-12 border-b border-white/[0.07] flex flex-wrap items-center justify-between px-3 py-1.5 gap-2 flex-shrink-0 bg-[var(--bg-subtle)]">
           <div className="flex items-center gap-2 min-w-0">
             <div className="leading-tight select-none">
               <div className="text-sm font-bold tracking-tighter text-white">
@@ -234,7 +234,7 @@ export default function ParallaxStudioPage() {
 
         <div className="flex-1 flex min-h-0 relative">
           {panelOpen && !cinemaMode && (
-            <aside className="w-[300px] flex-shrink-0 border-r border-white/[0.06] bg-[var(--bg-subtle)] flex flex-col min-h-0 relative">
+            <aside className="absolute lg:relative inset-y-0 left-0 z-30 w-[300px] max-w-[85vw] flex-shrink-0 border-r border-white/[0.06] bg-[var(--bg-subtle)] flex flex-col min-h-0 lg:min-h-full">
               <ConfigPanel config={config} setConfig={setConfig} />
               <button
                 onClick={() => setPanelOpen(false)}

@@ -36,7 +36,7 @@ export default function ZoomSlider({
 
   return (
     <div
-      className="w-9 flex-shrink-0 flex flex-col items-center py-3 gap-3"
+      className="hidden lg:flex w-9 flex-shrink-0 flex-col items-center py-3 gap-3"
       style={{
         backgroundColor: "var(--bg-panel)",
         borderLeft: "1px solid rgba(255,255,255,0.07)",
@@ -85,7 +85,7 @@ export default function ZoomSlider({
 
       {/* Zoom % */}
       <div
-        className="text-[9px] font-mono leading-none"
+        className="text-[9px] font-sans leading-none"
         style={{ color: "var(--text-muted-val)" }}
       >
         {pct}%

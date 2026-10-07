@@ -13,11 +13,10 @@ const shortcuts = [
   { key: "V", desc: "Select Tool" },
   { key: "H", desc: "Hand / Pan Canvas Tool" },
   { key: "Space + Drag", desc: "Pan canvas dynamically" },
+  { key: "Mouse Wheel", desc: "Zoom in or out toward the cursor" },
   { key: "Delete / Backspace", desc: "Delete selected element" },
   { key: "Ctrl + D", desc: "Duplicate selected element" },
   { key: "Arrow Keys", desc: "Nudge element 1px (Shift + Arrow for 10px)" },
-  { key: "Ctrl + G", desc: "Group selected elements" },
-  { key: "Ctrl + Shift + G", desc: "Ungroup selection" },
   { key: "?", desc: "Open this keyboard shortcuts panel" },
 ];
 
@@ -29,10 +28,10 @@ export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortc
       <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl flex flex-col">
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
-            <h3 className="font-grotesk text-lg font-bold text-white">
+            <h3 className="font-sans text-lg font-bold text-white">
               Keyboard Shortcuts
             </h3>
-            <p className="font-ibm-mono text-xs text-[var(--text-dim)]">
+            <p className="font-sans text-xs text-[var(--text-dim)]">
               Speed up your infographic editing workflow
             </p>
           </div>
@@ -50,8 +49,8 @@ export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortc
               key={item.key}
               className="flex items-center justify-between p-2.5 rounded-xl border border-white/5 bg-white/[0.02]"
             >
-              <span className="font-ibm-mono text-xs text-white/80">{item.desc}</span>
-              <kbd className="px-2.5 py-1 rounded-md border border-white/15 bg-white/10 font-ibm-mono text-xs font-semibold text-[var(--accent)] shadow-sm">
+              <span className="font-sans text-xs text-white/80">{item.desc}</span>
+              <kbd className="px-2.5 py-1 rounded-md border border-white/15 bg-white/10 font-mono text-xs font-semibold text-[var(--accent)] shadow-sm">
                 {item.key}
               </kbd>
             </div>
@@ -61,7 +60,7 @@ export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortc
         <div className="border-t border-white/10 pt-4 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-grotesk text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
           >
             Got it
           </button>

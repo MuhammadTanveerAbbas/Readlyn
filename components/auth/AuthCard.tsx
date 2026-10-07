@@ -62,7 +62,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
               className="group-hover:scale-110 transition-transform duration-200"
               style={{ imageRendering: "pixelated" }}
             />
-            <span className="font-grotesk text-[13px] font-bold text-white tracking-[2.5px]">
+            <span className="font-sans text-[13px] font-bold text-white tracking-[2.5px]">
               READLYN
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
@@ -83,13 +83,13 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
           {/* Header */}
           <div className="mb-7">
             <h1
-              className="font-grotesk font-bold text-white"
+              className="font-sans font-bold text-white"
               style={{ fontSize: "1.6rem", letterSpacing: "-0.03em" }}
             >
               {title}
             </h1>
             {subtitle && (
-              <p className="mt-1.5 font-ibm-mono text-[12px] text-[var(--text-dim)] tracking-[0.4px] leading-relaxed">
+              <p className="mt-1.5 font-sans text-[12px] text-[var(--text-dim)] tracking-[0.4px] leading-relaxed">
                 {subtitle}
               </p>
             )}
@@ -99,7 +99,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
         </div>
 
         {/* Footer note */}
-        <p className="mt-5 text-center font-ibm-mono text-[10px] text-[#555] tracking-[0.5px] leading-relaxed">
+        <p className="mt-5 text-center font-sans text-[10px] text-[#555] tracking-[0.5px] leading-relaxed">
           By continuing, you agree to our{" "}
           <Link
             href="/terms"

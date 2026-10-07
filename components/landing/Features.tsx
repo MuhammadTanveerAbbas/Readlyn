@@ -56,12 +56,12 @@ function FeatureCard({
 
       <div className="flex flex-col gap-3">
         <h3
-          className="font-grotesk font-bold text-white leading-[1.2] whitespace-pre-line"
+          className="font-sans font-bold text-white leading-[1.2] whitespace-pre-line"
           style={{ fontSize: "1.15rem", letterSpacing: "-0.02em" }}
         >
           {title}
         </h3>
-        <p className="font-ibm-mono text-[12px] text-[#777777] tracking-[0.3px] leading-[1.8]">
+        <p className="font-sans text-[12px] text-[#777777] tracking-[0.3px] leading-[1.8]">
           {description}
         </p>
       </div>
@@ -79,7 +79,7 @@ function FeatureCard({
             style={{ backgroundColor: tagColor }}
           />
           <span
-            className="font-ibm-mono text-[10px] tracking-[0.12em] uppercase font-semibold"
+            className="font-sans text-[10px] tracking-[0.12em] uppercase font-semibold"
             style={{ color: tagColor }}
           >
             {tag}
@@ -105,7 +105,7 @@ const features = [
     iconColor: "var(--accent)",
     title: "AI generation\nwith Groq",
     description:
-      "Describe any topic and Llama 3.3 70B generates a complete, structured infographic with real layout positions  not just placeholder text.",
+      "Describe any topic. Llama 3.3 70B generates a complete, structured infographic with real layout positions, not just placeholder text.",
     tag: "Groq AI",
     tagColor: "var(--accent)",
   },
@@ -153,7 +153,7 @@ const features = [
     iconColor: "var(--orange)",
     title: "9 layout\narchetypes",
     description:
-      "Steps, Stats, Timeline, Compare, List, Pyramid, Funnel, Cycle, or Auto  each with pre-computed element positions so the layout is always structured.",
+      "Steps, Stats, Timeline, Compare, List, Pyramid, Funnel, Cycle, or Auto, each with pre-computed element positions so the layout is always structured.",
     tag: "Layouts",
     tagColor: "var(--orange)",
   },
@@ -172,7 +172,7 @@ const features = [
     iconColor: "var(--blue)",
     title: "Interactive\ncanvas editor",
     description:
-      "Drag, resize, rotate, and edit any element on the Fabric.js canvas. Layers panel, properties panel, undo/redo, zoom, and pan all included.",
+      "Drag, resize, rotate, plus edit any element on the Fabric.js canvas. Layers panel, properties panel, undo/redo, zoom, plus pan all included.",
     tag: "Editor",
     tagColor: "var(--blue)",
   },
@@ -191,7 +191,7 @@ const features = [
     iconColor: "var(--success-soft)",
     title: "Export PNG\nor JSON",
     description:
-      "Download your infographic as a high-res PNG or save the raw JSON schema to reload and continue editing later.",
+      "Download your infographic as a high-res PNG or save the raw JSON schema to reload plus continue editing later.",
     tag: "Export",
     tagColor: "var(--success-soft)",
   },
@@ -210,7 +210,7 @@ const features = [
     iconColor: "var(--blue)",
     title: "Parallax\nStudio",
     description:
-      "Create scroll-driven parallax scenes with layered images, tilt effects, and zoom transitions. Export clean HTML/CSS/JS code.",
+      "Create scroll-driven parallax scenes with layered images, tilt effects, plus zoom transitions. Export clean HTML/CSS/JS code.",
     tag: "New tool",
     tagColor: "var(--blue)",
   },
@@ -228,12 +228,12 @@ export default function Features() {
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
           <span className="w-4 h-px bg-[var(--accent)]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             Features
           </span>
         </div>
         <h2
-          className="font-grotesk font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -241,9 +241,9 @@ export default function Features() {
         >
           {"Everything you need.\nNothing you don't."}
         </h2>
-        <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
-          From prompt to polished infographic AI generation, a full canvas
-          editor, and PNG export in one tool.
+        <p className="font-sans text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+          From prompt to polished infographic: AI generation, a full canvas
+          editor, plus PNG export in one tool.
         </p>
       </div>
 

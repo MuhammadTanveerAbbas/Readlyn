@@ -186,7 +186,7 @@ export default function ParallaxPreview({ config, cinemaMode }: ParallaxPreviewP
                     style={{ animation: "parallax-scroll-hint 2s ease-in-out infinite" }}
                   />
                 </div>
-                <span className="text-[10px] font-mono text-white/25 uppercase tracking-widest">
+                <span className="text-[10px] font-sans text-white/25 uppercase tracking-widest">
                   {dragging ? "Dragging..." : "Scroll or drag"}
                 </span>
               </div>
@@ -200,7 +200,7 @@ export default function ParallaxPreview({ config, cinemaMode }: ParallaxPreviewP
                 style={{ height: `${state.current.value * 100}%` }}
               />
             </div>
-            <span className="text-[8px] font-mono text-white/30">
+            <span className="text-[8px] font-sans text-white/30">
               {Math.round(state.current.value * 100)}%
             </span>
           </div>
@@ -208,7 +208,7 @@ export default function ParallaxPreview({ config, cinemaMode }: ParallaxPreviewP
       )}
 
       {!cinemaMode && (
-        <div className="absolute top-2 left-2 z-50 px-1.5 py-0.5 rounded text-[8px] font-mono bg-black/60 text-white/50 backdrop-blur pointer-events-none uppercase tracking-widest">
+        <div className="absolute top-2 left-2 z-50 px-1.5 py-0.5 rounded text-[8px] font-sans bg-black/60 text-white/50 backdrop-blur pointer-events-none uppercase tracking-widest">
           Preview
         </div>
       )}

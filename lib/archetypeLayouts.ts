@@ -2,6 +2,7 @@
 // Pre-computes EXACT pixel positions for every element slot in every archetype.
 // AI only fills in: text content, colors, emoji. Never positions.
 
+
 export interface SlotPosition {
   id: string;
   type: "rect" | "circle" | "line" | "text_slot" | "icon_slot" | "stat_slot";
@@ -18,6 +19,7 @@ export interface SlotPosition {
   role: string;
   zIndexHint: number;
 }
+
 
 export function computeLayout(
   style: string,
@@ -46,9 +48,12 @@ export function computeLayout(
   }
 }
 
-// ─────────────────────────────────────────────────────────
+
+
+
 // STEPS  Zigzag spine with alternating left/right content
-// ─────────────────────────────────────────────────────────
+
+
 function computeSteps(W: number, H: number): SlotPosition[] {
   const slots: SlotPosition[] = [];
   const STEPS = 5;
@@ -57,6 +62,7 @@ function computeSteps(W: number, H: number): SlotPosition[] {
   const STEP_H = 145;
   const CARD_W = 440;
   const ICON_R = 36;
+
 
   // Full background
   slots.push({
@@ -130,6 +136,7 @@ function computeSteps(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   // Spine line
   slots.push({
     id: "spine-line",
@@ -142,10 +149,12 @@ function computeSteps(W: number, H: number): SlotPosition[] {
     zIndexHint: 16,
   });
 
+
   for (let i = 0; i < STEPS; i++) {
     const baseY = START_Y + i * STEP_H;
     const finalCardX = SPINE_X + 32;
     const finalIconX = SPINE_X + CARD_W + 56;
+
 
     // Spine junction dot
     slots.push({
@@ -240,6 +249,7 @@ function computeSteps(W: number, H: number): SlotPosition[] {
     });
   }
 
+
   // Footer
   slots.push({
     id: "footer-band",
@@ -261,15 +271,20 @@ function computeSteps(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   return slots;
 }
 
-// ─────────────────────────────────────────────────────────
-// STATS  Bento grid with hero stat and varied cell sizes
-// ─────────────────────────────────────────────────────────
+
+
+
+// STATS  Bento grid with hero stat, plus varied cell sizes
+
+
 function computeStats(W: number, H: number): SlotPosition[] {
   const slots: SlotPosition[] = [];
   const GRID_GAP = 12;
+
 
   // Background
   slots.push({
@@ -282,6 +297,7 @@ function computeStats(W: number, H: number): SlotPosition[] {
     role: "canvas-background",
     zIndexHint: 0,
   });
+
 
   // Header
   slots.push({
@@ -342,12 +358,14 @@ function computeStats(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
-  // Grid layout: hero stat (full width) + 3x smaller stats below
+
+  // Grid layout: hero stat (full width) plus 3 smaller stats below
   const gridX = 40;
   const gridY = 180;
   const cellW = (W - 80 - 2 * GRID_GAP) / 3;
   const smallH = 110;
   const heroH = 130;
+
 
   // Hero stat (full width)
   slots.push({
@@ -371,6 +389,7 @@ function computeStats(W: number, H: number): SlotPosition[] {
     role: "stat-hero-block",
     zIndexHint: 32,
   });
+
 
   // 3 stats below
   for (let i = 0; i < 3; i++) {
@@ -399,6 +418,7 @@ function computeStats(W: number, H: number): SlotPosition[] {
     });
   }
 
+
   // Footer
   slots.push({
     id: "footer-band",
@@ -420,12 +440,16 @@ function computeStats(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   return slots;
 }
 
-// ─────────────────────────────────────────────────────────
+
+
+
 // TIMELINE  Horizontal timeline with left/right alternating nodes
-// ─────────────────────────────────────────────────────────
+
+
 function computeTimeline(W: number, H: number): SlotPosition[] {
   const slots: SlotPosition[] = [];
   const EVENTS = 5;
@@ -433,6 +457,7 @@ function computeTimeline(W: number, H: number): SlotPosition[] {
   const EVENT_SPACING = (W - 80) / EVENTS;
   const CARD_H = 120;
   const NODE_R = 20;
+
 
   // Background
   slots.push({
@@ -445,6 +470,7 @@ function computeTimeline(W: number, H: number): SlotPosition[] {
     role: "canvas-background",
     zIndexHint: 0,
   });
+
 
   // Header
   slots.push({
@@ -505,6 +531,7 @@ function computeTimeline(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   // Horizontal spine line
   slots.push({
     id: "spine-line",
@@ -517,10 +544,12 @@ function computeTimeline(W: number, H: number): SlotPosition[] {
     zIndexHint: 16,
   });
 
+
   for (let i = 0; i < EVENTS; i++) {
     const isTop = i % 2 === 0;
     const cx = 40 + (i + 0.5) * EVENT_SPACING;
     const cy = SPINE_Y;
+
 
     // Connector dot on spine
     slots.push({
@@ -541,6 +570,7 @@ function computeTimeline(W: number, H: number): SlotPosition[] {
       role: "timeline-date-label",
       zIndexHint: 62,
     });
+
 
     // Card above or below spine
     const cardY = isTop ? cy - CARD_H - 32 : cy + 32;
@@ -575,6 +605,7 @@ function computeTimeline(W: number, H: number): SlotPosition[] {
     });
   }
 
+
   // Footer
   slots.push({
     id: "footer-band",
@@ -596,15 +627,20 @@ function computeTimeline(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   return slots;
 }
 
-// ─────────────────────────────────────────────────────────
+
+
+
 // COMPARE  Left/right split with VS badge in center
-// ─────────────────────────────────────────────────────────
+
+
 function computeCompare(W: number, H: number): SlotPosition[] {
   const slots: SlotPosition[] = [];
   const DIVIDER_X = W / 2;
+
 
   // Background
   slots.push({
@@ -617,6 +653,7 @@ function computeCompare(W: number, H: number): SlotPosition[] {
     role: "canvas-background",
     zIndexHint: 0,
   });
+
 
   // Header
   slots.push({
@@ -677,6 +714,7 @@ function computeCompare(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   // Center divider line
   slots.push({
     id: "divider-line",
@@ -688,6 +726,7 @@ function computeCompare(W: number, H: number): SlotPosition[] {
     role: "center-divider",
     zIndexHint: 16,
   });
+
 
   // VS badge
   slots.push({
@@ -708,6 +747,7 @@ function computeCompare(W: number, H: number): SlotPosition[] {
     role: "vs-badge-text",
     zIndexHint: 52,
   });
+
 
   // Left side (3 comparison points)
   for (let i = 0; i < 3; i++) {
@@ -732,6 +772,7 @@ function computeCompare(W: number, H: number): SlotPosition[] {
     });
   }
 
+
   // Right side (3 comparison points)
   for (let i = 0; i < 3; i++) {
     const cy = 200 + i * 130;
@@ -755,6 +796,7 @@ function computeCompare(W: number, H: number): SlotPosition[] {
     });
   }
 
+
   // Footer
   slots.push({
     id: "footer-band",
@@ -776,17 +818,22 @@ function computeCompare(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   return slots;
 }
 
-// ─────────────────────────────────────────────────────────
+
+
+
 // LIST  Icon + text cards with left accent bar
-// ─────────────────────────────────────────────────────────
+
+
 function computeList(W: number, H: number): SlotPosition[] {
   const slots: SlotPosition[] = [];
   const ITEMS = 5;
   const ITEM_H = 100;
   const ITEM_GAP = 12;
+
 
   // Background
   slots.push({
@@ -799,6 +846,7 @@ function computeList(W: number, H: number): SlotPosition[] {
     role: "canvas-background",
     zIndexHint: 0,
   });
+
 
   // Header
   slots.push({
@@ -859,8 +907,10 @@ function computeList(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   for (let i = 0; i < ITEMS; i++) {
     const itemY = 180 + i * (ITEM_H + ITEM_GAP);
+
 
     // Left accent bar
     slots.push({
@@ -874,6 +924,7 @@ function computeList(W: number, H: number): SlotPosition[] {
       role: `list-item-accent-bar`,
       zIndexHint: 19,
     });
+
 
     // Icon
     slots.push({
@@ -894,6 +945,7 @@ function computeList(W: number, H: number): SlotPosition[] {
       role: `list-item-${i + 1}-emoji`,
       zIndexHint: 42,
     });
+
 
     // Text
     slots.push({
@@ -916,6 +968,7 @@ function computeList(W: number, H: number): SlotPosition[] {
     });
   }
 
+
   // Footer
   slots.push({
     id: "footer-band",
@@ -937,12 +990,16 @@ function computeList(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   return slots;
 }
 
-// ─────────────────────────────────────────────────────────
+
+
+
 // PYRAMID  Pre-computed trapezoid layers centered
-// ─────────────────────────────────────────────────────────
+
+
 function computePyramid(W: number, H: number): SlotPosition[] {
   const slots: SlotPosition[] = [];
   const LAYERS = 5;
@@ -952,6 +1009,7 @@ function computePyramid(W: number, H: number): SlotPosition[] {
   const MIN_W = 130;
   const MAX_W = W - 64;
   const ANNOT_Y_OFFSET = 24;
+
 
   slots.push({
     id: "bg",
@@ -981,6 +1039,7 @@ function computePyramid(W: number, H: number): SlotPosition[] {
     role: "decorative-depth-circle",
     zIndexHint: 2,
   });
+
 
   // Header
   slots.push({
@@ -1041,6 +1100,7 @@ function computePyramid(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   // Pyramid tip icon
   slots.push({
     id: "pyramid-tip-icon",
@@ -1052,11 +1112,13 @@ function computePyramid(W: number, H: number): SlotPosition[] {
     zIndexHint: 30,
   });
 
+
   for (let i = 0; i < LAYERS; i++) {
     const t = i / (LAYERS - 1);
     const layerW = Math.round(MIN_W + t * (MAX_W - MIN_W));
     const layerX = Math.round((W - layerW) / 2);
     const layerY = PYRAMID_TOP_Y + i * (LAYER_H + LAYER_GAP);
+
 
     // Main layer rect
     slots.push({
@@ -1080,6 +1142,7 @@ function computePyramid(W: number, H: number): SlotPosition[] {
       role: `pyramid-layer-${i}-label`,
       zIndexHint: 62,
     });
+
 
     // Annotation
     const isRight = i % 2 === 0;
@@ -1129,6 +1192,7 @@ function computePyramid(W: number, H: number): SlotPosition[] {
     }
   }
 
+
   // Footer
   slots.push({
     id: "footer-band",
@@ -1150,12 +1214,16 @@ function computePyramid(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   return slots;
 }
 
-// ─────────────────────────────────────────────────────────
+
+
+
 // FUNNEL  Pre-computed narrowing trapezoid stages
-// ─────────────────────────────────────────────────────────
+
+
 function computeFunnel(W: number, H: number): SlotPosition[] {
   const slots: SlotPosition[] = [];
   const STAGES = 5;
@@ -1165,6 +1233,7 @@ function computeFunnel(W: number, H: number): SlotPosition[] {
   const TOP_W = W - 64;
   const SHRINK = 110;
   const ANNOT_LINE_LEN = 72;
+
 
   slots.push({
     id: "bg",
@@ -1195,6 +1264,7 @@ function computeFunnel(W: number, H: number): SlotPosition[] {
     zIndexHint: 2,
   });
 
+
   // Funnel outline lines
   const leftTopX = (W - TOP_W) / 2;
   slots.push({
@@ -1217,6 +1287,7 @@ function computeFunnel(W: number, H: number): SlotPosition[] {
     role: "funnel-silhouette-right",
     zIndexHint: 16,
   });
+
 
   // Header
   slots.push({
@@ -1277,12 +1348,14 @@ function computeFunnel(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   for (let i = 0; i < STAGES; i++) {
     const shrinkPerSide = Math.round((i * SHRINK) / (STAGES - 1));
     const stageW = TOP_W - shrinkPerSide * 2;
     const stageX = Math.round((W - stageW) / 2);
     const stageY = START_Y + i * (STAGE_H + STAGE_GAP);
     const isLast = i === STAGES - 1;
+
 
     // Stage rect
     slots.push({
@@ -1315,7 +1388,7 @@ function computeFunnel(W: number, H: number): SlotPosition[] {
       role: "stage-number",
       zIndexHint: 52,
     });
-    // Stage heading and body
+    // Stage heading, plus body
     slots.push({
       id: `stage-${i + 1}-heading`,
       type: "text_slot",
@@ -1359,6 +1432,7 @@ function computeFunnel(W: number, H: number): SlotPosition[] {
     }
   }
 
+
   // Footer
   slots.push({
     id: "footer-band",
@@ -1380,12 +1454,16 @@ function computeFunnel(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   return slots;
 }
 
-// ─────────────────────────────────────────────────────────
+
+
+
 // CYCLE  Trigonometrically pre-computed radial positions
-// ─────────────────────────────────────────────────────────
+
+
 function computeCycle(W: number, H: number): SlotPosition[] {
   const slots: SlotPosition[] = [];
   const NODES = 5;
@@ -1395,6 +1473,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
   const NODE_R = 44;
   const LABEL_R = 295;
   const START_ANGLE = -Math.PI / 2;
+
 
   // Background
   slots.push({
@@ -1425,6 +1504,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
     role: "decorative-depth-circle",
     zIndexHint: 2,
   });
+
 
   // Header band
   slots.push({
@@ -1486,6 +1566,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
     zIndexHint: 72,
   });
 
+
   // Center circle
   slots.push({
     id: "center-ring-outer",
@@ -1515,10 +1596,12 @@ function computeCycle(W: number, H: number): SlotPosition[] {
     zIndexHint: 62,
   });
 
+
   for (let i = 0; i < NODES; i++) {
     const angle = START_ANGLE + (i / NODES) * 2 * Math.PI;
     const nx = Math.round(CENTER_X + ORBIT_R * Math.cos(angle));
     const ny = Math.round(CENTER_Y + ORBIT_R * Math.sin(angle));
+
 
     // Connector line
     const cEdgeX = Math.round(CENTER_X + 105 * Math.cos(angle));
@@ -1535,6 +1618,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
       role: "radial-connector-line",
       zIndexHint: 16,
     });
+
 
     // Node circle
     slots.push({
@@ -1556,6 +1640,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
       zIndexHint: 44,
     });
 
+
     // Label position
     const lx = Math.round(CENTER_X + LABEL_R * Math.cos(angle));
     const ly = Math.round(CENTER_Y + LABEL_R * Math.sin(angle));
@@ -1567,6 +1652,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
       : isRightSide
         ? lx
         : lx - labelW / 2;
+
 
     slots.push({
       id: `node-${i + 1}-heading`,
@@ -1588,6 +1674,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
     });
   }
 
+
   // Stats row below
   const STAT_COUNT = 3;
   const STAT_W = 200;
@@ -1595,6 +1682,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
   const STAT_Y = CENTER_Y + ORBIT_R + NODE_R + 32;
   const totalStatsW = STAT_COUNT * STAT_W + (STAT_COUNT - 1) * 16;
   const statsStartX = (W - totalStatsW) / 2;
+
 
   for (let i = 0; i < STAT_COUNT; i++) {
     const sx = statsStartX + i * (STAT_W + 16);
@@ -1621,6 +1709,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
     });
   }
 
+
   // Footer
   slots.push({
     id: "footer-band",
@@ -1641,6 +1730,7 @@ function computeCycle(W: number, H: number): SlotPosition[] {
     role: "footer-cta-text",
     zIndexHint: 72,
   });
+
 
   return slots;
 }

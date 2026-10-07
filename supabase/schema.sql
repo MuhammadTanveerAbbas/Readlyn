@@ -1,12 +1,12 @@
 -- =============================================================================
--- Readlyn — Complete Database Schema
--- Idempotent: run via Supabase SQL Editor at any time.
+-- Readlyn Complete Database Schema
+-- Idempotent, run via Supabase SQL Editor at any time.
 -- =============================================================================
 
--- ── Extensions ─────────────────────────────────────────────────────────────
+-- Extensions
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- ── Trigger: auto-set updated_at ──────────────────────────────────────────
+-- Trigger, auto-set updated_at
 CREATE OR REPLACE FUNCTION public.set_updated_at()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -21,7 +21,7 @@ $$;
 -- TABLES
 -- =============================================================================
 
--- ── 1. Projects ───────────────────────────────────────────────────────────
+--  1. Projects
 CREATE TABLE IF NOT EXISTS public.projects (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -51,7 +51,7 @@ CREATE TRIGGER trg_projects_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION public.set_updated_at();
 
--- ── 2. Generation History ────────────────────────────────────────────────
+-- 2. Generation History
 CREATE TABLE IF NOT EXISTS public.generation_history (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id      UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
@@ -60,16 +60,16 @@ CREATE TABLE IF NOT EXISTS public.generation_history (
   prompt          TEXT,
   archetype       TEXT,
   theme           TEXT,
-  model           TEXT NOT NULL DEFAULT 'llama-3.3-70b-versatile',
+  model           TEXT NOT NULL DEFAULT 'openai/gpt-oss-120b',
   thumbnail_url   TEXT,
   created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-ALTER TABLE public.generation_history ADD COLUMN IF NOT EXISTS model         TEXT NOT NULL DEFAULT 'llama-3.3-70b-versatile';
+ALTER TABLE public.generation_history ADD COLUMN IF NOT EXISTS model         TEXT NOT NULL DEFAULT 'openai/gpt-oss-120b';
 ALTER TABLE public.generation_history ADD COLUMN IF NOT EXISTS thumbnail_url TEXT;
 ALTER TABLE public.generation_history ADD COLUMN IF NOT EXISTS created_at    TIMESTAMPTZ NOT NULL DEFAULT now();
 
--- ── 3. Templates ─────────────────────────────────────────────────────────
+-- 3. Templates, reserved for a future template gallery, unused by the app today
 CREATE TABLE IF NOT EXISTS public.templates (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID REFERENCES auth.users(id) ON DELETE SET NULL,
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS public.templates (
 ALTER TABLE public.templates ADD COLUMN IF NOT EXISTS user_id    UUID REFERENCES auth.users(id) ON DELETE SET NULL;
 ALTER TABLE public.templates ADD COLUMN IF NOT EXISTS tool_type  TEXT NOT NULL DEFAULT 'infographic';
 
--- ── 4. Subscriptions (Stripe billing) ────────────────────────────────────
+--  4. Subscriptions (Stripe billing)
 CREATE TABLE IF NOT EXISTS public.subscriptions (
   id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id                 UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -108,7 +108,7 @@ CREATE TRIGGER trg_subscriptions_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION public.set_updated_at();
 
--- ── 5. Invoices (billing history) ────────────────────────────────────────
+--  5. Invoices (billing history)
 CREATE TABLE IF NOT EXISTS public.invoices (
   id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id                 UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -172,7 +172,7 @@ CREATE INDEX IF NOT EXISTS idx_invoices_created_at
 -- ROW LEVEL SECURITY
 -- =============================================================================
 
--- ── Projects ─────────────────────────────────────────────────────────────
+--  Projects
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users own projects" ON public.projects;
@@ -182,7 +182,7 @@ CREATE POLICY "Users own projects"
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
--- ── Generation History ───────────────────────────────────────────────────
+--  Generation History
 ALTER TABLE public.generation_history ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users own history" ON public.generation_history;
@@ -192,7 +192,7 @@ CREATE POLICY "Users own history"
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
--- ── Templates ────────────────────────────────────────────────────────────
+--  Templates
 ALTER TABLE public.templates ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Anyone read public templates" ON public.templates;
@@ -208,7 +208,7 @@ CREATE POLICY "Users manage own templates"
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
--- ── Subscriptions ────────────────────────────────────────────────────────
+--  Subscriptions
 ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users read own subscription" ON public.subscriptions;
@@ -217,9 +217,9 @@ CREATE POLICY "Users read own subscription"
   FOR SELECT
   USING (auth.uid() = user_id);
 
--- Admin upsert (service_role) bypasses RLS — no policy needed for insert/update.
+-- Admin upsert (service_role) bypasses RLS, no policy needed for insert/update.
 
--- ── Invoices ─────────────────────────────────────────────────────────────
+--  Invoices
 ALTER TABLE public.invoices ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users read own invoices" ON public.invoices;
@@ -228,7 +228,7 @@ CREATE POLICY "Users read own invoices"
   FOR SELECT
   USING (auth.uid() = user_id);
 
--- Webhook inserts use service_role — bypasses RLS.
+-- Webhook inserts use service_role, bypasses RLS.
 
 -- =============================================================================
 -- STORAGE (parallax-images bucket)
@@ -280,11 +280,11 @@ CREATE POLICY "Public read parallax images"
   USING (bucket_id = 'parallax-images');
 
 -- =============================================================================
--- SUMMARY: Tables created
---   public.projects            — User projects (infographics + parallax)
---   public.generation_history  — AI generation snapshots per project
---   public.templates           — Public & user-created templates
---   public.subscriptions       — Stripe subscription sync
---   public.invoices            — Stripe invoice payment records
---   storage.objects (RLS)      — parallax-images bucket policies
+-- SUMMARY, tables created
+--   public.projects: user projects (infographics plus parallax)
+--   public.generation_history: AI generation snapshots per project
+--   public.templates: public plus user created templates (reserved)
+--   public.subscriptions: Stripe subscription sync (reserved)
+--   public.invoices: Stripe invoice payment records (reserved)
+--   storage.objects (RLS): parallax-images bucket policies
 -- =============================================================================

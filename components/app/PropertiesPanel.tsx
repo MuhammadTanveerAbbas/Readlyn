@@ -9,7 +9,7 @@ import {
   AlignCenter,
   AlignRight,
 } from "lucide-react";
-import { FONT_FAMILIES } from "@/types/infographic";
+import { FONT_FAMILIES, BODY_FONT } from "@/types/infographic";
 import type { SelectionProperties } from "@/hooks/use-canvas-selection";
 
 interface PropertiesPanelProps {
@@ -74,7 +74,7 @@ export default function PropertiesPanel({
   }
 
   const inputCls =
-    "w-full h-6 px-2 text-[11px] font-mono rounded outline-none transition-colors";
+    "w-full h-6 px-2 text-[11px] font-sans rounded outline-none transition-colors";
   const inputStyle = {
     backgroundColor: "var(--bg-elevated)",
     border: "1px solid var(--border-default)",
@@ -242,7 +242,7 @@ export default function PropertiesPanel({
                 Font
               </div>
               <select
-                value={properties.fontFamily || "Arial"}
+                value={properties.fontFamily || BODY_FONT}
                 onChange={(e) => onUpdateProperty("fontFamily", e.target.value)}
                 className={`${inputCls} cursor-pointer ${inputFocusStyle}`}
                 style={inputStyle}

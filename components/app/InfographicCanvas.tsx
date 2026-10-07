@@ -9,19 +9,15 @@ import {
 } from "react";
 import * as fabric from "fabric";
 import { renderInfographic, createFabricObject } from "@/lib/renderElements";
+import { ensureCanvasFontsLoaded } from "@/lib/canvas-fonts";
 import { toast } from "@/hooks/use-toast";
 import type { InfographicData } from "@/types/infographic";
 
-function getPointerCoordinates(event: fabric.TPointerEvent): { x: number; y: number } {
-  if ("touches" in event && event.touches.length > 0) {
-    const touch = event.touches[0];
-    return { x: touch!.clientX, y: touch!.clientY };
-  }
-  if ("clientX" in event) {
-    return { x: event.clientX, y: event.clientY };
-  }
-  return { x: 0, y: 0 };
-}
+// The artboard plus the selection handles must use real color values. Canvas
+// rendering cannot resolve CSS custom properties, so the accent hex lives here.
+const ARTBOARD_BACKGROUND = "#ffffff";
+const SELECTION_COLOR = "#f5c518";
+const SELECTION_STROKE_COLOR = "#0f0f0f";
 
 export interface CanvasRef {
   canvas: fabric.Canvas | null;
@@ -32,7 +28,7 @@ export interface CanvasRef {
   ) => void;
   finishStream: () => void;
   setStreamProgress: (progress: { current: number; total: number }) => void;
-  exportPNG: () => void;
+  exportPNG: () => void | Promise<void>;
   exportJSON: () => void;
   clearAll: () => void;
   getObjects: () => fabric.FabricObject[];
@@ -54,9 +50,6 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
   ) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const fabricRef = useRef<fabric.Canvas | null>(null);
-    const isSpacePressed = useRef(false);
-    const isPanning = useRef(false);
-    const panStart = useRef({ x: 0, y: 0 });
     const [isLoading, setIsLoading] = useState(false);
     const [loadingProgress, setLoadingProgress] = useState({
       current: 0,
@@ -71,11 +64,12 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
         selection: true,
         width,
         height,
-        backgroundColor: "var(--text-primary)",
+        backgroundColor: ARTBOARD_BACKGROUND,
       });
 
-      fabric.FabricObject.prototype.borderColor = "var(--accent)";
-      fabric.FabricObject.prototype.cornerColor = "var(--accent)";
+      fabric.FabricObject.prototype.borderColor = SELECTION_COLOR;
+      fabric.FabricObject.prototype.cornerColor = SELECTION_COLOR;
+      fabric.FabricObject.prototype.cornerStrokeColor = SELECTION_STROKE_COLOR;
       fabric.FabricObject.prototype.cornerStyle = "circle";
       fabric.FabricObject.prototype.transparentCorners = false;
       fabric.FabricObject.prototype.cornerSize = 10;
@@ -84,7 +78,16 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
 
       onReady?.(canvas);
 
+      // Preload the webfonts and repaint once they are resident, so text added
+      // right after mount is measured against the real typeface instead of the
+      // canvas fallback metrics (which differ and cause visible reflow).
+      let cancelled = false;
+      void ensureCanvasFontsLoaded().then(() => {
+        if (!cancelled) canvas.requestRenderAll();
+      });
+
       return () => {
+        cancelled = true;
         canvas.dispose();
         fabricRef.current = null;
       };
@@ -119,74 +122,19 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
       canvas.requestRenderAll();
     }, [toolMode]);
 
-    useEffect(() => {
-      const onKeyDown = (event: KeyboardEvent) => {
-        if (event.code === "Space") {
-          isSpacePressed.current = true;
-          event.preventDefault();
-        }
-      };
-      const onKeyUp = (event: KeyboardEvent) => {
-        if (event.code === "Space") {
-          isSpacePressed.current = false;
-          isPanning.current = false;
-        }
-      };
-      window.addEventListener("keydown", onKeyDown);
-      window.addEventListener("keyup", onKeyUp);
-      return () => {
-        window.removeEventListener("keydown", onKeyDown);
-        window.removeEventListener("keyup", onKeyUp);
-      };
-    }, []);
-
+    // Zoom plus panning are handled by the editor viewport container, so this
+    // component only listens for object level changes.
     useEffect(() => {
       const canvas = fabricRef.current;
       if (!canvas) return;
 
-      const onWheel = (opt: fabric.TEvent<WheelEvent>) => {
-        const event = opt.e;
-        event.preventDefault();
-        event.stopPropagation();
-        const delta = event.deltaY;
-        const zoomFactor = delta > 0 ? 0.94 : 1.06;
-        const point = new fabric.Point(event.offsetX, event.offsetY);
-        canvas.zoomToPoint(point, Math.max(0.1, Math.min(2, canvas.getZoom() * zoomFactor)));
-      };
-
-      const onMouseDown = (opt: fabric.TPointerEventInfo<fabric.TPointerEvent>) => {
-        const shouldPan = toolMode === "hand" || isSpacePressed.current;
-        if (!shouldPan) return;
-        isPanning.current = true;
-        panStart.current = getPointerCoordinates(opt.e);
-      };
-      const onMouseMove = (opt: fabric.TPointerEventInfo<fabric.TPointerEvent>) => {
-        if (!isPanning.current) return;
-        const vpt = canvas.viewportTransform;
-        if (!vpt) return;
-        const point = getPointerCoordinates(opt.e);
-        const dx = point.x - panStart.current.x;
-        const dy = point.y - panStart.current.y;
-        vpt[4] += dx;
-        vpt[5] += dy;
-        canvas.requestRenderAll();
-        panStart.current = point;
-      };
-      const onMouseUp = () => {
-        isPanning.current = false;
-      };
-
-      canvas.on("mouse:wheel", onWheel);
-      canvas.on("mouse:down", onMouseDown);
-      canvas.on("mouse:move", onMouseMove);
-      canvas.on("mouse:up", onMouseUp);
       return () => {
-        canvas.off("mouse:wheel", onWheel);
-        canvas.off("mouse:down", onMouseDown);
-        canvas.off("mouse:move", onMouseMove);
-        canvas.off("mouse:up", onMouseUp);
+        canvas.off("mouse:wheel");
+        canvas.off("mouse:down");
+        canvas.off("mouse:move");
+        canvas.off("mouse:up");
       };
-    }, [toolMode]);
+    }, []);
 
     useEffect(() => {
       const canvas = fabricRef.current;
@@ -220,7 +168,7 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
         fabricRef.current.clear();
         fabricRef.current.setWidth(data.canvasWidth);
         fabricRef.current.setHeight(data.canvasHeight);
-        fabricRef.current.set("backgroundColor", data.background || "var(--text-primary)");
+        fabricRef.current.set("backgroundColor", data.background || ARTBOARD_BACKGROUND);
         fabricRef.current.requestRenderAll();
         setIsLoading(true);
         setLoadingProgress({ current: 0, total: 50 });
@@ -261,8 +209,11 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
           fabricRef.current.requestRenderAll();
         }
       },
-      exportPNG: () => {
+      exportPNG: async () => {
         if (!fabricRef.current) return;
+        // Ensure the webfonts are resident: a <canvas> silently substitutes a
+        // fallback face for any family that has not finished loading.
+        await ensureCanvasFontsLoaded();
         const url = fabricRef.current.toDataURL({
           format: "png",
           multiplier: 2,
@@ -294,7 +245,7 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
       clearAll: () => {
         if (!fabricRef.current) return;
         fabricRef.current.clear();
-        fabricRef.current.backgroundColor = "var(--text-primary)";
+        fabricRef.current.backgroundColor = ARTBOARD_BACKGROUND;
         fabricRef.current.renderAll();
       },
       getObjects: () => {

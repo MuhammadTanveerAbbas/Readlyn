@@ -1,7 +1,7 @@
 export default function Logos() {
   return (
     <section className="flex flex-col items-center w-full bg-[var(--bg-base)] py-14 px-6 md:px-[120px] gap-8 border-y border-white/5">
-      <span className="font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.25em] uppercase">
+      <span className="font-sans text-[11px] text-[var(--text-dim)] tracking-[0.25em] uppercase">
         What you get out of the box
       </span>
 
@@ -33,7 +33,7 @@ export default function Logos() {
               </svg>
             ),
             label: "Powered by Groq AI",
-            detail: "Llama 3.3 70B  fast generation.",
+            detail: "Fast structured generation with auto model fallback.",
           },
           {
             icon: (
@@ -59,10 +59,10 @@ export default function Logos() {
               {item.icon}
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="font-grotesk text-[13px] font-semibold text-[var(--text-secondary)]">
+              <span className="font-sans text-[13px] font-semibold text-[var(--text-secondary)]">
                 {item.label}
               </span>
-              <span className="font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-[0.05em]">
+              <span className="font-sans text-[11px] text-[var(--text-dim)] tracking-[0.05em]">
                 {item.detail}
               </span>
             </div>
@@ -70,8 +70,8 @@ export default function Logos() {
         ))}
       </div>
 
-      <p className="font-ibm-mono text-center text-[11px] tracking-[0.08em] text-[var(--text-dim)]">
-        Currently in early access your feedback shapes the roadmap
+      <p className="font-sans text-center text-[11px] tracking-[0.08em] text-[var(--text-dim)]">
+        Currently in early access. Your feedback shapes the roadmap.
       </p>
     </section>
   );

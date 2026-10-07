@@ -57,8 +57,8 @@
       "4xl": { "$type": "dimension", "$value": "49px" }
     },
     "fontFamily": {
-      "sans": { "$type": "fontFamily", "$value": "Space Grotesk, sans-serif" },
-      "mono": { "$type": "fontFamily", "$value": "IBM Plex Mono, monospace" }
+      "sans": { "$type": "fontFamily", "$value": "Geist, system-ui, sans-serif" },
+      "mono": { "$type": "fontFamily", "$value": "\"Geist Mono\", ui-monospace, monospace" }
     },
     "lineHeight": {
       "body": { "$type": "number", "$value": 1.5 },

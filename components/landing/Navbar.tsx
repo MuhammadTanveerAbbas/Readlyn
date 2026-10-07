@@ -72,7 +72,7 @@ export default function Navbar() {
               style={{ imageRendering: "pixelated" }}
             />
           </div>
-          <span className="font-grotesk text-[13px] font-bold text-white tracking-[2.5px]">
+          <span className="font-sans text-[13px] font-bold text-white tracking-[2.5px]">
             READLYN
           </span>
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
@@ -86,7 +86,7 @@ export default function Navbar() {
               <button
                 key={label}
                 onClick={() => scrollTo(section)}
-                className="relative font-ibm-mono text-[11px] tracking-[1.5px] transition-colors duration-200 bg-transparent border-none cursor-pointer py-1"
+                className="relative font-sans text-[11px] tracking-[1.5px] transition-colors duration-200 bg-transparent border-none cursor-pointer py-1"
                 style={{ color: isActive ? "var(--accent)" : "#888888" }}
                 onMouseEnter={(e) => {
                   if (!isActive)
@@ -113,7 +113,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-[16px]">
           <a
             href="/login"
-            className="font-ibm-mono text-[11px] text-[#888888] tracking-[1px] hover:text-white transition-colors duration-200"
+            className="font-sans text-[11px] text-[#888888] tracking-[1px] hover:text-white transition-colors duration-200"
           >
             Log in
           </a>
@@ -124,7 +124,7 @@ export default function Navbar() {
                        transition-all duration-200
                        shadow-[0_0_20px_rgba(245,197,24,0.3)]
                        hover:shadow-[0_0_30px_rgba(245,197,24,0.5)]
-                       hover:scale-[1.02] active:scale-[0.98] font-grotesk tracking-wide"
+                       hover:scale-[1.02] active:scale-[0.98] font-sans tracking-wide"
           >
             Start free
           </a>
@@ -177,7 +177,7 @@ export default function Navbar() {
                   scrollTo(section);
                   setMenuOpen(false);
                 }}
-                className="flex items-center gap-3 w-full font-ibm-mono text-[12px] tracking-[1px] py-[14px] border-b border-white/[0.05] transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer"
+                className="flex items-center gap-3 w-full font-sans text-[12px] tracking-[1px] py-[14px] border-b border-white/[0.05] transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer"
                 style={{ color: isActive ? "var(--accent)" : "#888888" }}
               >
                 <span
@@ -191,13 +191,13 @@ export default function Navbar() {
           <div className="flex flex-col gap-[10px] pt-5">
             <a
               href="/login"
-              className="font-ibm-mono text-[12px] text-[#888888] tracking-[1px]"
+              className="font-sans text-[12px] text-[#888888] tracking-[1px]"
             >
               Log in
             </a>
             <a
               href="/signup"
-              className="font-grotesk text-[12px] font-bold text-black bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
+              className="font-sans text-[12px] font-bold text-black bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
             >
               Start free
             </a>

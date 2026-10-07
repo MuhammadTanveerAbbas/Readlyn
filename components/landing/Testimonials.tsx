@@ -14,12 +14,12 @@ export default function Testimonials() {
       <div className="flex flex-col gap-4 max-w-[640px]">
         <div className="inline-flex items-center gap-2 w-fit">
           <span className="w-4 h-px bg-[var(--accent)]" />
-          <span className="font-ibm-mono text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             Early access
           </span>
         </div>
         <h2
-          className="font-grotesk font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -27,10 +27,10 @@ export default function Testimonials() {
         >
           {"Be among the first\nto build with Readlyn."}
         </h2>
-        <p className="font-ibm-mono text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8] max-w-[520px]">
-          We&apos;re in early access. No fake testimonials, no inflated numbers
+        <p className="font-sans text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8] max-w-[520px]">
+          We&apos;re in early access. No fake testimonials, no inflated numbers,
           just an honest tool we&apos;re building in public. Try it, break it,
-          and tell us what to fix.
+          plus tell us what to fix.
         </p>
       </div>
 
@@ -50,8 +50,8 @@ export default function Testimonials() {
             ),
             color: "var(--accent)",
             title: "Built in public",
-            body: "Every feature, every decision — shared openly. Follow the build on GitHub.",
-            cta: "View on GitHub →",
+            body: "Every feature, every decision, shared openly. Follow the build on GitHub.",
+            cta: "View on GitHub ➔",
             href: "https://github.com/MuhammadTanveerAbbas/Readlyn",
           },
           {
@@ -75,8 +75,8 @@ export default function Testimonials() {
             ),
             color: "var(--orange)",
             title: "Your feedback shapes it",
-            body: "We read every issue and feature request. Early users directly influence what gets built next.",
-            cta: "Open an issue →",
+            body: "We read every issue, plus every feature request. Early users directly influence what gets built next.",
+            cta: "Open an issue ➔",
             href: "https://github.com/MuhammadTanveerAbbas/Readlyn/issues",
           },
           {
@@ -94,7 +94,7 @@ export default function Testimonials() {
             color: "var(--blue)",
             title: "No lock-in, ever",
             body: "Export clean code you own. No proprietary formats, no vendor dependency. Your work stays yours.",
-            cta: "See export formats →",
+            cta: "See export formats ➔",
             href: "#showcase",
           },
         ].map((card, i) => (
@@ -122,10 +122,10 @@ export default function Testimonials() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="font-grotesk text-[15px] font-bold text-white tracking-[-0.01em]">
+              <h3 className="font-sans text-[15px] font-bold text-white tracking-[-0.01em]">
                 {card.title}
               </h3>
-              <p className="font-ibm-mono text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+              <p className="font-sans text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
                 {card.body}
               </p>
             </div>
@@ -134,7 +134,7 @@ export default function Testimonials() {
               href={card.href}
               target={card.href.startsWith("http") ? "_blank" : undefined}
               rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="mt-auto font-ibm-mono text-[11px] tracking-[0.1em] uppercase hover:underline"
+              className="mt-auto font-sans text-[11px] tracking-[0.1em] uppercase hover:underline"
               style={{ color: card.color }}
             >
               {card.cta}

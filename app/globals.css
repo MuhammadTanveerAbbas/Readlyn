@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-space-grotesk), "Space Grotesk", sans-serif;
-  --font-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
+  /* Geist is the default for the entire UI headings, body, nav, buttons,
+     labels and badges. Nothing chrome-related should be monospaced. */
+  --font-sans: var(--font-geist), "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Geist Mono is reserved for places where character alignment is the point:
+     JSON dumps, <kbd> shortcut keys, hex swatches, coordinate readouts. */
+  --font-mono: var(--font-pt-sans), "PT Sans", ui-sans-serif, sans-serif;
 }
 
 :root {
@@ -102,15 +107,21 @@
   }
 }
 
-@utility font-grotesk {
-  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
-}
+/* ---------------------------------------------------------------------------
+   Type system two families, both self-hosted variable fonts
+   ---------------------------------------------------------------------------
+   Geist Sans     100–900. The default for all UI: headings, body, nav,
+                  buttons, labels, badges. Includes a real 900 for the canvas
+                  stat numerals, so exported infographics never fake-bold.
+   Geist Mono     100–900. Code, JSON, <kbd> shortcuts, hex swatches,
+                  coordinate readouts alignment is the point, not style.
 
-@utility font-ibm-mono {
-  font-family: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
-}
+   Rule of thumb: if a reader could be confused by a ragged right edge, it is
+   not mono. Menus, badges, options and buttons are `font-sans` even when
+   they look "technical".
+   --------------------------------------------------------------------------- */
 
-/* ── Noise texture overlay ── */
+/* Noise texture overlay */
 body::before {
   content: "";
   position: fixed;
@@ -121,7 +132,7 @@ body::before {
   opacity: 0.3;
 }
 
-/* ── Animation keyframes ── */
+/* Animation keyframes */
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -187,18 +198,18 @@ body::before {
   animation-delay: 0.5s;
 }
 
-/* ── Scroll behavior ── */
+/* Scroll behavior */
 html {
   scroll-behavior: smooth;
 }
 
-/* ── Selection color ── */
+/* Selection color */
 ::selection {
   background-color: rgba(245, 197, 24, 0.2);
   color: var(--text-primary);
 }
 
-/* ── Scrollbar ── */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -213,7 +224,7 @@ html {
   background: var(--text-dim);
 }
 
-/* ── Scrollbar hide utility ── */
+/* Scrollbar hide utility */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -222,9 +233,9 @@ html {
   display: none;
 }
 
-/* ── JSON Syntax Highlighting ── */
+/* JSON Syntax Highlighting */
 .json-textarea {
-  font-family: "IBM Plex Mono", "Courier New", monospace;
+  font-family: var(--font-pt-sans), "PT Sans", ui-sans-serif, sans-serif;
   line-height: 1.5;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -266,7 +277,7 @@ html {
   }
 }
 
-/* ── Parallax utilities ── */
+/* Parallax utilities */
 @keyframes parallax-drift {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }

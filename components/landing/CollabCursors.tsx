@@ -1,8 +1,8 @@
 "use client";
 
-// Inline SVG icons  each represents what the collaborator is doing
+// Inline SVG icons, each represents what the collaborator is doing
 const icons: Record<string, React.ReactNode> = {
-  // Pencil  editing
+  // Pencil, editing
   "Alex K.": (
     <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
       <path
@@ -14,7 +14,7 @@ const icons: Record<string, React.ReactNode> = {
       />
     </svg>
   ),
-  // Sparkle  AI generating
+  // Sparkle, AI generating
   "Sara M.": (
     <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
       <path
@@ -26,7 +26,7 @@ const icons: Record<string, React.ReactNode> = {
       <circle cx="6" cy="6" r="1.5" fill="currentColor" />
     </svg>
   ),
-  // Eye  reviewing / inspecting
+  // Eye, reviewing / inspecting
   "Jin L.": (
     <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
       <path
@@ -38,7 +38,7 @@ const icons: Record<string, React.ReactNode> = {
       <circle cx="6" cy="6" r="1.5" fill="currentColor" />
     </svg>
   ),
-  // Chat bubble  commenting
+  // Chat bubble, commenting
   "Mila V.": (
     <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
       <path
@@ -52,7 +52,7 @@ const icons: Record<string, React.ReactNode> = {
 };
 
 // All positions use % relative to the section container.
-// Y values stay between 5% and 55% so cursors cluster around the headline text.
+// Y values stay within 5% to 55% so cursors cluster around the headline text.
 const CURSORS = [
   {
     name: "Alex K.",
@@ -197,7 +197,7 @@ export default function CollabCursors() {
             {/* Name */}
             <span
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "var(--font-geist), 'Geist', system-ui, sans-serif",
                 fontSize: "11px",
                 fontWeight: 600,
                 color: cursor.textColor,

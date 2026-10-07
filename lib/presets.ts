@@ -11,7 +11,7 @@ export const PRESETS: Preset[] = [
   {
     id: "mountain-landscape",
     name: "Mountain Landscape",
-    description: "Layered mountains with sky and foreground",
+    description: "Layered mountains with sky, plus foreground",
     config: {
       perspective: 1000,
       scrollDuration: 1.2,
@@ -84,7 +84,7 @@ export const PRESETS: Preset[] = [
   {
     id: "cosmic-journey",
     name: "Cosmic Journey",
-    description: "Deep space scene with stars, nebula, and planets",
+    description: "Deep space scene with stars, nebula, plus planets",
     config: {
       perspective: 1200,
       scrollDuration: 1.5,
@@ -157,7 +157,7 @@ export const PRESETS: Preset[] = [
   {
     id: "city-skyline",
     name: "City Skyline",
-    description: "Urban cityscape with sky, buildings, and street",
+    description: "Urban cityscape with sky, buildings, plus street",
     config: {
       perspective: 1000,
       scrollDuration: 1.0,
@@ -218,7 +218,7 @@ export const PRESETS: Preset[] = [
   {
     id: "underwater",
     name: "Underwater World",
-    description: "Ocean depths with light rays, fish, and coral",
+    description: "Ocean depths with light rays, fish, plus coral",
     config: {
       perspective: 1000,
       scrollDuration: 1.3,
@@ -352,7 +352,7 @@ export const PRESETS: Preset[] = [
   {
     id: "sunset-beach",
     name: "Sunset Beach",
-    description: "Tropical beach at sunset with waves and palm trees",
+    description: "Tropical beach at sunset with waves, plus palm trees",
     config: {
       perspective: 1000,
       scrollDuration: 1.1,

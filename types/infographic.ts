@@ -1,5 +1,30 @@
 import { z } from 'zod'
 
+/**
+ * Canvas font families.
+ *
+ * These must stay in sync with the self-hosted webfonts in `public/fonts`:
+ * Fabric.js renders into a <canvas>, which ignores CSS and only sees fonts the
+ * browser has actually loaded. Webfont loading is forced before render/export
+ * via `ensureCanvasFontsLoaded()` in `lib/canvas-fonts.ts`.
+ *
+ * Single source of truth the zod enum and the BrandKitModal options both
+ * derive from this list, so they cannot drift apart.
+ *
+ * Keep in sync with: the webfont files in `public/fonts`.
+ */
+export const FONT_FAMILIES = ['Geist', 'Geist Mono'] as const
+export type FontFamily = (typeof FONT_FAMILIES)[number]
+
+/**
+ * Font used for big stat/display numerals inside generated infographics.
+ * Geist is a variable font with a real 900, so `fontWeight: '900'` renders as
+ * genuine black rather than a synthesised faux-bold in the exported PNG.
+ */
+export const DISPLAY_FONT: FontFamily = 'Geist'
+/** Font used for body copy inside generated infographics. */
+export const BODY_FONT: FontFamily = 'Geist'
+
 export const RectSchema = z.object({
   type: z.literal('rect'),
   id: z.string(),
@@ -36,7 +61,7 @@ export const TextSchema = z.object({
   text: z.string(),
   fontSize: z.number(),
   fontWeight: z.enum(['normal', 'bold', '900']),
-  fontFamily: z.enum(['Arial', 'Georgia', 'Impact', 'Trebuchet MS', 'Courier New', 'Verdana']),
+  fontFamily: z.enum(FONT_FAMILIES),
   fill: z.string(),
   textAlign: z.enum(['left', 'center', 'right']).default('left'),
   width: z.number(),
@@ -127,6 +152,3 @@ export const THEME_COLORS: Record<ThemePalette, { primary: string; secondary: st
   slate: { primary: '#475569', secondary: '#64748b', accent: '#94a3b8' },
   midnight: { primary: '#1e293b', secondary: '#334155', accent: '#f5c518' },
 }
-
-export const FONT_FAMILIES = ['Arial', 'Georgia', 'Impact', 'Trebuchet MS', 'Courier New', 'Verdana'] as const
-export type FontFamily = (typeof FONT_FAMILIES)[number]

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { FREE_PLAN } from "@/config/plans";
 import type {
   CanvasSize,
   ThemePalette,
@@ -81,20 +80,6 @@ export default function NewProjectModal({
       if (!user) {
         setPending(false);
         setErrorMsg("You need to be logged in to create projects.");
-        return;
-      }
-
-      const { count: projectCount } = await supabase
-        .from("projects")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", user.id)
-        .eq("is_trashed", false);
-
-      if ((projectCount ?? 0) >= FREE_PLAN.limits.projects) {
-        setPending(false);
-        setErrorMsg(
-          `Project limit reached (${FREE_PLAN.limits.projects} projects on the free plan). Delete a project to create a new one.`,
-        );
         return;
       }
 
@@ -204,10 +189,10 @@ export default function NewProjectModal({
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 className="w-full h-32 rounded-xl border border-white/10 bg-[var(--bg-panel)] p-4 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all resize-none"
-                placeholder="E.g., 'Create a sales report showing Q4 2024 revenue growth across 5 regions with bar charts and key metrics'"
+                placeholder="E.g., 'Create a sales report showing Q4 2024 revenue growth across 5 regions with bar charts plus key metrics'"
               />
               <p className="text-xs text-white/40 mt-2">
-                Be specific about data, layout, and visual elements you want
+                Be specific about data, layout, plus visual elements you want
               </p>
             </div>
           )}

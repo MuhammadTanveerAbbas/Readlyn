@@ -12,7 +12,7 @@ export default function GlobalError({
       <body className="bg-[var(--bg-base)]">
         <div className="min-h-screen flex items-center justify-center">
           <div className="flex flex-col items-center gap-6 max-w-md text-center px-6">
-            <p className="font-mono text-[11px] text-red-400 tracking-[2px] uppercase">
+            <p className="font-sans text-[11px] text-red-400 tracking-[2px] uppercase">
               Critical Error
             </p>
             <h1 className="text-2xl font-semibold text-white tracking-tight">

@@ -1,5 +1,6 @@
 import * as fabric from 'fabric'
 import type { InfographicElement, InfographicData } from '@/types/infographic'
+import { BODY_FONT, DISPLAY_FONT } from '@/types/infographic'
 
 export function createFabricObject(el: InfographicElement): fabric.FabricObject | null {
   const common = { selectable: true, hasControls: true, hasBorders: true }
@@ -43,7 +44,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         top: el.y,
         fontSize: el.fontSize || 16,
         fontWeight: el.fontWeight || 'normal',
-        fontFamily: el.fontFamily || 'Arial',
+        fontFamily: el.fontFamily || BODY_FONT,
         textAlign: el.textAlign || 'left',
         opacity: el.opacity ?? 1,
         ...common,
@@ -80,7 +81,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
       const val = new fabric.IText(el.value || '', {
         fontSize: 36,
         fontWeight: '900',
-        fontFamily: 'Impact',
+        fontFamily: DISPLAY_FONT,
         originX: 'center',
         originY: 'center',
         top: -10,
@@ -90,7 +91,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
       const lbl = new fabric.IText(el.label || '', {
         fontSize: 11,
         fontWeight: 'normal',
-        fontFamily: 'Arial',
+        fontFamily: BODY_FONT,
         originX: 'center',
         originY: 'center',
         top: (el.height || 80) / 2 - 18,
@@ -168,7 +169,7 @@ export function addTextElement(canvas: fabric.Canvas): void {
     left: 100,
     top: 100,
     fontSize: 24,
-    fontFamily: 'Arial',
+    fontFamily: BODY_FONT,
     fill: '#ffffff',
     selectable: true,
     hasControls: true,
@@ -185,7 +186,7 @@ export function addHeadingElement(canvas: fabric.Canvas): void {
     top: 100,
     fontSize: 48,
     fontWeight: 'bold',
-    fontFamily: 'Arial',
+    fontFamily: BODY_FONT,
     fill: '#ffffff',
     selectable: true,
     hasControls: true,
@@ -242,7 +243,7 @@ export function addStatBlockElement(canvas: fabric.Canvas): void {
   const val = new fabric.IText('100%', {
     fontSize: 48,
     fontWeight: '900',
-    fontFamily: 'Impact',
+    fontFamily: DISPLAY_FONT,
     fill: '#f5c518',
     originX: 'center',
     originY: 'center',
@@ -251,7 +252,7 @@ export function addStatBlockElement(canvas: fabric.Canvas): void {
   const lbl = new fabric.IText('stat label', {
     fontSize: 14,
     fontWeight: 'normal',
-    fontFamily: 'Arial',
+    fontFamily: BODY_FONT,
     fill: '#94a3b8',
     originX: 'center',
     originY: 'center',

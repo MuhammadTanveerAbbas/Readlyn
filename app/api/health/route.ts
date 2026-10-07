@@ -1,5 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
-import { discoverGroqModels, sanitizeLogMessage } from "@/lib/groq";
+import {
+  discoverGroqModels,
+  sanitizeLogMessage,
+  getBestGroqModel,
+  MODEL_FALLBACK_CANDIDATES,
+} from "@/lib/groq";
 
 export const dynamic = "force-dynamic";
 
@@ -65,7 +70,10 @@ export async function GET() {
       const models = await discoverGroqModels(false);
       if (models.length > 0) {
         aiConnected = true;
+        const selectedModel = await getBestGroqModel("reasoning");
         checks.ai = `ok (${models.length} models)`;
+        checks.aiSelectedModel = selectedModel;
+        checks.aiCandidates = MODEL_FALLBACK_CANDIDATES.reasoning.join(", ");
       } else {
         checks.ai = "no models discovered";
       }

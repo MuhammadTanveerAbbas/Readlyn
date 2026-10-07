@@ -3,6 +3,9 @@ import {
   InfographicSchema,
   RectSchema,
   TextSchema,
+  FONT_FAMILIES,
+  BODY_FONT,
+  DISPLAY_FONT,
 } from "@/types/infographic";
 import { GROQ_MODELS, getGroqModel } from "@/lib/groq";
 import { PLANS, getPlanById } from "@/config/plans";
@@ -44,7 +47,7 @@ describe("Infographic Schemas", () => {
         text: "Hello World",
         fontSize: 44,
         fontWeight: "900",
-        fontFamily: "Arial",
+        fontFamily: "Geist",
         fill: "#000000",
         textAlign: "left",
         width: 700,
@@ -71,6 +74,82 @@ describe("Infographic Schemas", () => {
         zIndex: 1,
       });
       expect(result.success).toBe(false);
+    });
+
+    it("should accept every family in FONT_FAMILIES", () => {
+      for (const fontFamily of FONT_FAMILIES) {
+        const result = TextSchema.safeParse({
+          type: "text",
+          id: "t1",
+          x: 0,
+          y: 0,
+          text: "test",
+          fontSize: 16,
+          fontWeight: "normal",
+          fontFamily,
+          fill: "#000",
+          textAlign: "left",
+          width: 100,
+          opacity: 1,
+          zIndex: 1,
+        });
+        expect(result.success, `${fontFamily} should be a valid family`).toBe(true);
+      }
+    });
+
+    it("should reject the retired system fonts", () => {
+      const retired = [
+        "Arial",
+        "Impact",
+        "Georgia",
+        "Verdana",
+        "Trebuchet MS",
+        "Courier New",
+        "Space Grotesk",
+        "PT Sans",
+        "Roboto Condensed",
+        "Valley Sans",
+        "Inter",
+        "IBM Plex Mono",
+      ];
+      for (const fontFamily of retired) {
+        const result = TextSchema.safeParse({
+          type: "text",
+          id: "t1",
+          x: 0,
+          y: 0,
+          text: "test",
+          fontSize: 16,
+          fontWeight: "normal",
+          fontFamily,
+          fill: "#000",
+          textAlign: "left",
+          width: 100,
+          opacity: 1,
+          zIndex: 1,
+        });
+        expect(result.success, `${fontFamily} should no longer be accepted`).toBe(false);
+      }
+    });
+  });
+
+  describe("Font system", () => {
+    it("exposes exactly the two supported families", () => {
+      expect([...FONT_FAMILIES]).toEqual(["Geist", "Geist Mono"]);
+    });
+
+    it("uses families that are members of FONT_FAMILIES", () => {
+      // Guards the dropdown/schema drift: the brand kit default must be a value
+      // the schema will actually accept.
+      expect(FONT_FAMILIES).toContain(BODY_FONT);
+      expect(FONT_FAMILIES).toContain(DISPLAY_FONT);
+    });
+
+    it("uses a display font that has a real 900 weight", () => {
+      // The canvas schema permits fontWeight '900' for stat numerals. A family
+      // that stops at 700 would fake-bold them in the exported PNG, so the
+      // display font must be the variable Geist.
+      expect(DISPLAY_FONT).toBe("Geist");
     });
   });
 
@@ -103,7 +182,7 @@ describe("Infographic Schemas", () => {
             text: "Test Title",
             fontSize: 44,
             fontWeight: "900",
-            fontFamily: "Arial",
+            fontFamily: "Geist",
             fill: "#000000",
             textAlign: "left",
             width: 700,
@@ -228,15 +307,31 @@ describe("Groq Reliability Layer", () => {
     expect(delayAttempt1).toBeGreaterThanOrEqual(1000);
   });
 
-  it("should discover models with server-side caching and fallback", async () => {
-    const { discoverGroqModels, _resetModelCacheForTesting } = await import("@/lib/groq");
+  it("should discover models with server side caching and fallback", async () => {
+    const { discoverGroqModels, _resetModelCacheForTesting } = await import(
+      "@/lib/groq"
+    );
     _resetModelCacheForTesting();
-    
-    // In test environment without live key, should safely fall back to default candidates
-    const models = await discoverGroqModels();
-    expect(Array.isArray(models)).toBe(true);
-    expect(models.length).toBeGreaterThan(0);
-    expect(models).toContain("llama-3.3-70b-versatile");
+
+    // Force the offline fallback path so the test never hits the network.
+    const originalKey = process.env.GROQ_API_KEY;
+    const originalFetch = globalThis.fetch;
+    delete process.env.GROQ_API_KEY;
+    globalThis.fetch = (async () => {
+      throw new Error("network disabled in tests");
+    }) as typeof fetch;
+
+    try {
+      const models = await discoverGroqModels();
+      expect(Array.isArray(models)).toBe(true);
+      expect(models.length).toBeGreaterThan(0);
+      expect(models).toContain("openai/gpt-oss-120b");
+      expect(models).toContain("llama-3.3-70b-versatile");
+    } finally {
+      if (originalKey !== undefined) process.env.GROQ_API_KEY = originalKey;
+      globalThis.fetch = originalFetch;
+      _resetModelCacheForTesting();
+    }
   });
 
   it("should resolve compatible models and respect task hierarchy", async () => {
@@ -250,6 +345,83 @@ describe("Groq Reliability Layer", () => {
 
     const fastModel = await resolveGroqModel("fast");
     expect(fastModel).toBeDefined();
+  });
+
+  it("should auto select the best active model when a preferred one is retired", async () => {
+    const { getBestGroqModel, _resetModelCacheForTesting } = await import(
+      "@/lib/groq"
+    );
+    _resetModelCacheForTesting();
+
+    const originalKey = process.env.GROQ_API_KEY;
+    const originalFetch = globalThis.fetch;
+    const originalModel = process.env.GROQ_MODEL;
+
+    // Simulate a live catalog where the preferred model was decommissioned.
+    process.env.GROQ_API_KEY = "gsk_test_key";
+    delete process.env.GROQ_MODEL;
+    globalThis.fetch = (async () => {
+      return new Response(
+        JSON.stringify({
+          data: [
+            { id: "llama-3.1-8b-instant", active: true },
+            { id: "llama-3.3-70b-versatile", active: true },
+            { id: "mixtral-8x7b-32768", active: true },
+          ],
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    }) as unknown as typeof fetch;
+
+    try {
+      const best = await getBestGroqModel("reasoning");
+      expect(best).toBe("llama-3.3-70b-versatile");
+
+      const fast = await getBestGroqModel("fast");
+      expect(fast).toBe("llama-3.3-70b-versatile");
+    } finally {
+      if (originalKey !== undefined) process.env.GROQ_API_KEY = originalKey;
+      else delete process.env.GROQ_API_KEY;
+      if (originalModel !== undefined) process.env.GROQ_MODEL = originalModel;
+      globalThis.fetch = originalFetch;
+      _resetModelCacheForTesting();
+    }
+  });
+
+  it("should pick the next best model when none of the preferred candidates are active", async () => {
+    const { getBestGroqModel, _resetModelCacheForTesting } = await import(
+      "@/lib/groq"
+    );
+    _resetModelCacheForTesting();
+
+    const originalKey = process.env.GROQ_API_KEY;
+    const originalFetch = globalThis.fetch;
+    const originalModel = process.env.GROQ_MODEL;
+
+    process.env.GROQ_API_KEY = "gsk_test_key";
+    delete process.env.GROQ_MODEL;
+    globalThis.fetch = (async () => {
+      return new Response(
+        JSON.stringify({
+          data: [
+            { id: "some-brand-new-model-70b", active: true },
+            { id: "tiny-legacy-model", active: true },
+          ],
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    }) as unknown as typeof fetch;
+
+    try {
+      const best = await getBestGroqModel("reasoning");
+      expect(best).toBe("some-brand-new-model-70b");
+    } finally {
+      if (originalKey !== undefined) process.env.GROQ_API_KEY = originalKey;
+      else delete process.env.GROQ_API_KEY;
+      if (originalModel !== undefined) process.env.GROQ_MODEL = originalModel;
+      globalThis.fetch = originalFetch;
+      _resetModelCacheForTesting();
+    }
   });
 
   it("should recover automatically on rate limit using bounded retry backoff", async () => {

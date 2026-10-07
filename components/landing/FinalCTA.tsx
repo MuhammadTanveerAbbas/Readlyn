@@ -54,7 +54,7 @@ export default function FinalCTA() {
 
       {/* Title */}
       <h2
-        className="font-grotesk font-black text-white text-center w-full max-w-[900px] mb-6"
+        className="font-sans font-black text-white text-center w-full max-w-[900px] mb-6"
         style={{
           fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
           letterSpacing: "-0.035em",
@@ -73,23 +73,23 @@ export default function FinalCTA() {
       </h2>
 
       {/* Subtitle */}
-      <p className="font-ibm-mono text-[13px] text-[var(--text-dim)] tracking-[0.5px] text-center max-w-[520px] mb-12 leading-[1.8]">
+      <p className="font-sans text-[13px] text-[var(--text-dim)] tracking-[0.5px] text-center max-w-[520px] mb-12 leading-[1.8]">
         We&apos;re building Readlyn in public. Try it free, no credit card
-        needed, and tell us what to improve.
+        needed, plus tell us what to improve.
       </p>
 
       {/* CTAs */}
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <a
           href="/signup"
-          className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl font-grotesk text-[14px] font-bold text-black
+          className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl font-sans text-[14px] font-bold text-black
                      bg-[var(--accent)] hover:bg-[var(--accent-hover)]
                      shadow-[0_0_30px_rgba(245,197,24,0.35)]
                      hover:shadow-[0_0_50px_rgba(245,197,24,0.55)]
                      transition-all duration-200
                      hover:scale-[1.02] active:scale-[0.98]"
         >
-          Start free no card needed
+          Start free, no card needed
           <svg
             width="14"
             height="14"
@@ -111,7 +111,7 @@ export default function FinalCTA() {
           className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl
                      border border-white/10 text-[#888888]
                      hover:border-white/25 hover:text-white
-                     transition-all duration-200 font-ibm-mono text-[12px] tracking-[1px]
+                     transition-all duration-200 font-sans text-[12px] tracking-[1px]
                      hover:scale-[1.02] active:scale-[0.98]"
         >
           View on GitHub
@@ -119,7 +119,7 @@ export default function FinalCTA() {
       </div>
 
       {/* Honest note */}
-      <p className="font-ibm-mono text-[11px] text-[var(--text-dim)] tracking-widest mt-10 text-center">
+      <p className="font-sans text-[11px] text-[var(--text-dim)] tracking-widest mt-10 text-center">
         Early access · Built in public · Your feedback shapes the roadmap
       </p>
     </section>

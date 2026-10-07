@@ -20,6 +20,8 @@ import {
   Palette,
   HelpCircle,
   Sparkles,
+  PanelLeft,
+  PanelRight,
 } from "lucide-react";
 
 interface ToolbarProps {
@@ -30,6 +32,8 @@ interface ToolbarProps {
   onToolModeChange: (mode: "select" | "hand") => void;
   onUndo: () => void;
   onRedo: () => void;
+  onToggleLeftPanel?: () => void;
+  onToggleRightPanel?: () => void;
   onOpenHistory: () => void;
   onOpenMultiExport: () => void;
   onOpenDesignTokens?: () => void;
@@ -55,6 +59,8 @@ export default function Toolbar({
   onToolModeChange,
   onUndo,
   onRedo,
+  onToggleLeftPanel,
+  onToggleRightPanel,
   onOpenHistory,
   onOpenMultiExport,
   onOpenDesignTokens,
@@ -138,8 +144,8 @@ export default function Toolbar({
           <h1 className="text-[13px] font-semibold text-white tracking-[-0.01em] hidden sm:block">
             Readlyn
           </h1>
-          <div className="text-[9px] font-bold border border-[var(--accent)]/30 bg-[var(--accent)]/10 rounded px-1.5 py-0.5 text-[var(--accent)] font-ibm-mono hidden sm:block">
-            2026 PRO
+          <div className="text-[9px] font-bold border border-[var(--accent)]/30 bg-[var(--accent)]/10 rounded px-1.5 py-0.5 text-[var(--accent)] font-sans hidden sm:block">
+            EARLY ACCESS
           </div>
         </div>
 
@@ -167,6 +173,27 @@ export default function Toolbar({
             <Hand className="w-3.5 h-3.5" />
           </button>
         </div>
+
+        {onToggleLeftPanel && (
+          <button
+            onClick={onToggleLeftPanel}
+            className="h-7 w-7 flex items-center justify-center rounded border border-white/[0.08] hover:bg-white/[0.05] text-[var(--text-body)] hover:text-white transition-all lg:hidden"
+            title="Toggle prompt plus layers panel"
+            aria-label="Toggle prompt plus layers panel"
+          >
+            <PanelLeft className="w-3.5 h-3.5" />
+          </button>
+        )}
+        {onToggleRightPanel && (
+          <button
+            onClick={onToggleRightPanel}
+            className="h-7 w-7 flex items-center justify-center rounded border border-white/[0.08] hover:bg-white/[0.05] text-[var(--text-body)] hover:text-white transition-all lg:hidden"
+            title="Toggle properties panel"
+            aria-label="Toggle properties panel"
+          >
+            <PanelRight className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
 
       {/* Center: Actions */}
