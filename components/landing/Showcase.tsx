@@ -271,24 +271,21 @@ export default function Showcase() {
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className="group relative flex items-center gap-2 px-4 py-2.5 rounded-xl border font-sans text-[12px] font-medium tracking-[0.3px] transition-all duration-300"
+                className="group relative flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-full border font-sans text-[12px] font-medium tracking-[0.2px] transition-all duration-300 cursor-pointer"
                 style={{
-                  backgroundColor: isActive ? `${s.accentHex}10` : "rgba(255,255,255,0.02)",
-                  borderColor: isActive ? `${s.accentHex}35` : "rgba(255,255,255,0.07)",
+                  backgroundColor: isActive ? `${s.accentHex}12` : "rgba(255,255,255,0.03)",
+                  borderColor: isActive ? `${s.accentHex}40` : "rgba(255,255,255,0.08)",
                   color: isActive ? s.accentHex : "var(--text-muted)",
-                  boxShadow: isActive ? `0 0 20px ${s.accentHex}10` : "none",
+                  boxShadow: isActive ? `0 0 16px ${s.accentHex}18, inset 0 1px 0 ${s.accentHex}10` : "none",
                 }}
               >
-                {/* active top line */}
-                {isActive && (
-                  <span
-                    className="absolute top-0 inset-x-4 h-px rounded-full"
-                    style={{ backgroundColor: s.accentHex, opacity: 0.6 }}
-                  />
-                )}
+                {/* icon pill */}
                 <span
-                  className="transition-colors duration-300"
-                  style={{ color: isActive ? s.accentHex : "var(--text-muted)", opacity: isActive ? 1 : 0.5 }}
+                  className="flex items-center justify-center h-6 w-6 rounded-full shrink-0 transition-all duration-300"
+                  style={{
+                    backgroundColor: isActive ? `${s.accentHex}20` : "rgba(255,255,255,0.05)",
+                    color: isActive ? s.accentHex : "rgba(255,255,255,0.3)",
+                  }}
                 >
                   {s.menuIcon}
                 </span>

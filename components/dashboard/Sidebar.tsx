@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Home, Star, Clock3, Plus, Settings, LogOut, User, Sparkles, Layers } from "lucide-react";
+import { Home, Star, Clock3, Layers, Settings, LogOut, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -61,100 +61,51 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
   };
 
   return (
-    <aside className={`
-      fixed left-0 top-0 z-40 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[var(--surface-base)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-      transform transition-transform duration-200 ease-in-out
-      ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-    `}>
-      {/* Header */}
-      <div className="border-b border-white/[0.06] p-5">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold tracking-tight text-white">
-                Readlyn
-              </h1>
-              <div className="flex h-5 items-center gap-1 rounded-md bg-[var(--accent)]/10 border border-[var(--accent)]/20 px-1.5">
-                <Sparkles className="h-2.5 w-2.5 text-[var(--accent)]" />
-                <span className="text-[9px] font-bold text-[var(--accent)] uppercase tracking-wider">
-                  AI
-                </span>
-              </div>
-            </div>
-            <p className="text-[10px] uppercase tracking-[0.15em] text-white/40 mt-0.5">
-              Studio
-            </p>
-          </div>
-          <div className="relative">
-            <button
-              onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-gradient-to-br from-[var(--surface-raised)] to-[var(--surface-base)] hover:border-white/[0.15] transition-all hover:scale-105"
-            >
-              <User className="h-4 w-4 text-white/70" />
-            </button>
+    <aside
+      className={`
+        fixed left-0 top-0 z-40 flex h-screen w-[240px] flex-col
+        border-r border-white/[0.06] bg-[var(--surface-base)]
+        [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+        transform transition-transform duration-200 ease-in-out
+        ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+      `}
+    >
+      {/* ── Logo ── */}
+      <div className="flex items-center gap-2.5 px-5 h-[60px] border-b border-white/[0.06] shrink-0">
+        <img
+          src="/favicon.svg"
+          alt="Readlyn"
+          width={18}
+          height={18}
+          style={{ imageRendering: "pixelated" }}
+        />
+        <span className="text-[15px] font-bold tracking-tight text-white">
+          Readlyn
+        </span>
 
-            {showUserMenu && (
-              <div className="absolute right-0 top-11 w-48 rounded-lg border border-white/[0.08] bg-[var(--surface-base)] shadow-[0_20px_60px_rgba(11,11,12,0.6)] z-50">
-                <div className="p-1">
-                  <button
-                    onClick={() => {
-                      setShowUserMenu(false);
-                      onClose?.();
-                      router.push("/settings");
-                    }}
-                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-white/70 hover:bg-white/[0.05] hover:text-white transition-colors"
-                  >
-                    <Settings className="h-4 w-4" />
-                    Settings
-                  </button>
-
-                  <button
-                    onClick={handleSignOut}
-                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <button
-          onClick={() => {
-            onClose?.();
-            onNewProject();
-          }}
-          className="group relative flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-white shadow-[0_10px_30px_rgba(245,197,24,0.3)] transition-all hover:bg-[var(--accent-hover)] hover:shadow-[0_15px_40px_rgba(245,197,24,0.4)] hover:scale-[1.02] active:scale-[0.98]"
-        >
-          <Plus className="h-4 w-4" />
-          New Project
-          <div className="absolute inset-0 rounded-lg bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="p-3">
-        <div className="mb-2 px-3 py-2">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/30">
-            Workspace
-          </p>
-        </div>
+      {/* ── Nav ── */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/25">
+          Workspace
+        </p>
         <div className="space-y-0.5">
           {nav.map(({ href, label, icon: Icon, active }) => (
             <Link
               key={href}
               href={href}
               onClick={handleNavClick}
-              className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
+              className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-colors ${
                 active
-                  ? "bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20"
-                  : "text-white/60 hover:bg-white/[0.04] hover:text-white border border-transparent hover:border-white/[0.08]"
+                  ? "bg-[var(--accent)]/10 text-[var(--accent)]"
+                  : "text-white/50 hover:bg-white/[0.04] hover:text-white/90"
               }`}
             >
               <Icon
-                className={`h-4 w-4 transition-transform group-hover:scale-110 ${active ? "text-[var(--accent)]" : ""}`}
+                className={`h-[15px] w-[15px] shrink-0 ${
+                  active ? "text-[var(--accent)]" : "text-white/40 group-hover:text-white/70"
+                }`}
               />
               {label}
 
@@ -163,20 +114,47 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
         </div>
       </nav>
 
-      {/* Bottom section */}
-      <div className="absolute bottom-0 left-0 right-0 border-t border-white/[0.06] bg-[var(--surface-base)] p-4 flex flex-col gap-2">
-        <div className="rounded-lg border border-white/[0.08] bg-gradient-to-br from-[var(--accent)]/5 to-transparent p-3">
-          <div className="flex items-start gap-2 mb-1">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/20">
-              <Sparkles className="h-4 w-4 text-[var(--accent)]" />
+      {/* ── Footer ── */}
+      <div className="shrink-0 border-t border-white/[0.06] px-3 py-3">
+        <div className="relative">
+          <button
+            onClick={() => setShowUserMenu((v) => !v)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium text-white/50 hover:bg-white/[0.04] hover:text-white/90 transition-colors"
+          >
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-white/[0.10] bg-white/[0.04]">
+              <User className="h-3.5 w-3.5 text-white/60" />
             </div>
-            <div className="flex-1">
-              <p className="text-xs font-semibold text-white">AI-Powered</p>
-              <p className="text-[10px] text-white/50 mt-0.5">
-                Generate infographics instantly
-              </p>
+            <span className="flex-1 text-left text-[13px] text-white/60">Account</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-white/25">
+              <path d="M3 5l3-3 3 3M3 7l3 3 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+
+          {showUserMenu && (
+            <div className="absolute bottom-full left-0 right-0 mb-1 rounded-lg border border-white/[0.08] bg-[var(--surface-raised)] shadow-[0_-8px_32px_rgba(0,0,0,0.4)] z-50 overflow-hidden">
+              <div className="p-1">
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onClose?.();
+                    router.push("/settings");
+                  }}
+                  className="flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-[13px] text-white/60 hover:bg-white/[0.05] hover:text-white transition-colors"
+                >
+                  <Settings className="h-3.5 w-3.5" />
+                  Settings
+                </button>
+                <div className="my-1 h-px bg-white/[0.05]" />
+                <button
+                  onClick={handleSignOut}
+                  className="flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-[13px] text-red-400/80 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  Sign out
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </aside>

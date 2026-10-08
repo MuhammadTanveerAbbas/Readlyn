@@ -496,9 +496,6 @@ export default function Hero() {
         }}
       />
 
-      {/* Particles */}
-      <Particles />
-
       {/* Two-column layout */}
       <div className="relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-16 w-full max-w-[1200px] mx-auto px-6 md:px-12 pt-16 pb-10">
         {/* Left: text */}
@@ -560,31 +557,47 @@ export default function Hero() {
 
           {/* CTAs */}
           <div className="hero-enter-4 flex flex-col sm:flex-row items-center lg:items-start gap-3 mt-8 w-full sm:w-auto">
+            {/* Primary: Start free — spark/bolt icon */}
             <a
               href="/signup"
-              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[13px] font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
+              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
             >
-              Start free
+              {/* Bolt / spark */}
               <svg
-                width="13"
-                height="13"
-                viewBox="0 0 14 14"
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
                 fill="none"
-                className="group-hover:translate-x-0.5 transition-transform"
+                aria-hidden="true"
+                className="shrink-0 group-hover:scale-110 transition-transform"
               >
                 <path
-                  d="M1 7h12M8 3l5 4-5 4"
+                  d="M9.5 1L3 9.5h5L6 15l7.5-8.5H8.5L9.5 1z"
+                  fill="currentColor"
                   stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
+                  strokeWidth="0.4"
                   strokeLinejoin="round"
                 />
               </svg>
+              Start free
             </a>
+            {/* Secondary: Log in — key icon */}
             <a
               href="/login"
-              className="flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[12px] text-[var(--text-body)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[12px] text-[var(--text-body)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
+              {/* Key icon */}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+                className="shrink-0 opacity-60 group-hover:opacity-100 transition-opacity"
+              >
+                <circle cx="5.5" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.4"/>
+                <path d="M8.5 8H15M13 6.5V8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+              </svg>
               Log in
             </a>
           </div>

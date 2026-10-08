@@ -48,15 +48,11 @@ export default function Navbar() {
     <header
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
-          background: scrolled ? "rgba(8,8,8,0.92)" : "transparent",
-          backdropFilter: scrolled ? "blur(32px) saturate(200%)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(32px) saturate(200%)" : "none",
-          borderBottom: scrolled
-            ? "1px solid rgba(255,255,255,0.06)"
-            : "1px solid transparent",
-          boxShadow: scrolled
-            ? "0 1px 0 0 rgba(245,197,24,0.04), 0 8px 32px rgba(11,11,12,0.5)"
-            : "none",
+          background: "rgba(6,6,6,0.97)",
+          backdropFilter: "blur(40px) saturate(220%)",
+          WebkitBackdropFilter: "blur(40px) saturate(220%)",
+          borderBottom: "1px solid rgba(245,197,24,0.10)",
+          boxShadow: "0 1px 0 0 rgba(245,197,24,0.06), 0 4px 24px rgba(0,0,0,0.5)",
         }}
     >
       <div className="flex items-center justify-between h-[64px] px-6 md:px-[48px] max-w-[1400px] mx-auto">
@@ -87,16 +83,15 @@ export default function Navbar() {
                 key={label}
                 onClick={() => scrollTo(section)}
                 className="relative font-sans text-[11px] tracking-[1.5px] transition-colors duration-200 bg-transparent border-none cursor-pointer py-1"
-                style={{ color: isActive ? "var(--accent)" : "#888888" }}
+                style={{ color: isActive ? "var(--accent)" : "#aaaaaa" }}
                 onMouseEnter={(e) => {
                   if (!isActive)
-                    (e.currentTarget as HTMLButtonElement).style.color =
-                      "var(--text-primary)";
+                    (e.currentTarget as HTMLButtonElement).style.color = "#ffffff";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.color = isActive
                     ? "var(--accent)"
-                    : "#888888";
+                    : "#aaaaaa";
                 }}
               >
                 {label}
@@ -113,13 +108,17 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-[16px]">
           <a
             href="/signup"
-            className="relative px-5 py-2 rounded-lg text-[12px] font-bold text-white
+            className="relative flex items-center gap-[7px] px-5 py-2 rounded-lg text-[12px] font-bold text-black
                        bg-[var(--accent)] hover:bg-[var(--accent-hover)]
                        transition-all duration-200
                        shadow-[0_0_20px_rgba(245,197,24,0.3)]
                        hover:shadow-[0_0_30px_rgba(245,197,24,0.5)]
                        hover:scale-[1.02] active:scale-[0.98] font-sans tracking-wide"
           >
+            {/* Spark / bolt icon */}
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M9 1L3 9h5.5L7 15l6-8H7.5L9 1z" fill="currentColor" stroke="currentColor" strokeWidth="0.5" strokeLinejoin="round"/>
+            </svg>
             Start free
           </a>
         </div>
@@ -172,7 +171,7 @@ export default function Navbar() {
                   setMenuOpen(false);
                 }}
                 className="flex items-center gap-3 w-full font-sans text-[12px] tracking-[1px] py-[14px] border-b border-white/[0.05] transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer"
-                style={{ color: isActive ? "var(--accent)" : "#888888" }}
+                style={{ color: isActive ? "var(--accent)" : "#aaaaaa" }}
               >
                 <span
                   className="w-[4px] h-[4px] rounded-full shrink-0 transition-colors"
@@ -185,8 +184,11 @@ export default function Navbar() {
           <div className="flex flex-col gap-[10px] pt-5">
             <a
               href="/signup"
-              className="font-sans text-[12px] font-bold text-white bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
+              className="flex items-center justify-center gap-[7px] font-sans text-[12px] font-bold text-black bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
             >
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M9 1L3 9h5.5L7 15l6-8H7.5L9 1z" fill="currentColor" stroke="currentColor" strokeWidth="0.5" strokeLinejoin="round"/>
+              </svg>
               Start free
             </a>
           </div>

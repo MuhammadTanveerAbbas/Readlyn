@@ -12,7 +12,6 @@ import {
   TrendingUp,
   Zap,
   Rocket,
-  Wand2,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
@@ -103,10 +102,6 @@ export default function DashboardPage() {
   return (
     <div
       className="min-h-screen bg-[var(--surface-sunken)]"
-      style={{
-        backgroundImage:
-          "radial-gradient(circle at 20% 10%, rgba(245,197,24,0.08), transparent 35%), radial-gradient(circle at 80% 60%, rgba(124,58,237,0.06), transparent 40%)",
-      }}
     >
       {/* Mobile overlay */}
       {sidebarOpen && (
@@ -136,7 +131,7 @@ export default function DashboardPage() {
         <span className="font-bold text-white">Readlyn</span>
       </div>
 
-      <main className="md:ml-[260px] px-4 pb-6 pt-4 sm:px-6 lg:px-8">
+      <main className="md:ml-[240px] px-4 pb-6 pt-4 sm:px-6 lg:px-8">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-[var(--surface-base)] p-4">
           <div>
             <div className="mb-1 flex items-center gap-2">
@@ -156,7 +151,7 @@ export default function DashboardPage() {
           </div>
           <button
             onClick={() => setOpenModal(true)}
-            className="group inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-white transition-all hover:bg-[var(--accent-hover)]"
+            className="group inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-black transition-all hover:bg-[var(--accent-hover)]"
           >
             <Rocket className="h-4 w-4" />
             Create New Project
@@ -217,11 +212,8 @@ export default function DashboardPage() {
             <div className="relative z-10">
               <div className="flex justify-center mb-6">
                 <div className="relative">
-                  <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-[0_20px_60px_rgba(245,197,24,0.4)]">
-                    <Sparkles className="h-10 w-10 text-white" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-[var(--success-soft)] border-2 border-[var(--surface-base)] flex items-center justify-center">
-                    <Wand2 className="h-3 w-3 text-white" />
+                  <div className="h-20 w-20 rounded-2xl bg-[var(--accent)] flex items-center justify-center">
+                    <Sparkles className="h-10 w-10 text-black" />
                   </div>
                 </div>
               </div>
@@ -238,7 +230,7 @@ export default function DashboardPage() {
               {!search && (
                 <button
                   onClick={() => setOpenModal(true)}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_15px_40px_rgba(245,197,24,0.4)]"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black text-sm font-bold transition-all hover:scale-105 active:scale-95"
                 >
                   <Sparkles className="h-4 w-4" />
                   Create Your First Project
