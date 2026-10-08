@@ -108,7 +108,7 @@ export default function PromptPanel({
             onKeyDown={handleKeyDown}
             placeholder="Describe your infographic topic..."
             rows={3}
-            className="w-full px-3 py-2.5 pr-8 text-[12px] bg-[var(--bg-elevated)] border border-white/[0.08] rounded-lg text-white placeholder:text-white/25 resize-none focus:outline-none focus:border-[var(--accent)]/60 focus:ring-1 focus:ring-[var(--accent)]/20 transition-all font-sans leading-relaxed"
+            className="w-full px-3 py-2.5 pr-8 text-[12px] bg-[var(--surface-raised)] border border-white/[0.08] rounded-lg text-white placeholder:text-white/25 resize-none focus:outline-none focus:border-[var(--accent)]/60 focus:ring-1 focus:ring-[var(--accent)]/20 transition-all font-sans leading-relaxed"
           />
           {prompt.length > 0 && (
             <button
@@ -129,7 +129,7 @@ export default function PromptPanel({
         <button
           onClick={handleGenerate}
           disabled={isGenerating || !prompt.trim()}
-          className="w-full h-8 flex items-center justify-center gap-1.5 bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-black text-[12px] font-bold rounded-lg transition-all duration-150 active:scale-[0.98] shadow-[0_0_16px_rgba(245,197,24,0.25)] mt-2"
+          className="w-full h-8 flex items-center justify-center gap-1.5 bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-white text-[12px] font-bold rounded-lg transition-all duration-150 active:scale-[0.98] shadow-[0_0_16px_rgba(245,197,24,0.25)] mt-2"
         >
           {isGenerating ? (
             <>
@@ -156,7 +156,7 @@ export default function PromptPanel({
                 title={THEME_LABELS[t]}
                 className={`w-6 h-6 rounded-full border-2 transition-all hover:scale-110 ${
                   theme === t
-                    ? "border-white scale-110 ring-1 ring-offset-1 ring-offset-[var(--bg-panel)] ring-white/30"
+                    ? "border-white scale-110 ring-1 ring-offset-1 ring-offset-[var(--surface-base)] ring-white/30"
                     : "border-white/10 hover:border-white/30"
                 }`}
                 style={{ backgroundColor: THEME_COLORS[t].primary }}
@@ -170,7 +170,7 @@ export default function PromptPanel({
           <select
             value={size}
             onChange={(e) => setSize(e.target.value as CanvasSize)}
-            className="w-full h-7 px-2 text-[11px] rounded-md outline-none cursor-pointer bg-[var(--bg-elevated)] border border-white/[0.08] text-white/80 hover:border-white/20 focus:border-[var(--accent)]/60 transition-all"
+            className="w-full h-7 px-2 text-[11px] rounded-md outline-none cursor-pointer bg-[var(--surface-raised)] border border-white/[0.08] text-white/80 hover:border-white/20 focus:border-[var(--accent)]/60 transition-all"
           >
             {(Object.entries(CANVAS_SIZES) as [CanvasSize, { label: string }][]).map(([key, { label }]) => (
               <option key={key} value={key}>{label}</option>

@@ -11,7 +11,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
   return (
     <main
       className="relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden"
-      style={{ backgroundColor: "var(--bg-base)" }}
+      style={{ backgroundColor: "var(--surface-sunken)" }}
     >
       {/* Background glows */}
       <div
@@ -74,9 +74,9 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
           className="w-full rounded-2xl p-8"
           style={{
             background: "rgba(13,13,13,0.9)",
-            border: "1px solid var(--border-default)",
+            border: "1px solid var(--line-default)",
             boxShadow:
-              "0 0 0 1px rgba(255,255,255,0.03), 0 24px 60px rgba(0,0,0,0.7), 0 0 40px rgba(245,197,24,0.03)",
+              "0 0 0 1px rgba(255,255,255,0.03), 0 24px 60px rgba(11,11,12,0.6), 0 0 40px rgba(245,197,24,0.03)",
             backdropFilter: "blur(20px)",
           }}
         >
@@ -89,7 +89,7 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
               {title}
             </h1>
             {subtitle && (
-              <p className="mt-1.5 font-sans text-[12px] text-[var(--text-dim)] tracking-[0.4px] leading-relaxed">
+              <p className="mt-1.5 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.4px] leading-relaxed">
                 {subtitle}
               </p>
             )}
@@ -103,14 +103,14 @@ export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
           By continuing, you agree to our{" "}
           <Link
             href="/terms"
-            className="text-[var(--text-dim)] hover:text-[var(--text-body)] transition-colors"
+            className="text-[var(--text-muted)] hover:text-[var(--text-body)] transition-colors"
           >
             Terms of Service
           </Link>{" "}
           and{" "}
           <Link
             href="/privacy"
-            className="text-[var(--text-dim)] hover:text-[var(--text-body)] transition-colors"
+            className="text-[var(--text-muted)] hover:text-[var(--text-body)] transition-colors"
           >
             Privacy Policy
           </Link>

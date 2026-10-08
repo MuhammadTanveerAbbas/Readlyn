@@ -31,10 +31,10 @@ interface NewProjectModalProps {
 }
 
 const THEME_COLORS: Record<ThemePalette, { primary: string; name: string }> = {
-  ocean: { primary: "var(--blue)", name: "Ocean" },
+  ocean: { primary: "var(--info)", name: "Ocean" },
   ember: { primary: "var(--orange)", name: "Ember" },
   forest: { primary: "var(--success)", name: "Forest" },
-  slate: { primary: "var(--text-muted-val)", name: "Slate" },
+  slate: { primary: "var(--text-body)", name: "Slate" },
   midnight: { primary: "#1e293b", name: "Midnight" },
 };
 
@@ -117,8 +117,8 @@ export default function NewProjectModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="w-full max-w-3xl rounded-2xl border border-white/10 bg-[var(--bg-subtle)] shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4">
+      <div className="w-full max-w-3xl rounded-2xl border border-white/10 bg-[var(--surface-base)] shadow-[0_40px_100px_rgba(11,11,12,0.6)] relative overflow-hidden">
         {/* Header gradient */}
         <div
           className="absolute top-0 left-0 right-0 h-32 opacity-30"
@@ -159,8 +159,8 @@ export default function NewProjectModal({
               onClick={() => setTab("ai")}
               className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
                 tab === "ai"
-                  ? "bg-[var(--accent)] text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
-                  : "bg-[var(--bg-elevated)] text-white/70 hover:bg-[var(--bg-overlay)] border border-white/10"
+                  ? "bg-[var(--accent)] text-white shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
+                  : "bg-[var(--surface-raised)] text-white/70 hover:bg-[var(--surface-overlay)] border border-white/10"
               }`}
             >
               <Wand2 className="h-4 w-4" />
@@ -170,8 +170,8 @@ export default function NewProjectModal({
               onClick={() => setTab("blank")}
               className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
                 tab === "blank"
-                  ? "bg-[var(--accent)] text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
-                  : "bg-[var(--bg-elevated)] text-white/70 hover:bg-[var(--bg-overlay)] border border-white/10"
+                  ? "bg-[var(--accent)] text-white shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
+                  : "bg-[var(--surface-raised)] text-white/70 hover:bg-[var(--surface-overlay)] border border-white/10"
               }`}
             >
               <FileText className="h-4 w-4" />
@@ -188,7 +188,7 @@ export default function NewProjectModal({
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="w-full h-32 rounded-xl border border-white/10 bg-[var(--bg-panel)] p-4 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all resize-none"
+                className="w-full h-32 rounded-xl border border-white/10 bg-[var(--surface-base)] p-4 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all resize-none"
                 placeholder="E.g., 'Create a sales report showing Q4 2024 revenue growth across 5 regions with bar charts plus key metrics'"
               />
               <p className="text-xs text-white/40 mt-2">
@@ -207,7 +207,7 @@ export default function NewProjectModal({
               <select
                 value={size}
                 onChange={(e) => setSize(e.target.value as CanvasSize)}
-                className="w-full h-11 rounded-lg border border-white/10 bg-[var(--bg-panel)] px-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
+                className="w-full h-11 rounded-lg border border-white/10 bg-[var(--surface-base)] px-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
               >
                 <option value="a4">A4 Portrait</option>
                 <option value="square">Square</option>
@@ -224,7 +224,7 @@ export default function NewProjectModal({
                 <select
                   value={theme}
                   onChange={(e) => setTheme(e.target.value as ThemePalette)}
-                  className="w-full h-11 rounded-lg border border-white/10 bg-[var(--bg-panel)] pl-10 pr-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
+                  className="w-full h-11 rounded-lg border border-white/10 bg-[var(--surface-base)] pl-10 pr-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
                 >
                   {Object.entries(THEME_COLORS).map(([key, { name }]) => (
                     <option key={key} value={key}>
@@ -248,7 +248,7 @@ export default function NewProjectModal({
                 <select
                   value={style}
                   onChange={(e) => setStyle(e.target.value as StylePreset)}
-                  className="w-full h-11 rounded-lg border border-white/10 bg-[var(--bg-panel)] pl-10 pr-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
+                  className="w-full h-11 rounded-lg border border-white/10 bg-[var(--surface-base)] pl-10 pr-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
                 >
                   <option value="auto">Auto</option>
                   <option value="steps">Steps</option>
@@ -289,7 +289,7 @@ export default function NewProjectModal({
             <button
               disabled={pending || (tab === "ai" && !prompt.trim())}
               onClick={() => createProject(tab === "ai")}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--accent)] text-black text-sm font-bold hover:bg-[var(--accent-hover)] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--accent)] text-white text-sm font-bold hover:bg-[var(--accent-hover)] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
             >
               {pending ? (
                 <>

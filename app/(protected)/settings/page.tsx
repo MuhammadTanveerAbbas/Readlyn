@@ -99,10 +99,10 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)]">
+    <div className="min-h-screen bg-[var(--surface-sunken)]">
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
+          className="fixed inset-0 z-30 bg-[var(--scrim)] md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -113,7 +113,7 @@ export default function SettingsPage() {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-[var(--border-default)] bg-[var(--bg-elevated)] px-4 md:hidden">
+      <div className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-[var(--line-default)] bg-[var(--surface-raised)] px-4 md:hidden">
         <button
           onClick={() => setSidebarOpen(true)}
           className="p-2.5 -ml-2 min-h-11 min-w-11 text-white/60 hover:text-white"
@@ -134,7 +134,7 @@ export default function SettingsPage() {
       </div>
 
       <main className="md:ml-[260px] px-4 pb-8 pt-4 sm:px-6 lg:px-8">
-        <div className="mb-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-panel)] p-4">
+        <div className="mb-6 rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-4">
           <div className="mb-1 flex items-center gap-2">
             <Settings className="h-4 w-4 text-[var(--accent)]" />
             <h1 className="text-lg font-semibold text-[var(--text-primary)]">Settings</h1>
@@ -145,7 +145,7 @@ export default function SettingsPage() {
         </div>
 
         {loading ? (
-          <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-panel)] p-8 text-center">
+          <div className="rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-8 text-center">
             <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-[var(--accent)] border-t-transparent" />
             <p className="text-sm text-[var(--text-body)]">Loading account settings...</p>
           </div>
@@ -163,28 +163,28 @@ export default function SettingsPage() {
           </div>
         ) : (
           <div className="grid gap-4">
-            <section className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-panel)] p-5">
+            <section className="rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-5">
               <div className="mb-4 flex items-center gap-2">
                 <Mail className="h-4 w-4 text-[var(--accent)]" />
                 <h2 className="text-sm font-semibold text-[var(--text-primary)]">Account</h2>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-[var(--border-subtle-val)] bg-[var(--bg-elevated)] p-3">
+                <div className="rounded-lg border border-[var(--line-subtle)] bg-[var(--surface-raised)] p-3">
                   <p className="text-[11px] uppercase tracking-wider text-white/40">Email</p>
                   <p className="mt-1 text-sm text-[var(--text-primary)]">{account?.email}</p>
                 </div>
-                <div className="rounded-lg border border-[var(--border-subtle-val)] bg-[var(--bg-elevated)] p-3">
+                <div className="rounded-lg border border-[var(--line-subtle)] bg-[var(--surface-raised)] p-3">
                   <p className="text-[11px] uppercase tracking-wider text-white/40">Member Since</p>
                   <p className="mt-1 text-sm text-[var(--text-primary)]">{account?.createdAt}</p>
                 </div>
               </div>
-              <div className="mt-3 rounded-lg border border-[var(--border-subtle-val)] bg-[var(--bg-elevated)] p-3">
+              <div className="mt-3 rounded-lg border border-[var(--line-subtle)] bg-[var(--surface-raised)] p-3">
                 <p className="text-[11px] uppercase tracking-wider text-white/40">User ID</p>
                 <p className="mt-1 break-all font-mono text-xs text-white/80">{account?.id}</p>
               </div>
             </section>
 
-            <section className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-panel)] p-5">
+            <section className="rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-5">
               <div className="mb-4 flex items-center gap-2">
                 <Shield className="h-4 w-4 text-[var(--accent)]" />
                 <h2 className="text-sm font-semibold text-[var(--text-primary)]">Security</h2>
@@ -192,7 +192,7 @@ export default function SettingsPage() {
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => router.push("/update-password")}
-                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] px-4 py-2 text-sm text-white/80 transition-colors hover:border-[var(--accent)]/40 hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--line-default)] bg-[var(--surface-raised)] px-4 py-2 text-sm text-white/80 transition-colors hover:border-[var(--accent)]/40 hover:text-white"
                 >
                   <KeyRound className="h-4 w-4" />
                   Update Password
@@ -226,7 +226,7 @@ export default function SettingsPage() {
                     Delete Account
                   </button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="bg-[var(--bg-panel)] border border-[var(--border-default)]">
+                <AlertDialogContent className="bg-[var(--surface-base)] border border-[var(--line-default)]">
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-[var(--text-primary)]">Delete your account?</AlertDialogTitle>
                     <AlertDialogDescription className="text-[var(--text-body)]">
@@ -234,7 +234,7 @@ export default function SettingsPage() {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="bg-white/5 text-white/70 border border-[var(--border-default)] hover:bg-white/10">
+                    <AlertDialogCancel className="bg-white/5 text-white/70 border border-[var(--line-default)] hover:bg-white/10">
                       Cancel
                     </AlertDialogCancel>
                     <AlertDialogAction

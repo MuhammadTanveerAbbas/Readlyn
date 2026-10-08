@@ -67,7 +67,7 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
         }
         updated++;
       } else if (obj.type === "rect" || obj.type === "circle") {
-        if (obj.fill === "#080808" || obj.fill === "var(--bg-base)") {
+        if (obj.fill === "#080808" || obj.fill === "var(--surface-sunken)") {
           obj.set("fill", secondaryColor);
         } else {
           obj.set("fill", primaryColor);
@@ -86,15 +86,15 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
+      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col">
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
             <h3 className="font-sans text-lg font-bold text-white flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
               Brand Kit
             </h3>
-            <p className="font-sans text-xs text-[var(--text-dim)]">
+            <p className="font-sans text-xs text-[var(--text-muted)]">
               Palette plus typography stored in this browser.
             </p>
           </div>
@@ -177,7 +177,7 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
                 <option
                   key={family}
                   value={family}
-                  className="bg-[var(--bg-panel)] text-white"
+                  className="bg-[var(--surface-base)] text-white"
                 >
                   {family}
                 </option>
@@ -195,7 +195,7 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
           </button>
           <button
             onClick={applyBrandToCanvas}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all"
           >
             Apply to Canvas
           </button>

@@ -38,7 +38,7 @@ export default function ZoomSlider({
     <div
       className="hidden lg:flex w-9 flex-shrink-0 flex-col items-center py-3 gap-3"
       style={{
-        backgroundColor: "var(--bg-panel)",
+        backgroundColor: "var(--surface-base)",
         borderLeft: "1px solid rgba(255,255,255,0.07)",
       }}
     >
@@ -86,7 +86,7 @@ export default function ZoomSlider({
       {/* Zoom % */}
       <div
         className="text-[9px] font-sans leading-none"
-        style={{ color: "var(--text-muted-val)" }}
+        style={{ color: "var(--text-body)" }}
       >
         {pct}%
       </div>
@@ -109,10 +109,10 @@ export default function ZoomSlider({
       <button
         onClick={onFitToScreen}
         className={btnCls}
-        style={{ color: "var(--text-muted-val)" }}
+        style={{ color: "var(--text-body)" }}
         title="Fit to screen"
         onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted-val)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-body)")}
       >
         <Maximize className="w-3 h-3" />
       </button>

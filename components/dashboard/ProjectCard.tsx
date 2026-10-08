@@ -54,10 +54,10 @@ interface ProjectCardProps {
 }
 
 const THEME_COLORS: Record<string, string> = {
-  ocean: "var(--blue)",
+  ocean: "var(--info)",
   ember: "var(--orange)",
   forest: "var(--success)",
-  slate: "var(--text-muted-val)",
+  slate: "var(--text-body)",
   midnight: "var(--accent)",
 };
 
@@ -90,7 +90,7 @@ export default function ProjectCard({
   const title = project.title?.trim() || "Untitled Project";
   const theme = (project.theme || "ocean").toLowerCase();
   const archetype = (project.archetype || "auto").toLowerCase();
-  const themeColor = THEME_COLORS[theme] || "var(--blue)";
+  const themeColor = THEME_COLORS[theme] || "var(--info)";
   const ArchetypeIcon = ARCHETYPE_ICONS[archetype] || Wand2;
 
   const formatDate = (dateStr?: string | null) => {
@@ -195,7 +195,7 @@ export default function ProjectCard({
               e.preventDefault();
               e.stopPropagation();
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-black/60 opacity-80 backdrop-blur-sm transition-opacity hover:bg-black/80 hover:opacity-100"
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-[var(--scrim)] opacity-80 backdrop-blur-sm transition-opacity hover:bg-[var(--scrim)] hover:opacity-100"
             aria-label="Project actions"
           >
             <MoreHorizontal className="h-3.5 w-3.5 text-white/70" />
@@ -204,7 +204,7 @@ export default function ProjectCard({
         <DropdownMenuContent
           align="end"
           sideOffset={8}
-          className="z-[100] w-44 border-white/10 bg-[var(--bg-panel)] text-white"
+          className="z-[100] w-44 border-white/10 bg-[var(--surface-base)] text-white"
         >
           <DropdownMenuItem onSelect={() => handleRename()}>
             Rename project
@@ -231,7 +231,7 @@ export default function ProjectCard({
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent
           onClick={(e) => e.stopPropagation()}
-          className="border-white/10 bg-[var(--bg-panel)] text-white"
+          className="border-white/10 bg-[var(--surface-base)] text-white"
         >
           <AlertDialogHeader>
             <AlertDialogTitle>Delete project?</AlertDialogTitle>
@@ -268,7 +268,7 @@ export default function ProjectCard({
   // List View Mode
   if (viewMode === "list") {
     return (
-      <div className="relative group rounded-xl border border-white/[0.08] bg-[var(--bg-panel)] transition-all hover:border-white/[0.15] hover:bg-[var(--bg-elevated)] p-3">
+      <div className="relative group rounded-xl border border-white/[0.08] bg-[var(--surface-base)] transition-all hover:border-white/[0.15] hover:bg-[var(--surface-raised)] p-3">
         <div className="flex items-center gap-4">
           <Link
             href={`/editor/${project.id}`}
@@ -330,7 +330,7 @@ export default function ProjectCard({
 
   // Grid View Mode (Default)
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[var(--bg-panel)] transition-all duration-300 hover:scale-[1.02] hover:border-white/[0.15] hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(245,197,24,0.1)]">
+    <div className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[var(--surface-base)] transition-all duration-300 hover:scale-[1.02] hover:border-white/[0.15] hover:shadow-[0_20px_60px_rgba(11,11,12,0.5),0_0_0_1px_rgba(245,197,24,0.1)]">
       {/* Top accent line */}
       <div
         className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
@@ -341,7 +341,7 @@ export default function ProjectCard({
 
       <Link href={`/editor/${project.id}`} className="block">
         {/* Thumbnail */}
-        <div className="relative aspect-[4/3] bg-gradient-to-br from-[var(--bg-elevated)] via-[var(--bg-elevated)] to-[var(--bg-panel)] overflow-hidden">
+        <div className="relative aspect-[4/3] bg-gradient-to-br from-[var(--surface-raised)] via-[var(--surface-raised)] to-[var(--surface-base)] overflow-hidden">
           {project.thumbnail_url && !imageError ? (
             <img
               src={project.thumbnail_url}
@@ -373,10 +373,10 @@ export default function ProjectCard({
           )}
 
           {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--scrim)] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
           {/* Bottom left theme badge */}
-          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-[var(--scrim)] backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
             <div
               className="h-2 w-2 rounded-full"
               style={{ background: themeColor }}
@@ -417,7 +417,7 @@ export default function ProjectCard({
       {/* Top right badges & actions */}
       <div className="absolute right-2 top-2 z-20 flex items-center gap-1.5">
         {project.is_pinned && (
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm border border-[var(--accent)]/30">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--scrim)] backdrop-blur-sm border border-[var(--accent)]/30">
             <Pin className="h-3.5 w-3.5 text-[var(--accent)] fill-[var(--accent)]" />
           </div>
         )}

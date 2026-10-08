@@ -62,7 +62,7 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
 
   return (
     <aside className={`
-      fixed left-0 top-0 z-40 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[var(--bg-subtle)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+      fixed left-0 top-0 z-40 h-screen w-[260px] overflow-y-auto border-r border-white/[0.06] bg-[var(--surface-base)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
       transform transition-transform duration-200 ease-in-out
       ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
     `}>
@@ -88,13 +88,13 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-gradient-to-br from-[var(--bg-elevated)] to-[var(--bg-panel)] hover:border-white/[0.15] transition-all hover:scale-105"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-gradient-to-br from-[var(--surface-raised)] to-[var(--surface-base)] hover:border-white/[0.15] transition-all hover:scale-105"
             >
               <User className="h-4 w-4 text-white/70" />
             </button>
 
             {showUserMenu && (
-              <div className="absolute right-0 top-11 w-48 rounded-lg border border-white/[0.08] bg-[var(--bg-panel)] shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-50">
+              <div className="absolute right-0 top-11 w-48 rounded-lg border border-white/[0.08] bg-[var(--surface-base)] shadow-[0_20px_60px_rgba(11,11,12,0.6)] z-50">
                 <div className="p-1">
                   <button
                     onClick={() => {
@@ -126,7 +126,7 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
             onClose?.();
             onNewProject();
           }}
-          className="group relative flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-black shadow-[0_10px_30px_rgba(245,197,24,0.3)] transition-all hover:bg-[var(--accent-hover)] hover:shadow-[0_15px_40px_rgba(245,197,24,0.4)] hover:scale-[1.02] active:scale-[0.98]"
+          className="group relative flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-white shadow-[0_10px_30px_rgba(245,197,24,0.3)] transition-all hover:bg-[var(--accent-hover)] hover:shadow-[0_15px_40px_rgba(245,197,24,0.4)] hover:scale-[1.02] active:scale-[0.98]"
         >
           <Plus className="h-4 w-4" />
           New Project
@@ -157,16 +157,14 @@ export default function Sidebar({ onNewProject, isOpen = false, onClose }: Sideb
                 className={`h-4 w-4 transition-transform group-hover:scale-110 ${active ? "text-[var(--accent)]" : ""}`}
               />
               {label}
-              {active && (
-                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-              )}
+
             </Link>
           ))}
         </div>
       </nav>
 
       {/* Bottom section */}
-      <div className="absolute bottom-0 left-0 right-0 border-t border-white/[0.06] bg-[var(--bg-subtle)] p-4 flex flex-col gap-2">
+      <div className="absolute bottom-0 left-0 right-0 border-t border-white/[0.06] bg-[var(--surface-base)] p-4 flex flex-col gap-2">
         <div className="rounded-lg border border-white/[0.08] bg-gradient-to-br from-[var(--accent)]/5 to-transparent p-3">
           <div className="flex items-start gap-2 mb-1">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/20">

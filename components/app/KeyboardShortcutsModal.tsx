@@ -24,14 +24,14 @@ export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortc
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
+      <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col">
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
             <h3 className="font-sans text-lg font-bold text-white">
               Keyboard Shortcuts
             </h3>
-            <p className="font-sans text-xs text-[var(--text-dim)]">
+            <p className="font-sans text-xs text-[var(--text-muted)]">
               Speed up your infographic editing workflow
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortc
         <div className="border-t border-white/10 pt-4 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all"
           >
             Got it
           </button>

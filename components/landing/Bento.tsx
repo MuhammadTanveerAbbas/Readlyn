@@ -9,7 +9,7 @@ const items = [
     description:
       "Groq's Llama 3.3 70B writes real, structured content for your infographic, not filler text. Streamed live to the canvas.",
     tag: "GROQ AI",
-    tagColor: "var(--bg-subtle)",
+    tagColor: "var(--surface-base)",
     tagBg: "var(--accent)",
     accent: "var(--accent)",
     bg: "var(--accent)",
@@ -25,7 +25,7 @@ const items = [
     tagColor: "var(--accent)",
     tagBg: "transparent",
     accent: "var(--accent)",
-    bg: "var(--bg-panel)",
+    bg: "var(--surface-base)",
     dark: true,
     size: "normal",
   },
@@ -38,7 +38,7 @@ const items = [
     tagColor: "var(--orange)",
     tagBg: "transparent",
     accent: "var(--orange)",
-    bg: "var(--bg-subtle)",
+    bg: "var(--surface-base)",
     dark: true,
     size: "normal",
   },
@@ -51,7 +51,7 @@ const items = [
     tagColor: "var(--accent)",
     tagBg: "transparent",
     accent: "var(--accent)",
-    bg: "var(--bg-panel)",
+    bg: "var(--surface-base)",
     dark: true,
     size: "normal",
   },
@@ -64,7 +64,7 @@ const items = [
     tagColor: "var(--orange)",
     tagBg: "transparent",
     accent: "var(--orange)",
-    bg: "var(--bg-subtle)",
+    bg: "var(--surface-base)",
     dark: true,
     size: "featured",
   },
@@ -77,7 +77,7 @@ const items = [
     tagColor: "var(--success-soft)",
     tagBg: "transparent",
     accent: "var(--success-soft)",
-    bg: "var(--bg-subtle)",
+    bg: "var(--surface-base)",
     dark: true,
     size: "normal",
   },
@@ -89,15 +89,12 @@ export default function Bento() {
   return (
     <section
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
+      className="flex flex-col w-full bg-[var(--surface-sunken)] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
     >
       <div className="flex flex-col gap-4 max-w-[640px]">
-        <div className="inline-flex items-center gap-2 w-fit">
-          <span className="w-4 h-px bg-[var(--accent)]" />
-          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+        <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             Capabilities
           </span>
-        </div>
         <h2
           className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
@@ -140,7 +137,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
             : "transparent",
         minHeight: "260px",
         boxShadow: isFeatured
-          ? `0 0 0 1px ${item.accent}15, 0 20px 60px rgba(0,0,0,0.5)`
+          ? `0 0 0 1px ${item.accent}15, 0 20px 60px rgba(11,11,12,0.5)`
           : undefined,
       }}
     >
@@ -163,7 +160,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
 
       <span
         className="font-sans text-[11px] font-bold tracking-[2px]"
-        style={{ color: isYellow ? "var(--bg-overlay)" : item.accent }}
+        style={{ color: isYellow ? "var(--surface-overlay)" : item.accent }}
       >
         [{item.id}]
       </span>
@@ -173,7 +170,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
         style={{
           fontSize: "clamp(1.4rem, 2vw, 1.75rem)",
           letterSpacing: "-0.02em",
-          color: isYellow ? "var(--bg-subtle)" : "var(--text-primary)",
+          color: isYellow ? "var(--surface-base)" : "var(--text-primary)",
         }}
       >
         {item.title}
@@ -181,7 +178,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
 
       <p
         className="font-sans text-[12px] tracking-[0.5px] leading-[1.7]"
-        style={{ color: isYellow ? "var(--bg-overlay)" : "var(--text-muted-val)" }}
+        style={{ color: isYellow ? "var(--surface-overlay)" : "var(--text-body)" }}
       >
         {item.description}
       </p>
@@ -190,7 +187,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
         <div
           className="inline-flex items-center justify-center h-[26px] px-3 rounded-full"
           style={{
-            backgroundColor: isYellow ? "var(--bg-subtle)" : `${item.accent}12`,
+            backgroundColor: isYellow ? "var(--surface-base)" : `${item.accent}12`,
             border: isYellow ? "none" : `1px solid ${item.accent}30`,
           }}
         >

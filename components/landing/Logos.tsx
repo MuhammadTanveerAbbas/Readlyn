@@ -1,7 +1,7 @@
 export default function Logos() {
   return (
-    <section className="flex flex-col items-center w-full bg-[var(--bg-base)] py-14 px-6 md:px-[120px] gap-8 border-y border-white/5">
-      <span className="font-sans text-[11px] text-[var(--text-dim)] tracking-[0.25em] uppercase">
+    <section className="flex flex-col items-center w-full bg-[var(--surface-sunken)] py-14 px-6 md:px-[120px] gap-8 border-y border-white/5">
+      <span className="font-sans text-[11px] text-[var(--text-muted)] tracking-[0.25em] uppercase">
         What you get out of the box
       </span>
 
@@ -62,7 +62,7 @@ export default function Logos() {
               <span className="font-sans text-[13px] font-semibold text-[var(--text-secondary)]">
                 {item.label}
               </span>
-              <span className="font-sans text-[11px] text-[var(--text-dim)] tracking-[0.05em]">
+              <span className="font-sans text-[11px] text-[var(--text-muted)] tracking-[0.05em]">
                 {item.detail}
               </span>
             </div>
@@ -70,7 +70,7 @@ export default function Logos() {
         ))}
       </div>
 
-      <p className="font-sans text-center text-[11px] tracking-[0.08em] text-[var(--text-dim)]">
+      <p className="font-sans text-center text-[11px] tracking-[0.08em] text-[var(--text-muted)]">
         Currently in early access. Your feedback shapes the roadmap.
       </p>
     </section>

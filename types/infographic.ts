@@ -13,7 +13,7 @@ import { z } from 'zod'
  *
  * Keep in sync with: the webfont files in `public/fonts`.
  */
-export const FONT_FAMILIES = ['Geist', 'Geist Mono'] as const
+export const FONT_FAMILIES = ['Open Sans', 'PT Sans'] as const
 export type FontFamily = (typeof FONT_FAMILIES)[number]
 
 /**
@@ -21,9 +21,9 @@ export type FontFamily = (typeof FONT_FAMILIES)[number]
  * Geist is a variable font with a real 900, so `fontWeight: '900'` renders as
  * genuine black rather than a synthesised faux-bold in the exported PNG.
  */
-export const DISPLAY_FONT: FontFamily = 'Geist'
+export const DISPLAY_FONT: FontFamily = 'Open Sans'
 /** Font used for body copy inside generated infographics. */
-export const BODY_FONT: FontFamily = 'Geist'
+export const BODY_FONT: FontFamily = 'Open Sans'
 
 export const RectSchema = z.object({
   type: z.literal('rect'),

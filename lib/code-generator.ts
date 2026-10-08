@@ -58,7 +58,7 @@ export function generateHtml(config: ParallaxConfig): string {
     body {
       background: ${backgroundColor};
       overflow-x: hidden;
-      font-family: Geist, system-ui, sans-serif;
+      font-family: "Open Sans", system-ui, sans-serif;
     }
 
     .parallax-container {
@@ -98,7 +98,7 @@ export function generateHtml(config: ParallaxConfig): string {
       font-size: clamp(2rem, 5vw, 4rem);
       font-weight: 800;
       color: #ffffff;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 20px rgba(11,11,12,0.5);
       letter-spacing: -0.03em;
       line-height: 1.1;
       max-width: 800px;
@@ -219,7 +219,7 @@ ${layers.map((layer, i) => `
   font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 800;
   color: #fff;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 20px rgba(11,11,12,0.5);
   letter-spacing: -0.03em;
   max-width: 800px;
 }
@@ -306,7 +306,7 @@ export function generateInfographicReactComponent(canvasJson: Record<string, unk
           width: "${width}px",
           color: "${fill}",
           fontSize: "${obj.fontSize || 16}px",
-          fontFamily: "${obj.fontFamily || "Geist"}",
+          fontFamily: "${obj.fontFamily || "Open Sans"}",
           fontWeight: "${obj.fontWeight || "normal"}",
         }}
       >
@@ -333,7 +333,7 @@ export function generateInfographicReactComponent(canvasJson: Record<string, unk
 export function InfographicExport() {
   return (
     <div
-      className="relative overflow-hidden shadow-2xl rounded-2xl bg-[var(--bg-base)]"
+      className="relative overflow-hidden shadow-2xl rounded-2xl bg-[var(--surface-sunken)]"
       style={{ width: "800px", height: "1200px" }}
     >
 ${jsxElements}

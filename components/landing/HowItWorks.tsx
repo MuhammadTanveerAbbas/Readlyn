@@ -36,15 +36,12 @@ export default function HowItWorks() {
   return (
     <section
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
+      className="flex flex-col w-full bg-[var(--surface-sunken)] py-20 px-6 md:py-[120px] md:px-[120px] gap-14 md:gap-[72px]"
     >
       <div className="flex flex-col gap-4 max-w-[640px]">
-        <div className="inline-flex items-center gap-2 w-fit">
-          <span className="w-4 h-px bg-[var(--accent)]" />
-          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+        <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
             How it works
           </span>
-        </div>
         <h2
           className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
@@ -54,7 +51,7 @@ export default function HowItWorks() {
         >
           {"Three steps.\nPrompt to PNG."}
         </h2>
-        <p className="font-sans text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+        <p className="font-sans text-[13px] text-[var(--text-body)] tracking-[0.3px] leading-[1.8]">
           No design skills needed. Just describe what you want.
         </p>
       </div>
@@ -69,8 +66,8 @@ export default function HowItWorks() {
                         border transition-all duration-500 hover:-translate-y-1
                         ${
                           step.featured
-                            ? "border-[var(--orange)]/25 bg-[var(--bg-subtle)] shadow-[0_0_0_1px_rgba(255,107,53,0.08),0_20px_60px_rgba(0,0,0,0.5)]"
-                            : "border-white/[0.07] bg-[var(--bg-subtle)] hover:border-white/[0.14]"
+                            ? "border-[var(--orange)]/25 bg-[var(--surface-base)] shadow-[0_0_0_1px_rgba(255,107,53,0.08),0_20px_60px_rgba(11,11,12,0.5)]"
+                            : "border-white/[0.07] bg-[var(--surface-base)] hover:border-white/[0.14]"
                         }`}
           >
             <div
@@ -107,7 +104,7 @@ export default function HowItWorks() {
               >
                 {step.title}
               </h3>
-              <p className="font-sans text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+              <p className="font-sans text-[12px] text-[var(--text-body)] tracking-[0.3px] leading-[1.8]">
                 {step.description}
               </p>
             </div>

@@ -8,7 +8,7 @@ export default function FinalCTA() {
   return (
     <section
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="relative flex flex-col items-center w-full py-32 md:py-40 px-6 text-center overflow-hidden bg-[var(--bg-base)]"
+      className="relative flex flex-col items-center w-full py-32 md:py-40 px-6 text-center overflow-hidden bg-[var(--surface-sunken)]"
     >
       {/* Background layers */}
       <div
@@ -73,7 +73,7 @@ export default function FinalCTA() {
       </h2>
 
       {/* Subtitle */}
-      <p className="font-sans text-[13px] text-[var(--text-dim)] tracking-[0.5px] text-center max-w-[520px] mb-12 leading-[1.8]">
+      <p className="font-sans text-[13px] text-[var(--text-muted)] tracking-[0.5px] text-center max-w-[520px] mb-12 leading-[1.8]">
         We&apos;re building Readlyn in public. Try it free, no credit card
         needed, plus tell us what to improve.
       </p>
@@ -82,7 +82,7 @@ export default function FinalCTA() {
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <a
           href="/signup"
-          className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl font-sans text-[14px] font-bold text-black
+          className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl font-sans text-[14px] font-bold text-white
                      bg-[var(--accent)] hover:bg-[var(--accent-hover)]
                      shadow-[0_0_30px_rgba(245,197,24,0.35)]
                      hover:shadow-[0_0_50px_rgba(245,197,24,0.55)]
@@ -119,8 +119,8 @@ export default function FinalCTA() {
       </div>
 
       {/* Honest note */}
-      <p className="font-sans text-[11px] text-[var(--text-dim)] tracking-widest mt-10 text-center">
-        Early access · Built in public · Your feedback shapes the roadmap
+      <p className="font-sans text-[11px] text-[var(--text-muted)] tracking-widest mt-10 text-center">
+        Early access  Built in public  Your feedback shapes the roadmap
       </p>
     </section>
   );

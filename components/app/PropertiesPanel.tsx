@@ -45,13 +45,13 @@ export default function PropertiesPanel({
         <div
           className="w-8 h-8 rounded-lg flex items-center justify-center"
           style={{
-            backgroundColor: "var(--bg-elevated)",
-            border: "1px solid var(--border-default)",
+            backgroundColor: "var(--surface-raised)",
+            border: "1px solid var(--line-default)",
           }}
         >
           <svg
             className="w-4 h-4"
-            style={{ color: "var(--text-muted-val)" }}
+            style={{ color: "var(--text-body)" }}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -64,7 +64,7 @@ export default function PropertiesPanel({
             />
           </svg>
         </div>
-        <p className="text-[11px] leading-relaxed" style={{ color: "var(--text-muted-val)" }}>
+        <p className="text-[11px] leading-relaxed" style={{ color: "var(--text-body)" }}>
           Select an element
           <br />
           to edit properties
@@ -76,15 +76,15 @@ export default function PropertiesPanel({
   const inputCls =
     "w-full h-6 px-2 text-[11px] font-sans rounded outline-none transition-colors";
   const inputStyle = {
-    backgroundColor: "var(--bg-elevated)",
-    border: "1px solid var(--border-default)",
+    backgroundColor: "var(--surface-raised)",
+    border: "1px solid var(--line-default)",
     color: "var(--text-secondary)",
   };
   const inputFocusStyle =
     "focus:border-[rgba(245,197,24,0.4)] focus:ring-1 focus:ring-[rgba(245,197,24,0.15)]";
 
   const labelCls = "text-[10px] font-medium uppercase tracking-wide";
-  const labelStyle = { color: "var(--text-muted-val)" };
+  const labelStyle = { color: "var(--text-body)" };
   const sectionCls = "px-3 py-2.5 space-y-2";
   const sectionStyle = { borderBottom: "1px solid rgba(255,255,255,0.07)" };
 
@@ -196,7 +196,7 @@ export default function PropertiesPanel({
                     onChange={(e) => onUpdateProperty(key, e.target.value)}
                     className="w-6 h-6 rounded cursor-pointer p-0.5 shrink-0"
                     style={{
-                      border: "1px solid var(--border-default)",
+                      border: "1px solid var(--line-default)",
                       backgroundColor: "transparent",
                     }}
                   />
@@ -299,11 +299,11 @@ export default function PropertiesPanel({
                   className="flex-1 h-6 flex items-center justify-center rounded border transition-all"
                   style={{
                     backgroundColor:
-                      properties.textAlign === val ? "var(--bg-active)" : "transparent",
+                      properties.textAlign === val ? "var(--surface-overlay)" : "transparent",
                     borderColor:
                       properties.textAlign === val
                         ? "rgba(245,197,24,0.4)"
-                        : "var(--border-default)",
+                        : "var(--line-default)",
                   }}
                 >
                   <Icon className="w-3.5 h-3.5" style={{ color: "var(--text-body)" }} />
@@ -321,7 +321,7 @@ export default function PropertiesPanel({
                   onChange={(e) => onUpdateProperty("fill", e.target.value)}
                   className="w-6 h-6 rounded cursor-pointer p-0.5 shrink-0"
                   style={{
-                    border: "1px solid var(--border-default)",
+                    border: "1px solid var(--line-default)",
                     backgroundColor: "transparent",
                   }}
                 />
@@ -378,8 +378,8 @@ export default function PropertiesPanel({
               onClick={onClick}
               className={`h-6 flex items-center justify-center gap-1 rounded text-[10px] transition-all active:scale-95 ${
                 danger
-                  ? "bg-red-500/10 border border-transparent text-[var(--destructive)] hover:bg-[var(--destructive)] hover:text-white hover:border-[var(--destructive)]"
-                  : "border border-[var(--border-default)] text-[var(--text-body)] hover:border-[rgba(245,197,24,0.3)] hover:text-white"
+                  ? "bg-red-500/10 border border-transparent text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white hover:border-[var(--danger)]"
+                  : "border border-[var(--line-default)] text-[var(--text-body)] hover:border-[rgba(245,197,24,0.3)] hover:text-white"
               }`}
             >
               <Icon className="w-3 h-3" />

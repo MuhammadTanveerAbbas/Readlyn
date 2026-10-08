@@ -1,29 +1,35 @@
-interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+import type { InputHTMLAttributes } from "react";
+
+interface AuthInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
 }
 
-export default function AuthInput({ label, error, ...props }: AuthInputProps) {
+/**
+ * Shared input for auth forms.
+ */
+export default function AuthInput({
+  label,
+  error,
+  ...props
+}: AuthInputProps) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="font-sans text-[11px] text-[var(--text-dim)] tracking-[1px] uppercase">
+    <label className="flex flex-col gap-1.5">
+      <span className="font-sans text-xs font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
         {label}
-      </label>
+      </span>
       <input
         {...props}
-        className={`w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border text-white text-[13px] font-sans placeholder:text-[#333]
-          focus:outline-none transition-all duration-200
-          ${
-            error
-              ? "border-[var(--destructive)]/50 focus:border-[var(--destructive)]/80 focus:ring-1 focus:ring-[var(--destructive)]/20"
-              : "border-white/[0.07] focus:border-[rgba(245,197,24,0.4)] focus:ring-1 focus:ring-[rgba(245,197,24,0.15)]"
-          }`}
+        className={`h-11 w-full rounded-[var(--radius-md)] border bg-[var(--surface-base)] px-4 font-sans text-base text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:outline-none focus:ring-2 transition-colors ${
+          error
+            ? "border-[var(--danger)] focus:border-[var(--danger)] focus:ring-[var(--danger)]/20"
+            : "border-[var(--line-default)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
+        }`}
       />
-      {error && (
-        <p className="font-sans text-[11px] text-[var(--destructive)] tracking-[0.3px]">
-          {error}
-        </p>
-      )}
-    </div>
+      {error ? (
+        <span className="font-sans text-xs text-[var(--danger)]">{error}</span>
+      ) : null}
+    </label>
   );
 }
+

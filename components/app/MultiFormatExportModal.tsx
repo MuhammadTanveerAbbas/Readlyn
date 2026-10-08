@@ -29,8 +29,8 @@ export default function MultiFormatExportModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
+      <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl">
         <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
           <h3 className="font-sans text-lg font-bold text-white">Auto-Resize Export</h3>
           <button
@@ -61,7 +61,7 @@ export default function MultiFormatExportModal({
               });
               onClose();
             }}
-            className="rounded-lg bg-[var(--accent)] px-4 py-2 text-xs font-bold text-black disabled:opacity-50 hover:bg-[var(--accent-hover)] transition-all"
+            className="rounded-lg bg-[var(--accent)] px-4 py-2 text-xs font-bold text-white disabled:opacity-50 hover:bg-[var(--accent-hover)] transition-all"
           >
             Export All Selected
           </button>

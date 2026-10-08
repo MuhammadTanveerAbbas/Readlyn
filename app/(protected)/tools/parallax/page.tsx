@@ -127,9 +127,9 @@ export default function ParallaxStudioPage() {
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="h-screen w-screen flex flex-col bg-[var(--bg-base)] text-zinc-200 overflow-hidden font-sans">
+      <div className="h-screen w-screen flex flex-col bg-[var(--surface-sunken)] text-zinc-200 overflow-hidden font-sans">
         {/* HEADER */}
-        <header className="min-h-12 border-b border-white/[0.07] flex flex-wrap items-center justify-between px-3 py-1.5 gap-2 flex-shrink-0 bg-[var(--bg-subtle)]">
+        <header className="min-h-12 border-b border-white/[0.07] flex flex-wrap items-center justify-between px-3 py-1.5 gap-2 flex-shrink-0 bg-[var(--surface-base)]">
           <div className="flex items-center gap-2 min-w-0">
             <div className="leading-tight select-none">
               <div className="text-sm font-bold tracking-tighter text-white">
@@ -166,7 +166,7 @@ export default function ParallaxStudioPage() {
                   Presets
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56 border-white/10 bg-[var(--bg-panel)] text-white">
+              <DropdownMenuContent align="start" className="w-56 border-white/10 bg-[var(--surface-base)] text-white">
                 <DropdownMenuLabel className="text-white/60">Ready-made templates</DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-white/10" />
                 {PRESETS.map((p) => (
@@ -203,7 +203,7 @@ export default function ParallaxStudioPage() {
                   Session
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="border-white/10 bg-[var(--bg-panel)] text-white">
+              <DropdownMenuContent align="end" className="border-white/10 bg-[var(--surface-base)] text-white">
                 <DropdownMenuItem onClick={exportJSON} className="hover:bg-white/10">
                   <Download className="h-3.5 w-3.5" />
                   Export JSON
@@ -222,7 +222,7 @@ export default function ParallaxStudioPage() {
 
             <Button
               size="sm"
-              className="h-8 gap-1.5 text-xs font-medium text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] shadow-[0_0_20px_rgba(245,197,24,0.3)]"
+              className="h-8 gap-1.5 text-xs font-medium text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] shadow-[0_0_20px_rgba(245,197,24,0.3)]"
               onClick={() => setExportOpen(true)}
             >
               <Code2 className="h-3.5 w-3.5" />
@@ -234,11 +234,11 @@ export default function ParallaxStudioPage() {
 
         <div className="flex-1 flex min-h-0 relative">
           {panelOpen && !cinemaMode && (
-            <aside className="absolute lg:relative inset-y-0 left-0 z-30 w-[300px] max-w-[85vw] flex-shrink-0 border-r border-white/[0.06] bg-[var(--bg-subtle)] flex flex-col min-h-0 lg:min-h-full">
+            <aside className="absolute lg:relative inset-y-0 left-0 z-30 w-[300px] max-w-[85vw] flex-shrink-0 border-r border-white/[0.06] bg-[var(--surface-base)] flex flex-col min-h-0 lg:min-h-full">
               <ConfigPanel config={config} setConfig={setConfig} />
               <button
                 onClick={() => setPanelOpen(false)}
-                className="absolute top-[30px] -right-5 -translate-y-1/2 z-30 h-8 w-8 rounded-full bg-[var(--bg-subtle)] border border-white/10 text-white/40 hover:text-white hover:bg-[var(--bg-panel)] flex items-center justify-center shadow-md transition-colors"
+                className="absolute top-[30px] -right-5 -translate-y-1/2 z-30 h-8 w-8 rounded-full bg-[var(--surface-base)] border border-white/10 text-white/40 hover:text-white hover:bg-[var(--surface-base)] flex items-center justify-center shadow-md transition-colors"
                 aria-label="Close panel"
               >
                 <PanelLeftClose className="h-4 w-4" />
@@ -249,16 +249,16 @@ export default function ParallaxStudioPage() {
           {!panelOpen && !cinemaMode && (
             <button
               onClick={() => setPanelOpen(true)}
-              className="absolute left-0 top-[70px] z-30 h-9 w-9 rounded-r-xl bg-[var(--bg-subtle)] border border-l-0 border-white/10 text-white/40 hover:text-white hover:bg-[var(--bg-panel)] flex items-center justify-center shadow-lg transition-colors"
+              className="absolute left-0 top-[70px] z-30 h-9 w-9 rounded-r-xl bg-[var(--surface-base)] border border-l-0 border-white/10 text-white/40 hover:text-white hover:bg-[var(--surface-base)] flex items-center justify-center shadow-lg transition-colors"
               aria-label="Open panel"
             >
               <PanelLeftOpen className="h-4 w-4" />
             </button>
           )}
 
-          <main className={`flex-1 min-w-0 bg-[var(--bg-base)] flex items-center justify-center ${cinemaMode ? "p-0" : "p-4"}`}>
+          <main className={`flex-1 min-w-0 bg-[var(--surface-sunken)] flex items-center justify-center ${cinemaMode ? "p-0" : "p-4"}`}>
             <div
-              className={`relative overflow-hidden shadow-2xl transition-all duration-300 bg-[var(--bg-base)] ${
+              className={`relative overflow-hidden shadow-2xl transition-all duration-300 bg-[var(--surface-sunken)] ${
                 cinemaMode
                   ? "rounded-none border-0 w-full h-full"
                   : `rounded-xl border border-white/10 ${viewportSizes[viewport]}`
@@ -287,7 +287,7 @@ function ViewportButton({ active, onClick, icon, label }: { active: boolean; onC
           onClick={onClick}
           className={`h-7 w-7 rounded inline-flex items-center justify-center transition-colors ${
             active
-              ? "bg-[var(--bg-panel)] text-white shadow-sm"
+              ? "bg-[var(--surface-base)] text-white shadow-sm"
               : "text-white/40 hover:text-white"
           }`}
         >

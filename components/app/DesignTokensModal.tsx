@@ -40,14 +40,14 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
+      <div className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col max-h-[85vh]">
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
             <h3 className="font-sans text-lg font-bold text-white">
               W3C Design Tokens System
             </h3>
-            <p className="font-sans text-xs text-[var(--text-dim)]">
+            <p className="font-sans text-xs text-[var(--text-muted)]">
               Single source of truth for color, spacing, radius, typography & motion
             </p>
           </div>
@@ -64,7 +64,7 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
             onClick={() => setActiveTab("visual")}
             className={`px-3 py-1.5 rounded-lg text-xs font-sans transition-all ${
               activeTab === "visual"
-                ? "bg-[var(--accent)] text-black font-bold"
+                ? "bg-[var(--accent)] text-white font-bold"
                 : "text-white/70 hover:bg-white/5"
             }`}
           >
@@ -74,7 +74,7 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
             onClick={() => setActiveTab("json")}
             className={`px-3 py-1.5 rounded-lg text-xs font-sans transition-all ${
               activeTab === "json"
-                ? "bg-[var(--accent)] text-black font-bold"
+                ? "bg-[var(--accent)] text-white font-bold"
                 : "text-white/70 hover:bg-white/5"
             }`}
           >
@@ -137,14 +137,14 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
               </div>
             </div>
           ) : (
-            <pre className="p-4 rounded-xl bg-black/50 border border-white/10 font-mono text-xs text-emerald-400 overflow-x-auto">
+            <pre className="p-4 rounded-xl bg-[var(--scrim)] border border-white/10 font-mono text-xs text-emerald-400 overflow-x-auto">
               {jsonString}
             </pre>
           )}
         </div>
 
         <div className="flex items-center justify-between border-t border-white/10 pt-4">
-          <div className="font-sans text-[11px] text-[var(--text-dim)]">
+          <div className="font-sans text-[11px] text-[var(--text-muted)]">
             Format: W3C Design Tokens Community Group standard
           </div>
           <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
             </button>
             <button
               onClick={downloadJson}
-              className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
+              className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all"
             >
               Download tokens.json
             </button>

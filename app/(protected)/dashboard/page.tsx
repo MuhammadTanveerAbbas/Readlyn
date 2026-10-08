@@ -102,7 +102,7 @@ export default function DashboardPage() {
 
   return (
     <div
-      className="min-h-screen bg-[var(--bg-base)]"
+      className="min-h-screen bg-[var(--surface-sunken)]"
       style={{
         backgroundImage:
           "radial-gradient(circle at 20% 10%, rgba(245,197,24,0.08), transparent 35%), radial-gradient(circle at 80% 60%, rgba(124,58,237,0.06), transparent 40%)",
@@ -111,7 +111,7 @@ export default function DashboardPage() {
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
+          className="fixed inset-0 z-30 bg-[var(--scrim)] md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -123,7 +123,7 @@ export default function DashboardPage() {
       />
       
       {/* Mobile header */}
-      <div className="md:hidden flex items-center gap-3 px-4 h-16 border-b border-white/[0.06] bg-[var(--bg-subtle)] sticky top-0 z-20">
+      <div className="md:hidden flex items-center gap-3 px-4 h-16 border-b border-white/[0.06] bg-[var(--surface-base)] sticky top-0 z-20">
         <button 
           onClick={() => setSidebarOpen(true)} 
           className="p-2.5 -ml-2 min-h-11 min-w-11 text-white/60 hover:text-white"
@@ -137,7 +137,7 @@ export default function DashboardPage() {
       </div>
 
       <main className="md:ml-[260px] px-4 pb-6 pt-4 sm:px-6 lg:px-8">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-[var(--bg-panel)] p-4">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-[var(--surface-base)] p-4">
           <div>
             <div className="mb-1 flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-[var(--accent)]" />
@@ -156,7 +156,7 @@ export default function DashboardPage() {
           </div>
           <button
             onClick={() => setOpenModal(true)}
-            className="group inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-black transition-all hover:bg-[var(--accent-hover)]"
+            className="group inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-white transition-all hover:bg-[var(--accent-hover)]"
           >
             <Rocket className="h-4 w-4" />
             Create New Project
@@ -173,7 +173,7 @@ export default function DashboardPage() {
         />
 
         {loading ? (
-          <div className="rounded-xl border border-white/10 bg-[var(--bg-panel)] p-12 text-center">
+          <div className="rounded-xl border border-white/10 bg-[var(--surface-base)] p-12 text-center">
             <div className="flex justify-center mb-4">
               <div className="h-12 w-12 rounded-full border-2 border-[var(--accent)] border-t-transparent animate-spin" />
             </div>
@@ -183,7 +183,7 @@ export default function DashboardPage() {
           <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-8 text-center">
             <div className="flex justify-center mb-3">
               <div className="h-12 w-12 rounded-full bg-red-500/20 flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--destructive)" strokeWidth="2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" strokeWidth="2">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 7v5M12 15v1" />
                 </svg>
@@ -204,7 +204,7 @@ export default function DashboardPage() {
             </button>
           </div>
         ) : visibleProjects.length === 0 ? (
-          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[var(--bg-panel)] to-[var(--bg-elevated)] p-8 sm:p-16 text-center relative overflow-hidden">
+          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[var(--surface-base)] to-[var(--surface-raised)] p-8 sm:p-16 text-center relative overflow-hidden">
             {/* Background decoration */}
             <div
               className="absolute inset-0 opacity-20"
@@ -218,9 +218,9 @@ export default function DashboardPage() {
               <div className="flex justify-center mb-6">
                 <div className="relative">
                   <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-[0_20px_60px_rgba(245,197,24,0.4)]">
-                    <Sparkles className="h-10 w-10 text-black" />
+                    <Sparkles className="h-10 w-10 text-white" />
                   </div>
-                  <div className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-[var(--success-soft)] border-2 border-[var(--bg-panel)] flex items-center justify-center">
+                  <div className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-[var(--success-soft)] border-2 border-[var(--surface-base)] flex items-center justify-center">
                     <Wand2 className="h-3 w-3 text-white" />
                   </div>
                 </div>
@@ -238,7 +238,7 @@ export default function DashboardPage() {
               {!search && (
                 <button
                   onClick={() => setOpenModal(true)}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_15px_40px_rgba(245,197,24,0.4)]"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_15px_40px_rgba(245,197,24,0.4)]"
                 >
                   <Sparkles className="h-4 w-4" />
                   Create Your First Project

@@ -117,14 +117,14 @@ export default function Toolbar({
   `;
 
   return (
-    <div className="h-11 bg-[var(--bg-panel)] border-b border-white/[0.07] px-4 flex items-center justify-between gap-2">
+    <div className="h-11 bg-[var(--surface-base)] border-b border-white/[0.07] px-4 flex items-center justify-between gap-2">
       {/* Left: Back + Logo + Tools */}
       <div className="flex items-center gap-2">
         {showBackButton && (
           <>
             <button
               onClick={handleBack}
-              className="h-8 w-8 flex items-center justify-center rounded-lg border border-white/[0.08] hover:border-white/15 bg-[var(--bg-elevated)] hover:bg-[var(--bg-hover)] text-[var(--text-body)] hover:text-white transition-all duration-200 group"
+              className="h-8 w-8 flex items-center justify-center rounded-lg border border-white/[0.08] hover:border-white/15 bg-[var(--surface-raised)] hover:bg-[var(--surface-raised)] text-[var(--text-body)] hover:text-white transition-all duration-200 group"
               title="Back to Dashboard"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
@@ -149,13 +149,13 @@ export default function Toolbar({
           </div>
         </div>
 
-        <div className="flex items-center gap-0.5 bg-[var(--bg-elevated)] border border-white/[0.08] rounded-lg p-0.5 ml-1">
+        <div className="flex items-center gap-0.5 bg-[var(--surface-raised)] border border-white/[0.08] rounded-lg p-0.5 ml-1">
           <button
             onClick={() => onToolModeChange("select")}
             title="Select tool (V)"
             className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
               toolMode === "select"
-                ? "bg-[var(--accent)] text-black"
+                ? "bg-[var(--accent)] text-white"
                 : "text-[var(--text-body)] hover:text-white hover:bg-white/[0.06]"
             }`}
           >
@@ -166,7 +166,7 @@ export default function Toolbar({
             title="Hand tool (H)"
             className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
               toolMode === "hand"
-                ? "bg-[var(--accent)] text-black"
+                ? "bg-[var(--accent)] text-white"
                 : "text-[var(--text-body)] hover:text-white hover:bg-white/[0.06]"
             }`}
           >
@@ -299,7 +299,7 @@ export default function Toolbar({
 
         <button
           onClick={onClearAll}
-          className="h-7 px-2.5 flex items-center gap-1 rounded border border-transparent hover:border-[var(--destructive)]/50 hover:bg-[var(--destructive)]/[0.07] text-[11px] text-[var(--text-body)] hover:text-[var(--destructive)] transition-all duration-150 cursor-pointer"
+          className="h-7 px-2.5 flex items-center gap-1 rounded border border-transparent hover:border-[var(--danger)]/50 hover:bg-[var(--danger)]/[0.07] text-[11px] text-[var(--text-body)] hover:text-[var(--danger)] transition-all duration-150 cursor-pointer"
           title="Clear canvas"
         >
           <Trash2 className="w-3.5 h-3.5" />
@@ -308,7 +308,7 @@ export default function Toolbar({
 
       {/* Right: Zoom controls */}
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-1 bg-[var(--bg-elevated)] rounded-full px-2 py-1 border border-white/[0.08] flex-shrink-0">
+        <div className="flex items-center gap-1 bg-[var(--surface-raised)] rounded-full px-2 py-1 border border-white/[0.08] flex-shrink-0">
           <button
             onClick={onZoomOut}
             className="p-1 hover:bg-white/[0.06] rounded transition-colors"

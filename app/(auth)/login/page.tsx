@@ -39,7 +39,7 @@ function LoginForm() {
 
   if (isChecking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)]">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--surface-sunken)]">
         <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -103,7 +103,7 @@ function LoginForm() {
 
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
-            <label className="font-sans text-[11px] text-[var(--text-dim)] tracking-[1px] uppercase">
+            <label className="font-sans text-[11px] text-[var(--text-muted)] tracking-[1px] uppercase">
               Password
             </label>
             <Link
@@ -120,7 +120,7 @@ function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
-            className="w-full px-4 py-3 rounded-xl bg-[var(--bg-subtle)] border border-white/[0.07] text-white text-[13px] font-sans placeholder:text-[#333] focus:outline-none focus:border-[rgba(245,197,24,0.4)] focus:ring-1 focus:ring-[rgba(245,197,24,0.15)] transition-all duration-200"
+            className="w-full px-4 py-3 rounded-xl bg-[var(--surface-base)] border border-white/[0.07] text-white text-[13px] font-sans placeholder:text-[#333] focus:outline-none focus:border-[rgba(245,197,24,0.4)] focus:ring-1 focus:ring-[rgba(245,197,24,0.15)] transition-all duration-200"
           />
         </div>
 
@@ -139,15 +139,15 @@ function LoginForm() {
               fill="none"
               className="shrink-0 mt-[1px]"
             >
-              <circle cx="7" cy="7" r="6" stroke="var(--destructive)" strokeWidth="1.5" />
+              <circle cx="7" cy="7" r="6" stroke="var(--danger)" strokeWidth="1.5" />
               <path
                 d="M7 4v3.5M7 9.5v.5"
-                stroke="var(--destructive)"
+                stroke="var(--danger)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
               />
             </svg>
-            <p className="font-sans text-[11px] text-[var(--destructive)] tracking-[0.3px] leading-relaxed">
+            <p className="font-sans text-[11px] text-[var(--danger)] tracking-[0.3px] leading-relaxed">
               {error}
             </p>
           </div>
@@ -156,7 +156,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 rounded-xl font-sans text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+          className="w-full py-3 rounded-xl font-sans text-[13px] font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -190,7 +190,7 @@ function LoginForm() {
       </form>
 
       {/* Sign up link */}
-      <p className="mt-6 text-center font-sans text-[11px] text-[var(--text-dim)] tracking-[0.3px]">
+      <p className="mt-6 text-center font-sans text-[11px] text-[var(--text-muted)] tracking-[0.3px]">
         No account yet?{" "}
         <Link
           href="/signup"

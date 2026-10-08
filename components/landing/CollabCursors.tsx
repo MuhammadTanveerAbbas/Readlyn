@@ -57,7 +57,7 @@ const CURSORS = [
   {
     name: "Alex K.",
     color: "var(--accent)",
-    textColor: "var(--bg-subtle)",
+    textColor: "var(--surface-base)",
     animName: "cursor-alex",
     duration: "18s",
     keyframes: `@keyframes cursor-alex {
@@ -89,7 +89,7 @@ const CURSORS = [
   {
     name: "Jin L.",
     color: "var(--success-soft)",
-    textColor: "var(--bg-subtle)",
+    textColor: "var(--surface-base)",
     animName: "cursor-jin",
     duration: "26s",
     keyframes: `@keyframes cursor-jin {
@@ -104,7 +104,7 @@ const CURSORS = [
   },
   {
     name: "Mila V.",
-    color: "var(--blue)",
+    color: "var(--info)",
     textColor: "var(--text-primary)",
     animName: "cursor-mila",
     duration: "30s",
@@ -148,13 +148,13 @@ export default function CollabCursors() {
             viewBox="0 0 20 22"
             fill="none"
             style={{
-              filter: `drop-shadow(0 0 7px ${cursor.color}66) drop-shadow(0 2px 4px rgba(0,0,0,0.6))`,
+              filter: `drop-shadow(0 0 7px ${cursor.color}66) drop-shadow(0 2px 4px rgba(11,11,12,0.6))`,
             }}
           >
             <path d="M3 2L17 9.5L10.5 11.5L7.5 19.5L3 2Z" fill={cursor.color} />
             <path
               d="M3 2L17 9.5L10.5 11.5L7.5 19.5L3 2Z"
-              stroke="rgba(0,0,0,0.3)"
+              stroke="rgba(11,11,12,0.3)"
               strokeWidth="1"
               strokeLinejoin="round"
               fill="none"
@@ -173,7 +173,7 @@ export default function CollabCursors() {
               backgroundColor: cursor.color,
               borderRadius: "999px",
               padding: "3px 10px 3px 5px",
-              boxShadow: `0 2px 14px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.1)`,
+              boxShadow: `0 2px 14px rgba(11,11,12,0.45), 0 0 0 1px rgba(255,255,255,0.1)`,
               whiteSpace: "nowrap",
             }}
           >

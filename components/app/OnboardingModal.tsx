@@ -51,8 +51,8 @@ export default function OnboardingModal({ open, onClose, onStartPrompt }: Onboar
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fade-in">
-      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl flex flex-col items-center text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-md p-4 animate-fade-in">
+      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col items-center text-center">
         <button
           onClick={() => {
             onClose();
@@ -100,7 +100,7 @@ export default function OnboardingModal({ open, onClose, onStartPrompt }: Onboar
           )}
           <button
             onClick={nextStep}
-            className="flex-1 py-2.5 rounded-xl bg-[var(--accent)] font-sans text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(245,197,24,0.25)]"
+            className="flex-1 py-2.5 rounded-xl bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(245,197,24,0.25)]"
           >
             {step === steps.length - 1 ? (
               <>

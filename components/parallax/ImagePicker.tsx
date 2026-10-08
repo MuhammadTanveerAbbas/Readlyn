@@ -81,12 +81,12 @@ export default function ImagePicker({ value, onChange }: ImagePickerProps) {
           />
           <button
             onClick={() => onChange("")}
-            className="absolute top-1 right-1 h-5 w-5 rounded-full bg-black/70 flex items-center justify-center hover:bg-black/90 transition-colors"
+            className="absolute top-1 right-1 h-5 w-5 rounded-full bg-[var(--scrim)] flex items-center justify-center hover:bg-[var(--scrim)] transition-colors"
           >
             <X className="h-3 w-3 text-white/70" />
           </button>
           {isBuiltin && (
-            <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-[8px] text-white/60 font-sans">
+            <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-[var(--scrim)] text-[8px] text-white/60 font-sans">
               Built-in
             </span>
           )}
@@ -95,15 +95,15 @@ export default function ImagePicker({ value, onChange }: ImagePickerProps) {
 
       <Tabs value={tab} onValueChange={setTab} className="w-full">
         <TabsList className="w-full h-7 bg-white/5 border border-white/10 p-0.5 gap-0">
-          <TabsTrigger value="builtin" className="flex-1 h-full text-[10px] gap-1 data-[state=active]:bg-[#F5C518] data-[state=active]:text-black rounded">
+          <TabsTrigger value="builtin" className="flex-1 h-full text-[10px] gap-1 data-[state=active]:bg-[#F5C518] data-[state=active]:text-white rounded">
             <ImageIcon className="h-3 w-3" />
             Built-in
           </TabsTrigger>
-          <TabsTrigger value="upload" className="flex-1 h-full text-[10px] gap-1 data-[state=active]:bg-[#F5C518] data-[state=active]:text-black rounded">
+          <TabsTrigger value="upload" className="flex-1 h-full text-[10px] gap-1 data-[state=active]:bg-[#F5C518] data-[state=active]:text-white rounded">
             <Upload className="h-3 w-3" />
             Upload
           </TabsTrigger>
-          <TabsTrigger value="url" className="flex-1 h-full text-[10px] gap-1 data-[state=active]:bg-[#F5C518] data-[state=active]:text-black rounded">
+          <TabsTrigger value="url" className="flex-1 h-full text-[10px] gap-1 data-[state=active]:bg-[#F5C518] data-[state=active]:text-white rounded">
             <Link2 className="h-3 w-3" />
             URL
           </TabsTrigger>
@@ -122,7 +122,7 @@ export default function ImagePicker({ value, onChange }: ImagePickerProps) {
                 }`}
               >
                 <img src={img.src} alt={img.label} className="w-full h-full object-cover" />
-                <span className="absolute bottom-0 inset-x-0 bg-black/70 text-[6px] text-white/70 text-center truncate px-0.5 py-0.5 font-sans">
+                <span className="absolute bottom-0 inset-x-0 bg-[var(--scrim)] text-[6px] text-white/70 text-center truncate px-0.5 py-0.5 font-sans">
                   {img.label}
                 </span>
               </button>

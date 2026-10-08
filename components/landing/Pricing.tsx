@@ -10,15 +10,12 @@ export default function Pricing() {
     <section
       id="pricing"
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[80px] lg:px-[120px] gap-12"
+      className="flex flex-col w-full bg-[var(--surface-sunken)] py-20 px-6 md:py-[120px] md:px-[80px] lg:px-[120px] gap-12"
     >
       <div className="flex flex-col gap-4 max-w-[640px]">
-        <div className="inline-flex items-center gap-2 w-fit">
-          <span className="w-4 h-[1px] bg-[var(--accent)]" />
-          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
-            Monetization & Plans
-          </span>
-        </div>
+        <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+          Monetization & Plans
+        </span>
         <h2
           className="font-sans font-bold text-white leading-[1.05]"
           style={{
@@ -28,7 +25,7 @@ export default function Pricing() {
         >
           Simple, transparent credit pricing.
         </h2>
-        <p className="font-sans text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+        <p className="font-sans text-[13px] text-[var(--text-body)] tracking-[0.3px] leading-[1.8]">
           Every feature is unlocked for everyone during early access. Paid tiers
           arrive with the collaboration features marked coming soon.
         </p>
@@ -42,8 +39,8 @@ export default function Pricing() {
               key={plan.id}
               className={`group relative flex flex-col justify-between p-8 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 ${
                 isPro
-                  ? "border border-[var(--accent)]/50 bg-[var(--bg-subtle)] shadow-[0_0_40px_rgba(245,197,24,0.15)]"
-                  : "border border-white/[0.08] bg-[var(--bg-subtle)] hover:border-white/[0.2]"
+                  ? "border border-[var(--accent)]/50 bg-[var(--surface-base)] shadow-[0_0_40px_rgba(245,197,24,0.15)]"
+                  : "border border-white/[0.08] bg-[var(--surface-base)] hover:border-white/[0.2]"
               }`}
             >
               {isPro && (
@@ -66,7 +63,7 @@ export default function Pricing() {
                   <span className="font-sans text-xl font-bold text-white">
                     {plan.name}
                   </span>
-                  <p className="font-sans text-[11px] text-[var(--text-dim)] leading-[1.6]">
+                  <p className="font-sans text-[11px] text-[var(--text-muted)] leading-[1.6]">
                     {plan.description}
                   </p>
                 </div>
@@ -78,7 +75,7 @@ export default function Pricing() {
                   >
                     {plan.price}
                   </span>
-                  <span className="font-sans text-[11px] text-[var(--text-dim)]">
+                  <span className="font-sans text-[11px] text-[var(--text-muted)]">
                     /{plan.period}
                   </span>
                 </div>
@@ -118,7 +115,7 @@ export default function Pricing() {
                   href={plan.id === "free" ? "/signup" : "https://github.com/MuhammadTanveerAbbas/Readlyn"}
                   className={`w-full block py-3 rounded-xl font-sans text-[13px] font-bold text-center transition-all duration-200 ${
                     isPro
-                      ? "bg-[var(--accent)] text-black hover:bg-[var(--accent-hover)] shadow-[0_0_24px_rgba(245,197,24,0.3)]"
+                      ? "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] shadow-[0_0_24px_rgba(245,197,24,0.3)]"
                       : "bg-white/10 text-white hover:bg-white/15 border border-white/10"
                   }`}
                 >

@@ -208,7 +208,7 @@ export default function ParallaxPreview({ config, cinemaMode }: ParallaxPreviewP
       )}
 
       {!cinemaMode && (
-        <div className="absolute top-2 left-2 z-50 px-1.5 py-0.5 rounded text-[8px] font-sans bg-black/60 text-white/50 backdrop-blur pointer-events-none uppercase tracking-widest">
+        <div className="absolute top-2 left-2 z-50 px-1.5 py-0.5 rounded text-[8px] font-sans bg-[var(--scrim)] text-white/50 backdrop-blur pointer-events-none uppercase tracking-widest">
           Preview
         </div>
       )}

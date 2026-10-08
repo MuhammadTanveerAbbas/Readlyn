@@ -44,18 +44,15 @@ export default function FAQ() {
     <section
       id="faq"
       ref={ref as React.RefObject<HTMLDivElement>}
-      className="flex flex-col w-full bg-[var(--bg-base)] py-20 px-6 md:py-[120px] md:px-[120px]"
+      className="flex flex-col w-full bg-[var(--surface-sunken)] py-20 px-6 md:py-[120px] md:px-[120px]"
     >
       <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
         {/* Left */}
         <div className="flex flex-col gap-6 w-full max-w-[520px]">
           <div className="flex flex-col gap-4">
-            <div className="inline-flex items-center gap-2 w-fit">
-              <span className="w-4 h-px bg-[var(--accent)]" />
               <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
                 FAQ
               </span>
-            </div>
             <h2
               className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
               style={{
@@ -65,12 +62,12 @@ export default function FAQ() {
             >
               {"Got\nquestions?"}
             </h2>
-            <p className="font-sans text-[13px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+            <p className="font-sans text-[13px] text-[var(--text-body)] tracking-[0.3px] leading-[1.8]">
               Honest answers about what Readlyn does today, plus what it doesn&apos;t.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-white/[0.07] bg-[var(--bg-subtle)] p-6 flex flex-col gap-4">
+          <div className="rounded-2xl border border-white/[0.07] bg-[var(--surface-base)] p-6 flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -86,7 +83,7 @@ export default function FAQ() {
                 Something missing?
               </span>
             </div>
-            <p className="font-sans text-[12px] text-[var(--text-dim)] leading-[1.7] tracking-[0.3px]">
+            <p className="font-sans text-[12px] text-[var(--text-muted)] leading-[1.7] tracking-[0.3px]">
               Open a GitHub issue or reach out directly. Early users shape what
               gets built next.
             </p>
@@ -103,7 +100,7 @@ export default function FAQ() {
         </div>
 
         {/* Right: accordion */}
-        <div className="flex flex-col w-full rounded-2xl border border-white/[0.07] bg-[var(--bg-subtle)] overflow-hidden">
+        <div className="flex flex-col w-full rounded-2xl border border-white/[0.07] bg-[var(--surface-base)] overflow-hidden">
           {faqs.map((faq, i) => {
             const isOpen = openIndex === i;
             return (
@@ -156,7 +153,7 @@ export default function FAQ() {
                   style={{ maxHeight: isOpen ? "200px" : "0px" }}
                 >
                   <div className="px-6 pb-5">
-                    <p className="font-sans text-[12px] text-[var(--text-muted-val)] tracking-[0.3px] leading-[1.8]">
+                    <p className="font-sans text-[12px] text-[var(--text-body)] tracking-[0.3px] leading-[1.8]">
                       {faq.answer}
                     </p>
                   </div>

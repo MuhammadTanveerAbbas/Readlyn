@@ -127,7 +127,7 @@ const divider = (
 
 export default function Footer() {
   return (
-    <footer className="relative flex flex-col w-full bg-[var(--bg-base)] overflow-hidden">
+    <footer className="relative flex flex-col w-full bg-[var(--surface-sunken)] overflow-hidden">
       {/* top accent line */}
       <div
         className="absolute top-0 inset-x-0 h-px"
@@ -165,7 +165,7 @@ export default function Footer() {
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
           </div>
 
-          <p className="font-sans text-[12px] text-[var(--text-dim)] tracking-[0.3px] leading-[1.9] max-w-[220px]">
+          <p className="font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] leading-[1.9] max-w-[220px]">
             AI infographic generator describe a topic, get a structured visual
             in seconds.
           </p>
@@ -194,7 +194,7 @@ export default function Footer() {
               <a
                 key={link.label}
                 href={link.href}
-                className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-dim)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
+                className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
                 <span className="text-[var(--accent)] opacity-40 group-hover:opacity-80 transition-opacity duration-200">
                   {link.icon}
@@ -217,7 +217,7 @@ export default function Footer() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-dim)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
+                className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
                 <span className="text-[var(--accent)] opacity-40 group-hover:opacity-80 transition-opacity duration-200">
                   {link.icon}
@@ -238,7 +238,7 @@ export default function Footer() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-dim)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
+                className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
                 <span className="text-[var(--accent)] opacity-40 group-hover:opacity-80 transition-opacity duration-200">
                   {link.icon}
@@ -254,7 +254,7 @@ export default function Footer() {
 
       {/* ── ROW 2 : Social icons + tagline ── */}
       <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 px-6 md:px-[80px] lg:px-[120px] py-6">
-        <span className="font-sans text-[11px] text-[var(--text-dim)] tracking-[0.4px]">
+        <span className="font-sans text-[11px] text-[var(--text-muted)] tracking-[0.4px]">
           Follow the build journey
         </span>
 
@@ -266,7 +266,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.label}
-              className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/[0.07] bg-white/[0.03] text-[var(--text-dim)] hover:border-[var(--accent)]/40 hover:text-[var(--accent)] hover:bg-[var(--accent)]/[0.06] transition-all duration-200"
+              className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/[0.07] bg-white/[0.03] text-[var(--text-muted)] hover:border-[var(--accent)]/40 hover:text-[var(--accent)] hover:bg-[var(--accent)]/[0.06] transition-all duration-200"
             >
               {s.icon}
             </a>
@@ -282,9 +282,9 @@ export default function Footer() {
           <span className="font-sans text-[10px] text-[#555] tracking-[0.5px]">
             © 2026 Readlyn
           </span>
-          <span className="w-px h-3" style={{ background: "var(--border-default)" }} />
-          <span className="font-sans text-[10px] text-[var(--text-muted-val)] tracking-[0.5px]">
-            Built in public · MIT License
+          <span className="w-px h-3" style={{ background: "var(--line-default)" }} />
+          <span className="font-sans text-[10px] text-[var(--text-body)] tracking-[0.5px]">
+            Built in public  MIT License
           </span>
         </div>
 
@@ -293,7 +293,7 @@ export default function Footer() {
             href="https://themvpguy.vercel.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-[10px] text-[#555] tracking-[0.5px] hover:text-[var(--text-muted-val)] transition-colors duration-200"
+            className="font-sans text-[10px] text-[#555] tracking-[0.5px] hover:text-[var(--text-body)] transition-colors duration-200"
           >
             Made by The MVP Guy
           </a>

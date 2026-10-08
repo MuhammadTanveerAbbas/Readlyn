@@ -55,7 +55,7 @@ export default function Navbar() {
             ? "1px solid rgba(255,255,255,0.06)"
             : "1px solid transparent",
           boxShadow: scrolled
-            ? "0 1px 0 0 rgba(245,197,24,0.04), 0 8px 32px rgba(0,0,0,0.5)"
+            ? "0 1px 0 0 rgba(245,197,24,0.04), 0 8px 32px rgba(11,11,12,0.5)"
             : "none",
         }}
     >
@@ -112,14 +112,8 @@ export default function Navbar() {
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-[16px]">
           <a
-            href="/login"
-            className="font-sans text-[11px] text-[#888888] tracking-[1px] hover:text-white transition-colors duration-200"
-          >
-            Log in
-          </a>
-          <a
             href="/signup"
-            className="relative px-5 py-2 rounded-lg text-[12px] font-bold text-black
+            className="relative px-5 py-2 rounded-lg text-[12px] font-bold text-white
                        bg-[var(--accent)] hover:bg-[var(--accent-hover)]
                        transition-all duration-200
                        shadow-[0_0_20px_rgba(245,197,24,0.3)]
@@ -190,14 +184,8 @@ export default function Navbar() {
           })}
           <div className="flex flex-col gap-[10px] pt-5">
             <a
-              href="/login"
-              className="font-sans text-[12px] text-[#888888] tracking-[1px]"
-            >
-              Log in
-            </a>
-            <a
               href="/signup"
-              className="font-sans text-[12px] font-bold text-black bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
+              className="font-sans text-[12px] font-bold text-white bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
             >
               Start free
             </a>

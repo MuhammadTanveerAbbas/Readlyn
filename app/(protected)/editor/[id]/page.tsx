@@ -685,7 +685,7 @@ export default function EditorPage() {
   }, [canvas, projectId]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[var(--bg-base)]">
+    <div className="h-screen w-screen overflow-hidden bg-[var(--surface-sunken)]">
       {/* Offline / Sync Banner */}
       {isOffline && (
         <div className="bg-amber-500/20 border-b border-amber-500/30 px-4 py-1 text-center font-sans text-xs text-amber-300 flex items-center justify-center gap-2">
@@ -787,7 +787,7 @@ export default function EditorPage() {
       <div className="flex h-[calc(100vh-44px)]">
         {(leftPanelOpen || rightPanelOpen) && (
           <div
-            className="fixed inset-0 z-20 bg-black/50 lg:hidden"
+            className="fixed inset-0 z-20 bg-[var(--scrim)] lg:hidden"
             onClick={() => {
               setLeftPanelOpen(false);
               setRightPanelOpen(false);
@@ -795,7 +795,7 @@ export default function EditorPage() {
           />
         )}
         <div
-          className={`${leftPanelOpen ? "flex" : "hidden"} lg:flex fixed lg:static inset-y-11 lg:inset-auto left-0 z-30 w-[260px] lg:w-[240px] border-r border-white/[0.07] bg-[var(--bg-panel)] flex-col shadow-2xl lg:shadow-none`}
+          className={`${leftPanelOpen ? "flex" : "hidden"} lg:flex fixed lg:static inset-y-11 lg:inset-auto left-0 z-30 w-[260px] lg:w-[240px] border-r border-white/[0.07] bg-[var(--surface-base)] flex-col shadow-2xl lg:shadow-none`}
         >
           <PromptPanel
             onGenerate={handleGenerate}
@@ -815,7 +815,7 @@ export default function EditorPage() {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          className="relative flex flex-1 overflow-auto overscroll-contain bg-[color-mix(in_srgb,var(--bg-base)_85%,white_0.5%)]"
+          className="relative flex flex-1 overflow-auto overscroll-contain bg-[color-mix(in_srgb,var(--surface-sunken)_85%,white_0.5%)]"
           style={{ cursor: toolMode === "hand" ? "grab" : "default" }}
         >
           <div className="m-auto p-8">
@@ -836,7 +836,7 @@ export default function EditorPage() {
           onFitToScreen={fitToScreen}
         />
         <div
-          className={`${rightPanelOpen ? "flex" : "hidden"} lg:flex fixed lg:static inset-y-11 lg:inset-auto right-0 z-30 w-[260px] border-l border-white/[0.07] bg-[var(--bg-panel)] flex-col overflow-hidden shadow-2xl lg:shadow-none`}
+          className={`${rightPanelOpen ? "flex" : "hidden"} lg:flex fixed lg:static inset-y-11 lg:inset-auto right-0 z-30 w-[260px] border-l border-white/[0.07] bg-[var(--surface-base)] flex-col overflow-hidden shadow-2xl lg:shadow-none`}
         >
           <div className="flex-1 overflow-y-auto scrollbar-hide">
             <PropertiesPanel

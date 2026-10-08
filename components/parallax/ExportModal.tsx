@@ -70,21 +70,21 @@ export default function ExportModal({ open, onOpenChange, config }: ExportModalP
           <TabsList className="bg-white/5 border border-white/10 p-0.5 gap-0">
             <TabsTrigger
               value="html"
-              className="text-xs gap-1.5 data-[state=active]:bg-[#F5C518] data-[state=active]:text-black rounded"
+              className="text-xs gap-1.5 data-[state=active]:bg-[#F5C518] data-[state=active]:text-white rounded"
             >
               <Code2 className="h-3.5 w-3.5" />
               HTML
             </TabsTrigger>
             <TabsTrigger
               value="css"
-              className="text-xs gap-1.5 data-[state=active]:bg-[#F5C518] data-[state=active]:text-black rounded"
+              className="text-xs gap-1.5 data-[state=active]:bg-[#F5C518] data-[state=active]:text-white rounded"
             >
               <FileJson className="h-3.5 w-3.5" />
               CSS
             </TabsTrigger>
             <TabsTrigger
               value="js"
-              className="text-xs gap-1.5 data-[state=active]:bg-[#F5C518] data-[state=active]:text-black rounded"
+              className="text-xs gap-1.5 data-[state=active]:bg-[#F5C518] data-[state=active]:text-white rounded"
             >
               <FileJson className="h-3.5 w-3.5" />
               JS

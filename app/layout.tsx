@@ -1,43 +1,12 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { PT_Sans } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
-/**
- * Readlyn type system two self-hosted families, no runtime CDN calls.
- *
- *   --font-geist       Geist Sans        all UI: headings, body, nav, buttons
- *   --font-geist-mono  Geist Mono        code, JSON, shortcuts, coordinates
- *
- * Geist is Vercel's typeface and the Figma-editor default that most people
- * build against, so the app reads as a native modern product rather than a
- * monospace-inflected theme. Both are true variable fonts (100–900) in one
- * file each 52KB total for the whole system.
- *
- * The variable axis matters here: the canvas schema allows
- * `fontWeight: '900'` for the big stat numerals in generated infographics, and
- * a family topping out at 700 would fake-bold them in the exported PNG.
- */
-
-// Variable: 100–900 in one file.
-const geist = localFont({
-  variable: "--font-geist",
-  display: "swap",
-  fallback: ["system-ui", "sans-serif"],
-  src: [
-    {
-      path: "../public/fonts/geist-latin-variable.woff2",
-      weight: "100 900",
-      style: "normal",
-    },
-  ],
-});
-
-const ptSans = PT_Sans({
-  variable: "--font-pt-sans",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -117,7 +86,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon.svg" />
       </head>
       <body
-        className={`${geist.variable} ${ptSans.variable} h-full bg-[var(--bg-base)] overflow-x-hidden font-sans antialiased`}
+        className={`${openSans.variable} h-full bg-[var(--surface-sunken)] overflow-x-hidden font-sans antialiased`}
       >
         {children}
         <Toaster />

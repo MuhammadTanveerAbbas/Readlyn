@@ -19,7 +19,7 @@ import { FONT_FAMILIES } from '@/types/infographic'
 /**
  * Weights the infographic schema allows: 'normal' | 'bold' | '900'.
  *
- * Geist and Geist Mono are variable fonts, so each of these resolves to a real
+ * Open Sans is a variable font, so each of these resolves to a real
  * axis position on the same file rather than pulling a separate static cut.
  */
 const CANVAS_WEIGHTS = ['400', '500', '700', '900'] as const

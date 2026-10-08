@@ -271,16 +271,16 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
             position: "absolute",
             top: 0,
             left: 0,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.3), 0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)",
+            boxShadow: "0 2px 8px rgba(11,11,12,0.3), 0 8px 40px rgba(11,11,12,0.5), 0 0 0 1px rgba(255,255,255,0.05)",
           }}
         >
           <canvas ref={canvasRef} />
         </div>
 
         {isLoading && (
-          <div className="absolute inset-0 rounded-lg bg-black/55">
-            <div className="absolute inset-4 animate-pulse rounded-md border border-white/10 bg-[var(--bg-panel)]/80" />
-            <div className="absolute left-1/2 top-1/2 flex w-[300px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-lg border border-white/10 bg-[var(--bg-panel)] p-4">
+          <div className="absolute inset-0 rounded-lg bg-[var(--scrim)]">
+            <div className="absolute inset-4 animate-pulse rounded-md border border-white/10 bg-[var(--surface-base)]/80" />
+            <div className="absolute left-1/2 top-1/2 flex w-[300px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-lg border border-white/10 bg-[var(--surface-base)] p-4">
               <div className="h-3 w-full rounded bg-gradient-to-r from-white/5 via-white/15 to-white/5 [background-size:200%_100%] animate-[shimmer_1.3s_linear_infinite]" />
               <div className="w-56 h-2 bg-gray-700 rounded-full overflow-hidden">
                 <div

@@ -30,7 +30,7 @@ export default function SearchFilterBar({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search projects..."
-            className="h-11 w-full rounded-lg border border-white/[0.08] bg-[var(--bg-panel)] pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all"
+            className="h-11 w-full rounded-lg border border-white/[0.08] bg-[var(--surface-base)] pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all"
           />
         </div>
 
@@ -41,7 +41,7 @@ export default function SearchFilterBar({
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="h-11 appearance-none rounded-lg border border-white/[0.08] bg-[var(--bg-panel)] pl-10 pr-10 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
+              className="h-11 appearance-none rounded-lg border border-white/[0.08] bg-[var(--surface-base)] pl-10 pr-10 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
             >
               <option value="updated">Last Edited</option>
               <option value="created">Date Created</option>
@@ -65,12 +65,12 @@ export default function SearchFilterBar({
           </div>
 
           {/* View mode toggle */}
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-[var(--bg-panel)] p-1">
+          <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-[var(--surface-base)] p-1">
             <button
               onClick={() => setViewMode("grid")}
               className={`flex h-9 w-9 items-center justify-center rounded-md transition-all ${
                 viewMode === "grid"
-                  ? "bg-[var(--accent)] text-black"
+                  ? "bg-[var(--accent)] text-white"
                   : "text-white/50 hover:text-white hover:bg-white/[0.05]"
               }`}
               title="Grid view"
@@ -81,7 +81,7 @@ export default function SearchFilterBar({
               onClick={() => setViewMode("list")}
               className={`flex h-9 w-9 items-center justify-center rounded-md transition-all ${
                 viewMode === "list"
-                  ? "bg-[var(--accent)] text-black"
+                  ? "bg-[var(--accent)] text-white"
                   : "text-white/50 hover:text-white hover:bg-white/[0.05]"
               }`}
               title="List view"

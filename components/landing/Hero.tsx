@@ -127,23 +127,23 @@ function Particles() {
 function CanvasMock({ mounted }: { mounted: boolean }) {
   const layers = [
     { label: "FRAME / HERO", color: "var(--accent)", indent: 0, active: true },
-    { label: "NAVBAR", color: "var(--text-dim)", indent: 8 },
+    { label: "NAVBAR", color: "var(--text-muted)", indent: 8 },
     { label: "HEADLINE", color: "var(--success-soft)", indent: 8 },
-    { label: "SUBTEXT", color: "var(--text-dim)", indent: 8 },
+    { label: "SUBTEXT", color: "var(--text-muted)", indent: 8 },
     { label: "CTA GROUP", color: "var(--orange)", indent: 8 },
     { label: "BTN / PRIMARY", color: "var(--orange)", indent: 16 },
-    { label: "BTN / GHOST", color: "var(--text-dim)", indent: 16 },
-    { label: "MEDIA BLOCK", color: "var(--blue)", indent: 8 },
+    { label: "BTN / GHOST", color: "var(--text-muted)", indent: 16 },
+    { label: "MEDIA BLOCK", color: "var(--info)", indent: 8 },
   ];
 
   return (
     <div
       className="relative w-full rounded-2xl overflow-hidden"
       style={{
-        border: "1px solid var(--border-default)",
+        border: "1px solid var(--line-default)",
         boxShadow:
-          "0 0 0 1px rgba(255,255,255,0.03), 0 40px 100px rgba(0,0,0,0.9), 0 0 80px rgba(245,197,24,0.07)",
-        background: "var(--bg-subtle)",
+          "0 0 0 1px rgba(255,255,255,0.03), 0 40px 100px rgba(11,11,12,0.6), 0 0 80px rgba(245,197,24,0.07)",
+        background: "var(--surface-base)",
       }}
     >
       {/* Animated top border glow */}
@@ -167,8 +167,8 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
         </div>
         <div
-          className="flex items-center gap-2 px-3 py-1 rounded-md font-sans text-[10px] text-[var(--text-dim)] tracking-[1px]"
-          style={{ background: "var(--bg-subtle)", border: "1px solid #1E1E1E" }}
+          className="flex items-center gap-2 px-3 py-1 rounded-md font-sans text-[10px] text-[var(--text-muted)] tracking-[1px]"
+          style={{ background: "var(--surface-base)", border: "1px solid #1E1E1E" }}
         >
           <span
             className="w-1.5 h-1.5 rounded-full bg-[var(--success-soft)]"
@@ -182,8 +182,8 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               key={t}
               className="font-sans text-[10px] px-2 py-0.5 rounded"
               style={{
-                background: i === 0 ? "var(--accent)" : "var(--bg-overlay)",
-                color: i === 0 ? "#000" : "var(--text-dim)",
+                background: i === 0 ? "var(--accent)" : "var(--surface-overlay)",
+                color: i === 0 ? "#000" : "var(--text-muted)",
               }}
             >
               {t}
@@ -199,7 +199,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           className="w-[155px] shrink-0 flex flex-col border-r"
           style={{
             borderColor: "rgba(255,255,255,0.06)",
-            background: "var(--bg-panel)",
+            background: "var(--surface-base)",
           }}
         >
           <div
@@ -214,8 +214,8 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               className="flex items-center gap-2 py-[7px] font-sans text-[8px] tracking-[0.5px]"
               style={{
                 paddingLeft: `${12 + l.indent}px`,
-                background: l.active ? "var(--bg-overlay)" : "transparent",
-                color: l.active ? "var(--text-secondary)" : "var(--bg-active)",
+                background: l.active ? "var(--surface-overlay)" : "transparent",
+                color: l.active ? "var(--text-secondary)" : "var(--surface-overlay)",
                 borderLeft: l.active
                   ? "2px solid var(--accent)"
                   : "2px solid transparent",
@@ -236,7 +236,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
         {/* Canvas center */}
         <div
           className="flex-1 relative overflow-hidden"
-          style={{ background: "var(--bg-subtle)" }}
+          style={{ background: "var(--surface-base)" }}
         >
           {/* Scan line */}
           <div
@@ -292,7 +292,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                 {[
                   ["var(--accent)", "42%"],
                   ["var(--success-soft)", "8.4k"],
-                  ["var(--blue)", "$12k"],
+                  ["var(--info)", "$12k"],
                 ].map(([c, v], i) => (
                   <div
                     key={i}
@@ -341,7 +341,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                       background:
                         i === 0
                           ? "rgba(255,255,255,0.12)"
-                          : "var(--border-subtle-val)",
+                          : "var(--line-subtle)",
                     }}
                   />
                 ))}
@@ -361,7 +361,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           className="w-[145px] shrink-0 flex flex-col border-l"
           style={{
             borderColor: "rgba(255,255,255,0.06)",
-            background: "var(--bg-panel)",
+            background: "var(--surface-base)",
           }}
         >
           <div
@@ -376,7 +376,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               { k: "H", v: "1100px" },
               { k: "THEME", v: "Ocean" },
               { k: "LAYOUT", v: "Stats" },
-              { k: "FILL", v: "var(--bg-panel)", sw: "var(--bg-panel)" },
+              { k: "FILL", v: "var(--surface-base)", sw: "var(--surface-base)" },
               { k: "ACCENT", v: "var(--accent)", sw: "var(--accent)" },
               { k: "OPACITY", v: "100%" },
             ].map((p, i) => (
@@ -389,7 +389,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                   transition: `opacity 0.4s ease ${0.15 + i * 0.05}s`,
                 }}
               >
-                <span className="font-sans text-[8px] text-[var(--text-dim)] tracking-[1px]">
+                <span className="font-sans text-[8px] text-[var(--text-muted)] tracking-[1px]">
                   {p.k}
                 </span>
                 <div className="flex items-center gap-1">
@@ -399,7 +399,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                       style={{ background: p.sw }}
                     />
                   )}
-                  <span className="font-sans text-[8px] text-[var(--text-muted-val)]">
+                  <span className="font-sans text-[8px] text-[var(--text-body)]">
                     {p.v}
                   </span>
                 </div>
@@ -428,7 +428,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
       {/* Status bar */}
       <div
         className="flex items-center justify-between px-4 h-8 border-t font-sans text-[8px] text-[#333] tracking-[1px]"
-        style={{ borderColor: "rgba(255,255,255,0.06)", background: "var(--bg-subtle)" }}
+        style={{ borderColor: "rgba(255,255,255,0.06)", background: "var(--surface-base)" }}
       >
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
@@ -451,7 +451,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
       <div
         className="absolute bottom-0 inset-x-0 h-24 pointer-events-none z-10"
         style={{
-          background: "linear-gradient(to top, var(--bg-base) 30%, transparent)",
+          background: "linear-gradient(to top, var(--surface-sunken) 30%, transparent)",
         }}
       />
     </div>
@@ -464,7 +464,7 @@ export default function Hero() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <section className="relative w-full bg-[var(--bg-base)] overflow-hidden">
+    <section className="relative w-full bg-[var(--surface-sunken)] overflow-hidden">
       <style>{`
         @keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes scan     { 0%{top:-2px} 100%{top:100%} }
@@ -509,7 +509,7 @@ export default function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-70" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]" />
             </span>
-            <span className="font-sans text-[10px] text-[var(--text-muted-val)] tracking-[0.18em] uppercase">
+            <span className="font-sans text-[10px] text-[var(--text-body)] tracking-[0.18em] uppercase">
               Early access open
             </span>
           </div>
@@ -537,7 +537,7 @@ export default function Hero() {
           </h1>
 
           {/* Sub */}
-          <p className="hero-enter-2 font-sans text-[var(--text-dim)] text-[13px] leading-[1.9] tracking-[0.3px] mt-5 max-w-[400px]">
+          <p className="hero-enter-2 font-sans text-[var(--text-muted)] text-[13px] leading-[1.9] tracking-[0.3px] mt-5 max-w-[400px]">
             Type a topic, pick a layout plus theme. Get a complete, editable
             infographic in seconds.
           </p>
@@ -562,7 +562,7 @@ export default function Hero() {
           <div className="hero-enter-4 flex flex-col sm:flex-row items-center lg:items-start gap-3 mt-8 w-full sm:w-auto">
             <a
               href="/signup"
-              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
+              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[13px] font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
             >
               Start free
               <svg
@@ -583,14 +583,14 @@ export default function Hero() {
             </a>
             <a
               href="/login"
-              className="flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[12px] text-[var(--text-muted-val)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[12px] text-[var(--text-body)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
               Log in
             </a>
           </div>
 
-          <p className="hero-enter-4 font-sans text-[10px] text-[var(--bg-active)] tracking-[2px] mt-3">
-            No credit card · Free plan · Early access
+          <p className="hero-enter-4 font-sans text-[10px] text-[var(--surface-overlay)] tracking-[2px] mt-3">
+            No credit card  Free plan  Early access
           </p>
 
           {/* Stats row */}
@@ -598,7 +598,7 @@ export default function Hero() {
             {[
               { v: "9", l: "Layouts", c: "var(--accent)" },
               { v: "5", l: "Themes", c: "var(--success-soft)" },
-              { v: "3", l: "Canvas sizes", c: "var(--blue)" },
+              { v: "3", l: "Canvas sizes", c: "var(--info)" },
               { v: "Free", l: "To start", c: "var(--orange)" },
             ].map(({ v, l, c }) => (
               <div
@@ -611,7 +611,7 @@ export default function Hero() {
                 >
                   {v}
                 </span>
-                <span className="font-sans text-[9px] text-[var(--text-dim)] tracking-[1.5px] uppercase">
+                <span className="font-sans text-[9px] text-[var(--text-muted)] tracking-[1.5px] uppercase">
                   {l}
                 </span>
               </div>
@@ -630,7 +630,7 @@ export default function Hero() {
       <div
         className="absolute bottom-0 inset-x-0 h-28 pointer-events-none z-20"
         style={{
-          background: "linear-gradient(to top, var(--bg-base) 0%, transparent 100%)",
+          background: "linear-gradient(to top, var(--surface-sunken) 0%, transparent 100%)",
         }}
       />
     </section>

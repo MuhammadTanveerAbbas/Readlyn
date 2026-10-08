@@ -17,6 +17,16 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev)
 
+---
+
+<div align="center">
+
+| 9 Layouts | 5 Themes | 3 Canvas Sizes | Free to Start |
+|:---------:|:--------:|:--------------:|:-------------:|
+| Steps · Stats · Timeline · Compare · List · Pyramid · Funnel · Cycle · Auto | Ocean · Ember · Forest · Slate · Midnight | A4 Portrait · Square · Wide | No credit card · 100 generations/day |
+
+</div>
+
 </div>
 
 ---
@@ -116,7 +126,7 @@ Readlyn uses a hand-crafted dark design language (think Resend meets Framer). Th
 | Auth & Database    | Supabase (Auth plus Postgres)                                                 |
 | Input Sanitization | isomorphic-dompurify                                                          |
 | Testing            | Vitest (unit) plus Playwright (e2e)                                           |
-| Fonts              | Space Grotesk + IBM Plex Mono                                                 |
+| Fonts              | Open Sans (single variable font, all weights)                                 |
 | Deployment         | Vercel                                                                        |
 
 ---

@@ -33,7 +33,7 @@ export default function ProjectGrid({
   const iconColors: Record<string, string> = {
     "Pinned Projects": "text-[var(--accent)]",
     "Recent Projects": "text-[var(--success-soft)]",
-    "All Projects": "text-[var(--blue)]",
+    "All Projects": "text-[var(--info)]",
   };
 
   return (

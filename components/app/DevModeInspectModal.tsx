@@ -76,15 +76,15 @@ export function InfographicElement() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-[var(--bg-panel)] p-6 shadow-2xl flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
+      <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col">
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
             <h3 className="font-sans text-lg font-bold text-white flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
               Dev Mode, CSS plus Code Inspect
             </h3>
-            <p className="font-sans text-xs text-[var(--text-dim)]">
+            <p className="font-sans text-xs text-[var(--text-muted)]">
               {selectedObject ? `Inspecting ${selectedObject.type} element` : "No element selected (showing canvas item)"}
             </p>
           </div>
@@ -122,7 +122,7 @@ export function InfographicElement() {
             onClick={() => setActiveTab("css")}
             className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "css"
-                ? "bg-[var(--accent)] text-black font-bold"
+                ? "bg-[var(--accent)] text-white font-bold"
                 : "text-white/70 hover:bg-white/5"
             }`}
           >
@@ -132,7 +132,7 @@ export function InfographicElement() {
             onClick={() => setActiveTab("react")}
             className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "react"
-                ? "bg-[var(--accent)] text-black font-bold"
+                ? "bg-[var(--accent)] text-white font-bold"
                 : "text-white/70 hover:bg-white/5"
             }`}
           >
@@ -142,7 +142,7 @@ export function InfographicElement() {
             onClick={() => setActiveTab("svg")}
             className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "svg"
-                ? "bg-[var(--accent)] text-black font-bold"
+                ? "bg-[var(--accent)] text-white font-bold"
                 : "text-white/70 hover:bg-white/5"
             }`}
           >
@@ -150,17 +150,17 @@ export function InfographicElement() {
           </button>
         </div>
 
-        <pre className="p-4 my-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-amber-300 overflow-x-auto max-h-56">
+        <pre className="p-4 my-4 rounded-xl bg-[var(--scrim)] border border-white/10 font-mono text-xs text-amber-300 overflow-x-auto max-h-56">
           {activeCode}
         </pre>
 
         <div className="border-t border-white/10 pt-4 flex justify-between items-center">
-          <span className="font-sans text-[10px] text-[var(--text-dim)]">
+          <span className="font-sans text-[10px] text-[var(--text-muted)]">
             Developers can directly copy production ready code
           </span>
           <button
             onClick={copyCode}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-black hover:bg-[var(--accent-hover)] transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all"
           >
             Copy Snippet
           </button>
