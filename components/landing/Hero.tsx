@@ -84,7 +84,7 @@ function Particles() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(245,197,24,${p.o})`;
+        ctx.fillStyle = `rgba(148,163,184,${p.o})`;
         ctx.fill();
       });
 
@@ -98,7 +98,7 @@ function Particles() {
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = `rgba(245,197,24,${0.06 * (1 - dist / 90)})`;
+            ctx.strokeStyle = `rgba(148,163,184,${0.04 * (1 - dist / 90)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -483,16 +483,33 @@ export default function Hero() {
         .hero-enter-2 { animation: float-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.25s both; }
         .hero-enter-3 { animation: float-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.35s both; }
         .hero-enter-4 { animation: float-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.45s both; }
-        .hero-enter-5 { animation: float-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
         .hero-canvas  { animation: float-up 0.9s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
       `}</style>
 
-      {/* Yellow top glow */}
+      {/* Modern background blue-indigo mesh gradient */}
+      {/* Layer 1: blue-purple radial at top-center */}
       <div
-        className="absolute inset-x-0 top-0 h-[560px] pointer-events-none"
+        className="absolute inset-x-0 top-0 h-[600px] pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 65% 50% at 50% -5%, rgba(245,197,24,0.13) 0%, transparent 70%)",
+            "radial-gradient(ellipse 70% 55% at 50% -10%, rgba(99,102,241,0.12) 0%, rgba(139,92,246,0.06) 40%, transparent 70%)",
+        }}
+      />
+      {/* Layer 2: subtle blue radial at top-right */}
+      <div
+        className="absolute top-0 right-0 h-[400px] w-[500px] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 60% at 100% 0%, rgba(96,165,250,0.07) 0%, transparent 65%)",
+        }}
+      />
+      {/* Layer 3: very faint dot-grid texture */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
         }}
       />
 
@@ -513,7 +530,7 @@ export default function Hero() {
 
           {/* Headline */}
           <h1
-            className="hero-enter-1 font-sans text-white"
+            className="hero-enter-1 font-display text-white"
             style={{
               fontSize: "clamp(2.8rem, 5.5vw, 4.2rem)",
               fontWeight: 800,
@@ -557,7 +574,7 @@ export default function Hero() {
 
           {/* CTAs */}
           <div className="hero-enter-4 flex flex-col sm:flex-row items-center lg:items-start gap-3 mt-8 w-full sm:w-auto">
-            {/* Primary: Start free — spark/bolt icon */}
+            {/* Primary: Start free spark/bolt icon */}
             <a
               href="/signup"
               className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
@@ -581,7 +598,7 @@ export default function Hero() {
               </svg>
               Start free
             </a>
-            {/* Secondary: Log in — key icon */}
+            {/* Secondary: Log in key icon */}
             <a
               href="/login"
               className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[12px] text-[var(--text-body)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
@@ -605,31 +622,6 @@ export default function Hero() {
           <p className="hero-enter-4 font-sans text-[10px] text-[var(--surface-overlay)] tracking-[2px] mt-3">
             No credit card  Free plan  Early access
           </p>
-
-          {/* Stats row */}
-          <div className="hero-enter-5 flex flex-wrap justify-center lg:justify-start gap-2.5 mt-8">
-            {[
-              { v: "9", l: "Layouts", c: "var(--accent)" },
-              { v: "5", l: "Themes", c: "var(--success-soft)" },
-              { v: "3", l: "Canvas sizes", c: "var(--info)" },
-              { v: "Free", l: "To start", c: "var(--orange)" },
-            ].map(({ v, l, c }) => (
-              <div
-                key={l}
-                className="flex flex-col gap-0.5 px-4 py-3 rounded-xl border border-white/[0.07] bg-white/[0.02]"
-              >
-                <span
-                  className="font-sans text-[20px] font-bold leading-none"
-                  style={{ color: c }}
-                >
-                  {v}
-                </span>
-                <span className="font-sans text-[9px] text-[var(--text-muted)] tracking-[1.5px] uppercase">
-                  {l}
-                </span>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Right: canvas mock */}

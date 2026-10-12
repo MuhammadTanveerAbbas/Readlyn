@@ -96,7 +96,7 @@ export default function Bento() {
             Capabilities
           </span>
         <h2
-          className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-display font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -166,7 +166,7 @@ function BentoCard({ item }: { item: (typeof items)[0] }) {
       </span>
 
       <h3
-        className="font-sans font-bold leading-[1.1] whitespace-pre-line"
+        className="font-display font-bold leading-[1.1] whitespace-pre-line"
         style={{
           fontSize: "clamp(1.4rem, 2vw, 1.75rem)",
           letterSpacing: "-0.02em",

@@ -152,7 +152,7 @@ export default function Features() {
           Features
         </span>
         <h2
-          className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-display font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", letterSpacing: "-0.03em" }}
         >
           {"Everything you need.\nNothing you don't."}
@@ -189,7 +189,7 @@ export default function Features() {
                   <span className="font-sans text-[10px] font-bold text-[#444] tracking-[2px]">01</span>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h3 className="font-sans font-bold text-white leading-[1.15]" style={{ fontSize: "1.35rem", letterSpacing: "-0.025em" }}>
+                  <h3 className="font-display font-bold text-white leading-[1.15]" style={{ fontSize: "1.35rem", letterSpacing: "-0.025em" }}>
                     {features[0].title}
                   </h3>
                   <p className="font-sans text-[12px] text-[var(--text-body)] leading-[1.8] tracking-[0.2px] max-w-[340px]">
@@ -243,7 +243,7 @@ function FeatureCard({ feature }: { feature: typeof features[0] }) {
       </div>
 
       <div className="flex flex-col gap-2">
-        <h3 className="font-sans font-bold text-white leading-[1.2]" style={{ fontSize: "1rem", letterSpacing: "-0.02em" }}>
+        <h3 className="font-display font-bold text-white leading-[1.2]" style={{ fontSize: "1rem", letterSpacing: "-0.02em" }}>
           {feature.title}
         </h3>
         <p className="font-sans text-[11px] text-[#666] tracking-[0.2px] leading-[1.8]">

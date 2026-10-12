@@ -21,7 +21,7 @@ import { createClient } from "@/lib/supabase/client";
 
 export default function Home() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -32,21 +32,17 @@ export default function Home() {
       if (user) {
         router.replace("/dashboard");
       } else {
-        setIsLoading(false);
+        setIsReady(true);
       }
     };
     checkAuth();
   }, [router]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--surface-sunken)]">
-        <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
   return (
-    <main className="relative flex flex-col w-full bg-[var(--surface-sunken)] pt-[64px]">
+    <main
+      className="relative flex flex-col w-full bg-[var(--surface-sunken)] pt-[64px] transition-opacity duration-300"
+      style={{ opacity: isReady ? 1 : 0 }}
+    >
       <Navbar />
       <Hero />
       <PixelDivider />

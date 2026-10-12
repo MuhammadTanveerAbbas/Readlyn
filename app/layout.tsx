@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Open_Sans } from "next/font/google";
+import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
+const bricolageGrotesque = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
@@ -86,7 +93,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon.svg" />
       </head>
       <body
-        className={`${openSans.variable} h-full bg-[var(--surface-sunken)] overflow-x-hidden font-sans antialiased`}
+        className={`${bricolageGrotesque.variable} ${figtree.variable} h-full bg-[var(--surface-sunken)] overflow-x-hidden font-sans antialiased`}
       >
         {children}
         <Toaster />

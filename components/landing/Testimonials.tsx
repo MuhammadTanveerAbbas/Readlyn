@@ -16,7 +16,7 @@ export default function Testimonials() {
               Early access
             </span>
         <h2
-          className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-display font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -119,7 +119,7 @@ export default function Testimonials() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="font-sans text-[15px] font-bold text-white tracking-[-0.01em]">
+              <h3 className="font-display text-[15px] font-bold text-white tracking-[-0.01em]">
                 {card.title}
               </h3>
               <p className="font-sans text-[12px] text-[var(--text-body)] tracking-[0.3px] leading-[1.8]">

@@ -7,15 +7,15 @@ const slides = [
   {
     tag: "Dashboard",
     idx: "01",
-    total: "04",
+    total: "03",
     title: "Analytics Dashboard",
     description:
-      "Data-dense dashboards with charts, tables, plus real-time indicators, built entirely with Readlyn components.",
+      "Data-dense dashboards with live charts, KPI cards, and real-time indicators generated from a single prompt.",
     accent: "var(--accent)",
     accentHex: "#F5C518",
     bg: "var(--surface-base)",
-    border: "rgba(245,197,24,0.12)",
-    glow: "rgba(245,197,24,0.07)",
+    border: "rgba(245,197,24,0.15)",
+    glow: "rgba(245,197,24,0.08)",
     menuIcon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
@@ -23,35 +23,17 @@ const slides = [
     ),
   },
   {
-    tag: "Design System",
-    idx: "02",
-    total: "04",
-    title: "Component Library",
-    description:
-      "Full design systems with tokens, variants, plus documentation, exported as clean React or Vue code.",
-    accent: "var(--accent)",
-    accentHex: "#F5C518",
-    bg: "var(--surface-base)",
-    border: "rgba(245,197,24,0.12)",
-    glow: "rgba(245,197,24,0.07)",
-    menuIcon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="3" /><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
-      </svg>
-    ),
-  },
-  {
     tag: "Mobile UI",
-    idx: "03",
-    total: "04",
+    idx: "02",
+    total: "03",
     title: "Mobile Interface",
     description:
-      "Responsive mobile-first layouts with touch-optimized components, exported to Flutter or React Native.",
+      "Responsive mobile-first layouts with touch-optimized components, ready to export to Flutter or React Native.",
     accent: "var(--orange)",
     accentHex: "#FF6B35",
     bg: "var(--surface-base)",
-    border: "rgba(255,107,53,0.12)",
-    glow: "rgba(255,107,53,0.07)",
+    border: "rgba(255,107,53,0.15)",
+    glow: "rgba(255,107,53,0.08)",
     menuIcon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="5" y="2" width="14" height="20" rx="2" /><line x1="12" y1="18" x2="12.01" y2="18" />
@@ -60,16 +42,16 @@ const slides = [
   },
   {
     tag: "Marketing",
-    idx: "04",
-    total: "04",
+    idx: "03",
+    total: "03",
     title: "Landing Page",
     description:
-      "High-converting marketing pages with sections, CTAs, plus animations, ready to ship in hours.",
-    accent: "var(--success-soft)",
+      "High-converting marketing pages with hero sections, CTAs, and animations shipped in hours, not days.",
+    accent: "#4ade80",
     accentHex: "#4ADE80",
     bg: "var(--surface-base)",
-    border: "rgba(74,222,128,0.12)",
-    glow: "rgba(74,222,128,0.07)",
+    border: "rgba(74,222,128,0.15)",
+    glow: "rgba(74,222,128,0.08)",
     menuIcon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
@@ -100,7 +82,15 @@ function DashboardPreview({ accent }: { accent: string }) {
       <div className="flex-1 rounded-lg p-3 flex flex-col justify-end gap-1" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid var(--line-subtle)" }}>
         <div className="flex items-end gap-1.5 h-16">
           {[40, 65, 45, 80, 55, 90, 60, 75, 50, 85].map((h, i) => (
-            <div key={i} className="flex-1 rounded-sm" style={{ height: `${h}%`, backgroundColor: i === 6 ? accent : `${accent}25` }} />
+            <div
+              key={i}
+              className="flex-1 rounded-sm"
+              style={{
+                height: `${h}%`,
+                backgroundColor: i === 6 ? accent : `${accent}25`,
+                boxShadow: i === 6 ? `0 0 8px ${accent}60` : "none",
+              }}
+            />
           ))}
         </div>
         <div className="flex justify-between mt-1">
@@ -120,43 +110,20 @@ function DashboardPreview({ accent }: { accent: string }) {
   );
 }
 
-function DesignSystemPreview({ accent }: { accent: string }) {
-  return (
-    <div className="relative w-full h-full p-4 flex flex-col gap-3">
-      <div className="flex gap-1.5">
-        {[accent, `${accent}80`, `${accent}40`, "#333", "#222", "#111"].map((c, i) => (
-          <div key={i} className="h-6 flex-1 rounded-md" style={{ backgroundColor: c }} />
-        ))}
-      </div>
-      <div className="flex gap-2">
-        <div className="h-7 px-3 rounded-md flex items-center font-sans text-[9px] font-bold" style={{ backgroundColor: accent, color: "var(--surface-base)" }}>Button</div>
-        <div className="h-7 px-3 rounded-md flex items-center font-sans text-[9px] text-[var(--text-body)]" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>Ghost</div>
-        <div className="h-5 px-2 rounded-full flex items-center font-sans text-[8px]" style={{ backgroundColor: `${accent}15`, color: accent }}>Badge</div>
-      </div>
-      <div className="h-8 rounded-lg px-3 flex items-center gap-2" style={{ border: `1px solid ${accent}30`, backgroundColor: "rgba(255,255,255,0.02)" }}>
-        <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: accent }} />
-        <div className="h-1.5 w-24 rounded-full bg-white/10" />
-      </div>
-      <div className="flex-1 rounded-lg p-3 flex flex-col justify-center gap-2" style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid var(--line-subtle)" }}>
-        <div className="h-3 w-3/4 rounded-full bg-white/20" />
-        <div className="h-2 w-1/2 rounded-full bg-white/10" />
-        <div className="h-1.5 w-2/3 rounded-full bg-white/6" />
-        <div className="h-1.5 w-1/3 rounded-full bg-white/4" />
-      </div>
-      <div className="grid grid-cols-4 gap-1.5">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="h-4 rounded" style={{ backgroundColor: i < 2 ? `${accent}20` : "rgba(255,255,255,0.04)", border: "1px solid var(--line-subtle)" }} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function MobilePreview({ accent }: { accent: string }) {
   return (
     <div className="relative w-full h-full flex items-center justify-center py-2">
       <div className="relative h-full max-h-[220px] aspect-[9/16] rounded-[20px] overflow-hidden flex flex-col" style={{ border: `1px solid ${accent}25`, backgroundColor: "var(--surface-base)" }}>
-        <div className="flex justify-center pt-2 pb-1">
+        {/* Status bar */}
+        <div className="flex items-center justify-between px-3 pt-1.5 pb-0.5">
+          <div className="h-1 w-6 rounded-full bg-white/20" />
+          <div className="h-1.5 w-8 rounded-full bg-white/10" />
+          <div className="flex gap-0.5 items-center">
+            <div className="h-1 w-3 rounded-sm bg-white/20" />
+            <div className="h-1.5 w-1 rounded-sm bg-white/30" />
+          </div>
+        </div>
+        <div className="flex justify-center pb-1">
           <div className="h-1.5 w-10 rounded-full bg-white/10" />
         </div>
         <div className="flex-1 px-2.5 flex flex-col gap-2 overflow-hidden">
@@ -189,8 +156,12 @@ function MobilePreview({ accent }: { accent: string }) {
 function MarketingPreview({ accent }: { accent: string }) {
   return (
     <div className="relative w-full h-full p-4 flex flex-col gap-3">
+      {/* Nav with logo placeholder */}
       <div className="flex items-center justify-between">
-        <div className="h-2 w-12 rounded-full" style={{ backgroundColor: `${accent}60` }} />
+        <div className="flex items-center gap-1.5">
+          <div className="h-5 w-5 rounded-full" style={{ backgroundColor: `${accent}30`, border: `1px solid ${accent}50` }} />
+          <div className="h-2 w-12 rounded-full" style={{ backgroundColor: `${accent}60` }} />
+        </div>
         <div className="flex gap-1.5">
           {[1, 2, 3].map((i) => <div key={i} className="h-1.5 w-8 rounded-full bg-white/8" />)}
         </div>
@@ -219,7 +190,7 @@ function MarketingPreview({ accent }: { accent: string }) {
   );
 }
 
-const previews = [DashboardPreview, DesignSystemPreview, MobilePreview, MarketingPreview];
+const previews = [DashboardPreview, MobilePreview, MarketingPreview];
 
 export default function Showcase() {
   const ref = useReveal() as React.RefObject<HTMLElement>;
@@ -246,7 +217,7 @@ export default function Showcase() {
                 What you can build
               </span>
             <h2
-              className="font-sans font-bold text-white leading-[1.05]"
+              className="font-display font-bold text-white leading-[1.05]"
               style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", letterSpacing: "-0.03em" }}
             >
               From idea to shipped.
@@ -299,11 +270,11 @@ export default function Showcase() {
       {/* Main card */}
       <div className="px-6 md:px-[120px]">
         <div
-          className="relative w-full rounded-2xl overflow-hidden transition-all duration-500"
+          className="relative w-full rounded-3xl overflow-hidden transition-all duration-500"
           style={{ border: `1px solid ${slide.border}`, backgroundColor: slide.bg }}
         >
           {/* Top accent line */}
-          <div className="absolute top-0 inset-x-0 h-px transition-colors duration-500" style={{ backgroundColor: slide.accent, opacity: 0.4 }} />
+          <div className="absolute top-0 inset-x-0 h-px transition-colors duration-500" style={{ backgroundColor: slide.accent, opacity: 0.6 }} />
 
           <div className="grid md:grid-cols-[1fr_1.1fr] min-h-[380px] md:min-h-[420px]">
             {/* Left info */}
@@ -327,7 +298,7 @@ export default function Showcase() {
               {/* Title + desc */}
               <div className="flex flex-col gap-4 my-8">
                 <h3
-                  className="font-sans font-bold text-white leading-[1.1]"
+                  className="font-display font-bold text-white leading-[1.1]"
                   style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", letterSpacing: "-0.025em" }}
                 >
                   {slide.title}
@@ -360,7 +331,7 @@ export default function Showcase() {
                 style={{ background: `radial-gradient(ellipse at 60% 30%, ${slide.glow} 0%, transparent 65%)` }}
               />
               <div
-                className="absolute inset-0 pointer-events-none opacity-[0.03]"
+                className="absolute inset-0 pointer-events-none opacity-[0.05]"
                 style={{
                   backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
                   backgroundSize: "20px 20px",

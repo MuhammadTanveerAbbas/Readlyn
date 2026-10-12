@@ -128,12 +128,12 @@ const divider = (
 export default function Footer() {
   return (
     <footer className="relative flex flex-col w-full bg-[var(--surface-sunken)] overflow-hidden">
-      {/* top accent line */}
+      {/* top separator white gradient, no yellow */}
       <div
         className="absolute top-0 inset-x-0 h-px"
         style={{
           background:
-            "linear-gradient(90deg, transparent 0%, rgba(245,197,24,0.25) 30%, rgba(245,197,24,0.5) 50%, rgba(245,197,24,0.25) 70%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 80%, transparent 100%)",
         }}
       />
 
@@ -148,7 +148,7 @@ export default function Footer() {
       />
 
       {/* ── ROW 1 : Brand + Nav columns ── */}
-      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 px-6 md:px-[80px] lg:px-[120px] pt-16 pb-12">
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 gap-y-12 px-6 md:px-10 lg:px-[120px] pt-24 pb-12">
         {/* Brand */}
         <div className="flex flex-col gap-5 sm:col-span-2 lg:col-span-1 lg:pr-8">
           <div className="flex items-center gap-[10px]">
@@ -162,7 +162,6 @@ export default function Footer() {
             <span className="font-sans text-[13px] font-bold text-white tracking-[2.5px]">
               READLYN
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
           </div>
 
           <p className="font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] leading-[1.9] max-w-[220px]">
@@ -173,12 +172,12 @@ export default function Footer() {
           <div
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg w-fit"
             style={{
-              background: "rgba(245,197,24,0.05)",
-              border: "1px solid rgba(245,197,24,0.12)",
+              background: "rgba(99,102,241,0.08)",
+              border: "1px solid rgba(99,102,241,0.18)",
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-            <span className="font-sans text-[10px] text-[var(--accent)] tracking-[1.5px] opacity-70">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--info)] animate-pulse" />
+            <span className="font-sans text-[10px] text-[var(--info)] tracking-[1.5px] opacity-70">
               EARLY ACCESS OPEN
             </span>
           </div>
@@ -186,7 +185,7 @@ export default function Footer() {
 
         {/* Product */}
         <div className="flex flex-col gap-4">
-          <span className="font-sans text-[9px] font-semibold text-[var(--accent)] tracking-[0.25em] uppercase opacity-60">
+          <span className="font-sans text-[9px] font-semibold text-[var(--text-muted)] tracking-[0.25em] uppercase">
             Product
           </span>
           <div className="flex flex-col gap-3">
@@ -196,7 +195,7 @@ export default function Footer() {
                 href={link.href}
                 className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
-                <span className="text-[var(--accent)] opacity-40 group-hover:opacity-80 transition-opacity duration-200">
+                <span className="text-white/30 group-hover:text-white/70 transition-opacity duration-200">
                   {link.icon}
                 </span>
                 {link.label}
@@ -207,7 +206,7 @@ export default function Footer() {
 
         {/* Open Source */}
         <div className="flex flex-col gap-4">
-          <span className="font-sans text-[9px] font-semibold text-[var(--accent)] tracking-[0.25em] uppercase opacity-60">
+          <span className="font-sans text-[9px] font-semibold text-[var(--text-muted)] tracking-[0.25em] uppercase">
             Open Source
           </span>
           <div className="flex flex-col gap-3">
@@ -219,7 +218,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
-                <span className="text-[var(--accent)] opacity-40 group-hover:opacity-80 transition-opacity duration-200">
+                <span className="text-white/30 group-hover:text-white/70 transition-opacity duration-200">
                   {link.icon}
                 </span>
                 {link.label}
@@ -230,7 +229,7 @@ export default function Footer() {
 
         {/* Legal */}
         <div className="flex flex-col gap-4">
-          <span className="font-sans text-[9px] font-semibold text-[var(--accent)] tracking-[0.25em] uppercase opacity-60">
+          <span className="font-sans text-[9px] font-semibold text-[var(--text-muted)] tracking-[0.25em] uppercase">
             Legal
           </span>
           <div className="flex flex-col gap-3">
@@ -240,7 +239,7 @@ export default function Footer() {
                 href={link.href}
                 className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
-                <span className="text-[var(--accent)] opacity-40 group-hover:opacity-80 transition-opacity duration-200">
+                <span className="text-white/30 group-hover:text-white/70 transition-opacity duration-200">
                   {link.icon}
                 </span>
                 {link.label}
@@ -253,7 +252,7 @@ export default function Footer() {
       {divider}
 
       {/* ── ROW 2 : Social icons + tagline ── */}
-      <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 px-6 md:px-[80px] lg:px-[120px] py-6">
+      <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 px-6 md:px-10 lg:px-[120px] py-6">
         <span className="font-sans text-[11px] text-[var(--text-muted)] tracking-[0.4px]">
           Follow the build journey
         </span>
@@ -266,7 +265,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.label}
-              className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/[0.07] bg-white/[0.03] text-[var(--text-muted)] hover:border-[var(--accent)]/40 hover:text-[var(--accent)] hover:bg-[var(--accent)]/[0.06] transition-all duration-200"
+              className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/[0.07] bg-white/[0.03] text-[var(--text-muted)] hover:border-white/20 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
             >
               {s.icon}
             </a>
@@ -277,7 +276,7 @@ export default function Footer() {
       {divider}
 
       {/* ── ROW 3 : Copyright bar ── */}
-      <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-6 md:px-[80px] lg:px-[120px] py-4">
+      <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-6 md:px-10 lg:px-[120px] py-6">
         <div className="flex items-center gap-4">
           <span className="font-sans text-[10px] text-[#555] tracking-[0.5px]">
             © 2026 Readlyn

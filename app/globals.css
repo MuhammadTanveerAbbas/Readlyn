@@ -4,17 +4,18 @@
    READLYN DESIGN SYSTEM
    Single source of truth for every surface, type step, radius and motion.
    Rules the system enforces:
-     1. Two typefaces only. Open Sans for all UI, PT Sans for figures, code
-        and coordinates.
+     1. Two typefaces only. Bricolage Grotesque for headings and display text,
+        Figtree for body text and general UI.
      2. No pure black. The darkest surface is --surface-sunken.
      3. No glow. Accent colour separates through fill and border, never
         through outer box-shadow bloom.
    =========================================================================== */
 
 @theme inline {
-  --font-sans: var(--font-open-sans), "Open Sans", system-ui, -apple-system,
+  --font-sans: var(--font-figtree), "Figtree", system-ui, -apple-system,
     "Segoe UI", sans-serif;
-  --font-mono: var(--font-pt-sans), "PT Sans", ui-sans-serif, sans-serif;
+  --font-display: var(--font-bricolage), "Bricolage Grotesque", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Fira Code", monospace;
 }
 
 :root {
@@ -115,6 +116,16 @@
   input::placeholder, textarea::placeholder { color: var(--text-faint); }
   img, video, svg { max-width: 100%; height: auto; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
 }
 
 ::-webkit-scrollbar { width: 6px; }

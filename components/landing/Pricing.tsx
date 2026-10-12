@@ -17,7 +17,7 @@ export default function Pricing() {
           Monetization & Plans
         </span>
         <h2
-          className="font-sans font-bold text-white leading-[1.05]"
+          className="font-display font-bold text-white leading-[1.05]"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",

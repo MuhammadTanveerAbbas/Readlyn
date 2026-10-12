@@ -43,7 +43,7 @@ export default function HowItWorks() {
             How it works
           </span>
         <h2
-          className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-display font-bold text-white leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -99,7 +99,7 @@ export default function HowItWorks() {
 
             <div className="flex flex-col gap-3 z-10">
               <h3
-                className="font-sans font-bold text-white leading-[1.2]"
+                className="font-display font-bold text-white leading-[1.2]"
                 style={{ fontSize: "1.15rem", letterSpacing: "-0.02em" }}
               >
                 {step.title}

@@ -54,7 +54,7 @@ export default function FAQ() {
                 FAQ
               </span>
             <h2
-              className="font-sans font-bold text-white leading-[1.05] whitespace-pre-line"
+              className="font-display font-bold text-white leading-[1.05] whitespace-pre-line"
               style={{
                 fontSize: "clamp(2rem, 3.5vw, 3rem)",
                 letterSpacing: "-0.03em",

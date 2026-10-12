@@ -88,8 +88,8 @@ const CURSORS = [
   },
   {
     name: "Jin L.",
-    color: "var(--success-soft)",
-    textColor: "var(--surface-base)",
+    color: "#4ade80",
+    textColor: "#000000",
     animName: "cursor-jin",
     duration: "26s",
     keyframes: `@keyframes cursor-jin {
@@ -148,7 +148,7 @@ export default function CollabCursors() {
             viewBox="0 0 20 22"
             fill="none"
             style={{
-              filter: `drop-shadow(0 0 7px ${cursor.color}66) drop-shadow(0 2px 4px rgba(11,11,12,0.6))`,
+              filter: `drop-shadow(0 0 10px ${cursor.color}99) drop-shadow(0 0 4px ${cursor.color}55) drop-shadow(0 2px 6px rgba(11,11,12,0.8))`,
             }}
           >
             <path d="M3 2L17 9.5L10.5 11.5L7.5 19.5L3 2Z" fill={cursor.color} />
@@ -173,7 +173,7 @@ export default function CollabCursors() {
               backgroundColor: cursor.color,
               borderRadius: "999px",
               padding: "3px 10px 3px 5px",
-              boxShadow: `0 2px 14px rgba(11,11,12,0.45), 0 0 0 1px rgba(255,255,255,0.1)`,
+              boxShadow: `0 4px 20px rgba(11,11,12,0.6), 0 0 0 1px rgba(255,255,255,0.18), 0 0 12px ${cursor.color}40`,
               whiteSpace: "nowrap",
             }}
           >

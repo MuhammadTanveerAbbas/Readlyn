@@ -54,7 +54,7 @@ export default function FinalCTA() {
 
       {/* Title */}
       <h2
-        className="font-sans font-black text-white text-center w-full max-w-[900px] mb-6"
+        className="font-display font-black text-white text-center w-full max-w-[900px] mb-6"
         style={{
           fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
           letterSpacing: "-0.035em",
