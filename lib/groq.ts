@@ -1,46 +1,62 @@
 import { createGroq } from "@ai-sdk/groq";
+import { AI_TASK_CONFIG, getConfiguredModel, getModelFallbacks, type AiTask } from "@/lib/ai/config";
 
 /**
  * Default fallback candidate hierarchy for each task type (July 2026 Spec)
  */
-export const MODEL_FALLBACK_CANDIDATES = {
-  reasoning: [
-    process.env.GROQ_MODEL,
-    "openai/gpt-oss-120b",
-    "llama-3.3-70b-versatile",
-    "llama-3.1-70b-versatile",
-    "llama-3.1-8b-instant",
-    "mixtral-8x7b-32768",
-  ].filter(Boolean) as string[],
-  vision: [
-    process.env.GROQ_VISION_MODEL,
-    "qwen/qwen3.6-27b",
-    "llama-3.2-11b-vision-preview",
-    "llama-3.2-90b-vision-preview",
-  ].filter(Boolean) as string[],
-  fast: [
-    process.env.GROQ_FAST_MODEL,
-    "llama-3.1-8b-instant",
-    "llama-3.3-70b-versatile",
-  ].filter(Boolean) as string[],
-} as const;
+export type GroqTaskType = AiTask | "reasoning";
+
+const TASK_ALIASES: Record<string, AiTask> = {
+  reasoning: "general",
+};
+
+export function normalizeGroqTask(task: string): AiTask {
+  return (TASK_ALIASES[task] || task) as AiTask;
+}
+
+export const MODEL_FALLBACK_CANDIDATES = Object.fromEntries(
+  (Object.keys(AI_TASK_CONFIG) as AiTask[]).map((task) => [
+    task,
+    getModelFallbacks(task),
+  ]),
+) as Record<string, string[]>;
+
+// Backward-compatible aliases
+MODEL_FALLBACK_CANDIDATES.reasoning = MODEL_FALLBACK_CANDIDATES.general;
 
 export const GROQ_MODELS = {
+  get general(): string {
+    return getConfiguredModel("general");
+  },
+  get design(): string {
+    return getConfiguredModel("design");
+  },
+  get code(): string {
+    return getConfiguredModel("code");
+  },
+  get analysis(): string {
+    return getConfiguredModel("analysis");
+  },
+  get edit(): string {
+    return getConfiguredModel("edit");
+  },
+  get json(): string {
+    return getConfiguredModel("json");
+  },
   get reasoning(): string {
-    return MODEL_FALLBACK_CANDIDATES.reasoning[0] || "openai/gpt-oss-120b";
+    return getConfiguredModel("general");
   },
   get vision(): string {
-    return MODEL_FALLBACK_CANDIDATES.vision[0] || "qwen/qwen3.6-27b";
+    return getConfiguredModel("vision");
   },
   get fast(): string {
-    return MODEL_FALLBACK_CANDIDATES.fast[0] || "llama-3.1-8b-instant";
+    return getConfiguredModel("fast");
   },
 };
 
-export type GroqTaskType = keyof typeof MODEL_FALLBACK_CANDIDATES;
-
 export function getGroqModel(task: GroqTaskType = "reasoning"): string {
-  return GROQ_MODELS[task] || GROQ_MODELS.reasoning;
+  const normalized = normalizeGroqTask(String(task));
+  return GROQ_MODELS[normalized as keyof typeof GROQ_MODELS] || GROQ_MODELS.general;
 }
 
 export function getGroqClient() {
@@ -63,7 +79,7 @@ let modelCache: ModelCache | null = null;
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 /**
- * Remove sensitive credentials from error messages, plus logs
+ * Remove sensitive credentials from error messages, and logs
  */
 export function sanitizeLogMessage(message: string): string {
   return message
@@ -148,8 +164,9 @@ export async function resolveGroqModel(
   forceRefresh = false,
   excludedModels: Set<string> = new Set(),
 ): Promise<string> {
+  const normalized = normalizeGroqTask(String(task));
   const availableModels = await discoverGroqModels(forceRefresh);
-  const candidates = MODEL_FALLBACK_CANDIDATES[task] || MODEL_FALLBACK_CANDIDATES.reasoning;
+  const candidates = MODEL_FALLBACK_CANDIDATES[normalized] || MODEL_FALLBACK_CANDIDATES.general;
 
   // 1. Quality ranked priority candidates that are active right now
   const activeCandidates = candidates
@@ -181,12 +198,10 @@ export async function resolveGroqModel(
 /** Quality tiers used to rank discovered models, higher is better. */
 const MODEL_QUALITY_TIERS: Array<{ pattern: RegExp, score: number }> = [
   { pattern: /gpt-oss-120b/i, score: 100 },
-  { pattern: /llama-3\.3-70b/i, score: 90 },
-  { pattern: /llama-3\.1-70b/i, score: 80 },
-  { pattern: /qwen/i, score: 70 },
-  { pattern: /llama-3\.2/i, score: 60 },
+  { pattern: /gpt-oss-20b/i, score: 95 },
+  { pattern: /qwen3\.8-27b/i, score: 85 },
+  { pattern: /llama-3\.3-70b/i, score: 80 },
   { pattern: /llama-3\.1-8b/i, score: 50 },
-  { pattern: /mixtral/i, score: 40 },
 ];
 
 function scoreModel(modelId: string): number {
@@ -202,13 +217,15 @@ function scoreModel(modelId: string): number {
 export async function getBestGroqModel(
   task: GroqTaskType = "reasoning",
 ): Promise<string> {
+  const normalized = normalizeGroqTask(String(task));
   const availableModels = await discoverGroqModels(false);
   const envOverride = process.env.GROQ_MODEL;
   if (envOverride && availableModels.includes(envOverride)) {
     return envOverride;
   }
 
-  const activeCandidates = MODEL_FALLBACK_CANDIDATES[task].filter((candidate) =>
+  const candidates = MODEL_FALLBACK_CANDIDATES[normalized] || MODEL_FALLBACK_CANDIDATES.general;
+  const activeCandidates = candidates.filter((candidate) =>
     availableModels.includes(candidate),
   );
   if (activeCandidates.length > 0) {
@@ -218,7 +235,7 @@ export async function getBestGroqModel(
   }
 
   return [...availableModels].sort((a, b) => scoreModel(b) - scoreModel(a))[0] ||
-    MODEL_FALLBACK_CANDIDATES[task][0] ||
+    candidates[0] ||
     "openai/gpt-oss-120b";
 }
 
@@ -306,7 +323,7 @@ export interface SelfHealingOptions {
 }
 
 /**
- * Execute Groq operation with automatic model discovery, fallback, rate limit backoff, plus transient failure recovery
+ * Execute Groq operation with automatic model discovery, fallback, rate limit backoff, and transient failure recovery
  */
 export async function executeGroqWithSelfHealing<T>(
   fn: (modelName: string) => Promise<T>,
@@ -339,7 +356,7 @@ export async function executeGroqWithSelfHealing<T>(
         modelFallbackCount++;
         excludedModels.add(currentModel);
         console.warn(
-          `[groq-self-heal] Model "${currentModel}" unavailable (${safeErrorMsg}). Refreshing catalog plus falling back...`,
+          `[groq-self-heal] Model "${currentModel}" unavailable (${safeErrorMsg}). Refreshing catalog and falling back...`,
         );
         currentModel = await resolveGroqModel(task, true, excludedModels);
         continue;

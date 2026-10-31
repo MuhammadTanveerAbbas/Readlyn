@@ -40,11 +40,11 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col max-h-[85vh]">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4 animate-fade-in">
+      <div className="relative w-full max-w-2xl rounded-2xl border border-[var(--line-default)] bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col max-h-[85vh]">
+        <div className="flex items-center justify-between border-b border-[var(--line-default)] pb-4">
           <div>
-            <h3 className="font-sans text-lg font-bold text-white">
+            <h3 className="font-sans text-lg font-bold text-[var(--text-primary)]">
               W3C Design Tokens System
             </h3>
             <p className="font-sans text-xs text-[var(--text-muted)]">
@@ -53,19 +53,19 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/60 hover:bg-white/10 hover:text-white shrink-0"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--line-default)] text-[var(--text-body)] hover:bg-[var(--fill-strong)] hover:text-[var(--text-primary)] shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="flex items-center gap-2 border-b border-white/10 py-3">
+        <div className="flex items-center gap-2 border-b border-[var(--line-default)] py-3">
           <button
             onClick={() => setActiveTab("visual")}
             className={`px-3 py-1.5 rounded-lg text-xs font-sans transition-all ${
               activeTab === "visual"
-                ? "bg-[var(--accent)] text-white font-bold"
-                : "text-white/70 hover:bg-white/5"
+                ? "bg-[var(--accent)] text-[var(--text-primary)] font-bold"
+                : "text-[var(--text-body)] hover:bg-[var(--fill-default)]"
             }`}
           >
             Token Palette
@@ -74,8 +74,8 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
             onClick={() => setActiveTab("json")}
             className={`px-3 py-1.5 rounded-lg text-xs font-sans transition-all ${
               activeTab === "json"
-                ? "bg-[var(--accent)] text-white font-bold"
-                : "text-white/70 hover:bg-white/5"
+                ? "bg-[var(--accent)] text-[var(--text-primary)] font-bold"
+                : "text-[var(--text-body)] hover:bg-[var(--fill-default)]"
             }`}
           >
             W3C JSON
@@ -86,33 +86,33 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
           {activeTab === "visual" ? (
             <div className="space-y-6">
               <div>
-                <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-[var(--accent)] mb-3">
+                <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-[var(--accent-text)] mb-3">
                   Color Scale (Primary & Semantic)
                 </h4>
                 <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
                   {Object.entries(designTokens.color.primary).map(([step, token]) => (
                     <div key={step} className="flex flex-col items-center gap-1">
                       <div
-                        className="w-full h-10 rounded-md border border-white/10 shadow-inner"
+                        className="w-full h-10 rounded-md border border-[var(--line-default)] shadow-inner"
                         style={{ backgroundColor: token.$value }}
                       />
-                      <span className="font-sans text-[10px] text-white/60">{step}</span>
+                      <span className="font-sans text-[10px] text-[var(--text-body)]">{step}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-[var(--accent)] mb-3">
+                <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-[var(--accent-text)] mb-3">
                   Spacing Scale
                 </h4>
                 <div className="flex flex-wrap gap-3">
                   {Object.entries(designTokens.spacing).map(([key, token]) => (
                     <div
                       key={key}
-                      className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-sans text-xs text-white"
+                      className="flex items-center gap-2 rounded-lg border border-[var(--line-default)] bg-[var(--fill-default)] px-3 py-1.5 font-sans text-xs text-[var(--text-primary)]"
                     >
-                      <span className="text-[var(--accent)]">{key}:</span>
+                      <span className="text-[var(--accent-text)]">{key}:</span>
                       <span>{token.$value}</span>
                     </div>
                   ))}
@@ -120,16 +120,16 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
               </div>
 
               <div>
-                <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-[var(--accent)] mb-3">
+                <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-[var(--accent-text)] mb-3">
                   Radius Tokens
                 </h4>
                 <div className="flex flex-wrap gap-3">
                   {Object.entries(designTokens.radius).map(([key, token]) => (
                     <div
                       key={key}
-                      className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-sans text-xs text-white"
+                      className="flex items-center gap-2 rounded-lg border border-[var(--line-default)] bg-[var(--fill-default)] px-3 py-1.5 font-sans text-xs text-[var(--text-primary)]"
                     >
-                      <span className="text-[var(--accent)]">{key}:</span>
+                      <span className="text-[var(--accent-text)]">{key}:</span>
                       <span>{token.$value}</span>
                     </div>
                   ))}
@@ -137,26 +137,26 @@ export default function DesignTokensModal({ open, onClose }: DesignTokensModalPr
               </div>
             </div>
           ) : (
-            <pre className="p-4 rounded-xl bg-[var(--scrim)] border border-white/10 font-mono text-xs text-emerald-400 overflow-x-auto">
+            <pre className="p-4 rounded-xl bg-[var(--surface-sunken)] border border-[var(--line-default)] font-mono text-xs text-[var(--text-secondary)] overflow-x-auto">
               {jsonString}
             </pre>
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-white/10 pt-4">
+        <div className="flex items-center justify-between border-t border-[var(--line-default)] pt-4">
           <div className="font-sans text-[11px] text-[var(--text-muted)]">
             Format: W3C Design Tokens Community Group standard
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={copyToClipboard}
-              className="px-4 py-2 rounded-lg border border-white/10 font-sans text-xs font-semibold text-white hover:bg-white/10 transition-all"
+              className="px-4 py-2 rounded-lg border border-[var(--line-default)] font-sans text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--fill-strong)] transition-all"
             >
               Copy JSON
             </button>
             <button
               onClick={downloadJson}
-              className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all"
+              className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--accent-hover)] transition-all"
             >
               Download tokens.json
             </button>

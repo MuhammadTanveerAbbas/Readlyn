@@ -124,7 +124,7 @@ export default function SignupPage() {
           </p>
           <Link
             href="/login"
-            className="font-sans text-[11px] text-[var(--accent)] opacity-70 hover:opacity-100 transition-opacity tracking-[0.5px]"
+            className="font-sans text-[11px] text-[var(--accent-text)] opacity-70 hover:opacity-100 transition-opacity tracking-[0.5px]"
           >
             ← Back to sign in
           </Link>
@@ -145,14 +145,14 @@ export default function SignupPage() {
       <div className="flex items-center gap-3 my-5">
         <div
           className="flex-1 h-px"
-          style={{ background: "rgba(255,255,255,0.06)" }}
+          style={{ background: "rgba(16,17,19,0.06)" }}
         />
-        <span className="font-sans text-[10px] text-[#333] tracking-[1px]">
+        <span className="font-sans text-[10px] text-[var(--text-faint)] tracking-[1px]">
           OR
         </span>
         <div
           className="flex-1 h-px"
-          style={{ background: "rgba(255,255,255,0.06)" }}
+          style={{ background: "rgba(16,17,19,0.06)" }}
         />
       </div>
 
@@ -214,7 +214,7 @@ export default function SignupPage() {
                     : password.length >= 8
                       ? 2
                       : 1;
-              const colors = ["var(--danger)", "var(--orange)", "var(--accent)", "var(--success-soft)"];
+              const colors = ["var(--danger)", "var(--orange)", "var(--accent)", "var(--success)"];
               return (
                 <div
                   key={level}
@@ -223,7 +223,7 @@ export default function SignupPage() {
                     background:
                       level <= strength
                         ? colors[strength - 1]
-                        : "rgba(255,255,255,0.07)",
+                        : "rgba(16,17,19,0.07)",
                   }}
                 />
               );
@@ -277,7 +277,7 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 rounded-xl font-sans text-[13px] font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+          className="w-full py-3 rounded-xl font-sans text-[13px] font-bold text-[var(--accent-ink)] bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -314,7 +314,7 @@ export default function SignupPage() {
         Already have an account?{" "}
         <Link
           href="/login"
-          className="text-[var(--text-body)] hover:text-white transition-colors"
+          className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
         >
           Sign in
         </Link>

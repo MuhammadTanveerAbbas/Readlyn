@@ -4,18 +4,41 @@
    READLYN DESIGN SYSTEM
    Single source of truth for every surface, type step, radius and motion.
    Rules the system enforces:
-     1. Two typefaces only. Bricolage Grotesque for headings and display text,
-        Figtree for body text and general UI.
-     2. No pure black. The darkest surface is --surface-sunken.
+     1. Two families only. Bricolage Grotesque for headings and display text,
+        Figtree for body text, UI, and canvas artwork. Both are self-hosted
+        from `public/fonts` so Fabric.js can load them by their literal names.
+     2. White surfaces only. Cards are --surface-base on a --surface-sunken
+        page, and text stays between --text-primary and --text-faint.
      3. No glow. Accent colour separates through fill and border, never
         through outer box-shadow bloom.
    =========================================================================== */
 
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 400 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/fonts/bricolage-grotesque-latin-variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url("/fonts/figtree-latin-variable.woff2") format("woff2");
+}
+
+/* Dark mode is disabled. Tailwind's `dark:` variant now requires an explicit
+   `.dark` ancestor, which this app never sets, so OS dark mode cannot turn
+   any component into a black theme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
-  --font-sans: var(--font-figtree), "Figtree", system-ui, -apple-system,
-    "Segoe UI", sans-serif;
-  --font-display: var(--font-bricolage), "Bricolage Grotesque", system-ui, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", "Fira Code", monospace;
+  --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-mono: "Figtree", ui-monospace, monospace;
 }
 
 :root {
@@ -52,45 +75,52 @@
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
-  --surface-sunken: #0b0b0c;
-  --surface-base: #121214;
-  --surface-raised: #191a1d;
-  --surface-overlay: #212227;
-  --surface-inset: #0e0e10;
+  color-scheme: light;
 
-  --text-primary: #ffffff;
-  --text-secondary: #e6e6e8;
-  --text-body: #a1a1aa;
-  --text-muted: #71717a;
-  --text-faint: #52525b;
+  --surface-sunken: #f6f6f3;
+  --surface-base: #ffffff;
+  --surface-raised: #fafaf8;
+  --surface-overlay: #f0f0ec;
+  --surface-inset: #f3f3ef;
 
-  --line-subtle: rgba(255, 255, 255, 0.06);
-  --line-default: rgba(255, 255, 255, 0.1);
-  --line-strong: rgba(255, 255, 255, 0.18);
+  --text-primary: #111113;
+  --text-secondary: #2a2a2e;
+  --text-body: #52525b;
+  --text-muted: #5f5f68;
+  --text-faint: #6f6f78;
+
+  --line-subtle: rgba(17, 17, 19, 0.06);
+  --line-default: rgba(17, 17, 19, 0.1);
+  --line-strong: rgba(17, 17, 19, 0.18);
+
+  --fill-subtle: rgba(17, 17, 19, 0.03);
+  --fill-default: rgba(17, 17, 19, 0.05);
+  --fill-strong: rgba(17, 17, 19, 0.08);
 
   --accent: #f5c518;
-  --accent-hover: #d9ad0e;
-  --accent-ink: #ffffff;
-  --accent-soft: rgba(245, 197, 24, 0.12);
-  --accent-line: rgba(245, 197, 24, 0.32);
+  --accent-hover: #e0b400;
+  --accent-ink: #111113;
+  --accent-text: #8a6a00;
+  --accent-soft: rgba(245, 197, 24, 0.18);
+  --accent-line: rgba(245, 197, 24, 0.45);
 
-  --orange: #ff6b35;
-  --orange-soft: rgba(255, 107, 53, 0.12);
+  --orange: #c2410c;
+  --orange-soft: rgba(234, 88, 12, 0.1);
 
-  --success: #4ade80;
-  --success-soft: rgba(74, 222, 128, 0.12);
-  --warning: #fbbf24;
-  --danger: #f87171;
-  --danger-soft: rgba(248, 113, 113, 0.12);
-  --info: #60a5fa;
-  --info-soft: rgba(96, 165, 250, 0.12);
+  --success: #15803d;
+  --success-soft: rgba(21, 128, 61, 0.1);
+  --warning: #b45309;
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.08);
+  --info: #2563eb;
+  --info-soft: rgba(37, 99, 235, 0.08);
 
-  --scrim: rgba(11, 11, 12, 0.72);
+  --scrim: rgba(17, 17, 19, 0.45);
 
-  --elevation-resting: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --elevation-raised: 0 4px 12px rgba(0, 0, 0, 0.45);
-  --elevation-floating: 0 12px 32px rgba(0, 0, 0, 0.5);
-  --elevation-modal: 0 24px 60px rgba(0, 0, 0, 0.6);
+  --elevation-resting: 0 1px 2px rgba(17, 17, 19, 0.06);
+  --elevation-raised: 0 4px 12px rgba(17, 17, 19, 0.08);
+  --elevation-floating: 0 12px 32px rgba(17, 17, 19, 0.12);
+  --elevation-modal: 0 24px 60px rgba(17, 17, 19, 0.18);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -109,6 +139,7 @@
   body {
     background-color: var(--surface-sunken);
     color: var(--text-secondary);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -130,7 +161,7 @@
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--surface-sunken); }
-::-webkit-scrollbar-thumb { background: var(--surface-overlay); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
 
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

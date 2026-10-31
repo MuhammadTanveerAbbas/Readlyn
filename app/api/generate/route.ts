@@ -1,4 +1,4 @@
-import { generateText } from "ai";
+import { generateText, Output } from "ai";
 import { getGroqClient, getBestGroqModel, executeGroqWithSelfHealing } from "@/lib/groq";
 import {
   InfographicSchema,
@@ -9,9 +9,7 @@ import {
 } from "@/types/infographic";
 import { BODY_FONT, DISPLAY_FONT } from "@/types/infographic";
 import { computeLayout, type SlotPosition } from "@/lib/archetypeLayouts";
-import { FAIR_USE_DAILY_GENERATIONS } from "@/config/plans";
 import { createClient } from "@/lib/supabase/server";
-import { checkRateLimit } from "@/lib/rate-limit";
 import { checkCsrfOrigin } from "@/lib/csrf";
 import { sanitizePrompt, sanitizeOutput } from "@/lib/sanitize";
 import { z } from "zod";
@@ -35,17 +33,6 @@ const GenerateRequestSchema = z.object({
   ]),
 });
 
-function extractFirstJsonObject(raw: string) {
-  const fencedMatch = raw.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  const firstGroup = fencedMatch?.[1];
-  const candidate = firstGroup ?? raw;
-  const firstBrace = candidate.indexOf("{");
-  const lastBrace = candidate.lastIndexOf("}");
-  if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
-    throw new Error("No JSON object found in model output");
-  }
-  return candidate.slice(firstBrace, lastBrace + 1);
-}
 
 function buildFallbackInfographic(args: {
   prompt: string;
@@ -99,7 +86,7 @@ function buildFallbackInfographic(args: {
         fontSize: 24,
         fontWeight: "bold",
         fontFamily: BODY_FONT,
-        fill: colors.secondary,
+        fill: colors.primary,
         textAlign: "left",
         width: slot.width ?? 300,
         opacity: 1,
@@ -115,9 +102,9 @@ function buildFallbackInfographic(args: {
         height: slot.height ?? 120,
         value: "72%",
         label: "Readers improve focus",
-        valueFill: "#ffffff",
-        labelFill: "#f1f5f9",
-        bgFill: colors.primary,
+        valueFill: colors.primary,
+        labelFill: "#52525b",
+        bgFill: "#f6f6f3",
         rx: slot.rx ?? 12,
         zIndex: slot.zIndexHint ?? 20,
       });
@@ -141,7 +128,7 @@ function buildFallbackInfographic(args: {
         y1: slot.y1 ?? 300,
         x2: slot.x2 ?? width - 40,
         y2: slot.y2 ?? 300,
-        stroke: colors.secondary,
+        stroke: colors.primary,
         strokeWidth: 2,
         dashed: true,
         zIndex: slot.zIndexHint ?? 8,
@@ -167,7 +154,7 @@ function buildFallbackInfographic(args: {
         y: slot.y ?? 160,
         width: slot.width ?? 220,
         height: slot.height ?? 120,
-        fill: "#f8fafc",
+        fill: "#f6f6f3",
         rx: slot.rx ?? 12,
         opacity: 1,
         stroke: colors.accent,
@@ -202,17 +189,6 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const rateCheck = await checkRateLimit(`generate:${user.id}`, "generate");
-    if (!rateCheck.allowed) {
-      return Response.json(
-        {
-          error: "Too many requests. Please wait before generating again.",
-          retryAfter: Math.ceil(rateCheck.resetIn),
-        },
-        { status: 429 },
-      );
-    }
-
     const body = await req.json();
     const parsed = GenerateRequestSchema.safeParse(body);
     if (!parsed.success) {
@@ -222,22 +198,6 @@ export async function POST(req: Request) {
       );
     }
     const { prompt, theme, size, style } = parsed.data;
-
-    // Fair use safety net, so a single account cannot exhaust the provider
-    // quota for everyone else. This is not a plan gate, everyone shares it.
-    const { count: generationsToday } = await supabase
-      .from("generation_history")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .gte("created_at", new Date(Date.now() - 86400000).toISOString());
-
-    const dailyLimit = FAIR_USE_DAILY_GENERATIONS;
-    if ((generationsToday ?? 0) >= dailyLimit) {
-      return Response.json(
-        { error: `Daily generation limit reached (${dailyLimit}/day). Try again tomorrow.` },
-        { status: 429 },
-      );
-    }
 
     const sanitizedPrompt = sanitizePrompt(prompt);
     const { width: w, height: h } = CANVAS_SIZES[size];
@@ -275,10 +235,10 @@ For each slot above, generate a matching element in the output JSON using:
 - The EXACT zIndex from the slot
 - YOUR CHOICE of: fill color, text content, fontSize, fontWeight, emoji, opacity
 
-text_slot ➔ generate a 'text' element with real content
-stat_slot ➔ generate a 'stat' element with a value, plus label
-icon_slot ➔ generate an 'icon' element with emoji
-rect/circle/line ➔ generate that exact type
+text_slot -> generate a 'text' element with real content
+stat_slot -> generate a 'stat' element with a value and label
+icon_slot -> generate an 'icon' element with emoji
+rect/circle/line -> generate that exact type
 
 You MAY add extra decorative depth elements (circles, texture dots) at zIndex 1-4,
 but NEVER move or resize a pre-computed slot.`
@@ -298,16 +258,16 @@ ${layoutManifest}
 QUALITY RULES:
 1) Output ONLY a valid JSON object with keys: canvasWidth, canvasHeight, background, elements.
 2) NEVER output markdown fences, prose, preamble, or explanation.
-3) If style=auto, choose the best archetype for the topic based on information density, plus narrative flow.
-4) Build strong hierarchy: clear title, section headers, body text, plus supporting visual accents.
-5) Maintain high contrast between text, plus backgrounds.
-6) Respect spacing rhythm: avoid overlaps, preserve gutters, plus keep breathing room between groups.
+3) If style=auto, choose the best archetype for the topic based on information density and narrative flow.
+4) Build strong hierarchy: clear title, section headers, body text, and supporting visual accents.
+5) Maintain high contrast between text and backgrounds.
+6) Respect spacing rhythm: avoid overlaps, preserve gutters, and keep breathing room between groups.
 7) Use statistically meaningful, concrete facts where possible (no placeholder copy).
-8) Use realistic typography values, plus bounded widths so text remains readable.
+8) Use realistic typography values and bounded widths so text remains readable.
 9) Include decorative depth intentionally (subtle circles/lines) without harming readability.
-10) Sort elements by zIndex ascending, plus include a full-canvas background rect at zIndex 0.
+10) Sort elements by zIndex ascending, and include a full-canvas background rect at zIndex 0.
 11) Keep output valid for schema types only: rect, circle, text, stat, icon, line.
-12) Keep total element count between 28, plus 60 for balanced complexity.`;
+12) Keep total element count between 28 and 60 for balanced complexity.`;
 
     const userPrompt = `Create a professional, visually stunning ${style === "auto" ? "auto-layout" : `${style.toUpperCase()}-style`} infographic about: "${sanitizedPrompt}"
 
@@ -315,7 +275,7 @@ Canvas: ${w}×${h}px
 Theme: ${theme}
 Style: ${style}
 
-Generate REAL facts, statistics, plus data about this topic. The visual structure must match
+Generate REAL facts, statistics, and data about this topic. The visual structure must match
 the ${style === "auto" ? "selected" : style} archetype, pyramid shapes for pyramid, cycle rings for cycle, etc.
 Make it look like it came from Venngage or Piktochart.
 
@@ -323,8 +283,8 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
 
     const groq = getGroqClient();
 
-    let text = "";
-    let usedModel = await getBestGroqModel("reasoning");
+    let aiPayload: InfographicData | null = null;
+    let usedModel = await getBestGroqModel("json");
     try {
       const response = await executeGroqWithSelfHealing(
         async (modelName) => {
@@ -334,11 +294,12 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
             system: systemPrompt,
             prompt: userPrompt,
             temperature: 0.7,
+            output: Output.object({ schema: InfographicSchema }),
           });
         },
-        { task: "reasoning" },
+        { task: "json" },
       );
-      text = response.text;
+      aiPayload = (response.output as InfographicData) || null;
     } catch (aiErr) {
       console.warn(
         "[generate] AI generation degraded to fallback template:",
@@ -346,41 +307,15 @@ Return ONLY a valid JSON object. No markdown fences. No explanation.`;
       );
     }
 
-    let payload: InfographicData;
-    if (text) {
-      try {
-        const normalizedJson = extractFirstJsonObject(text).replace(
-          /:\s*undefined(\s*[,}])/g,
-          ": null$1",
-        );
-        const parsed = InfographicSchema.safeParse(JSON.parse(normalizedJson));
-        payload = parsed.success
-          ? parsed.data
-          : buildFallbackInfographic({
-              prompt,
-              width: w,
-              height: h,
-              colors,
-              slots,
-            });
-      } catch {
-        payload = buildFallbackInfographic({
-          prompt,
-          width: w,
-          height: h,
-          colors,
-          slots,
-        });
-      }
-    } else {
-      payload = buildFallbackInfographic({
+    const payload: InfographicData =
+      aiPayload ||
+      buildFallbackInfographic({
         prompt,
         width: w,
         height: h,
         colors,
         slots,
       });
-    }
 
     payload.elements = payload.elements.map((el) => {
       if (el.type === "text") {

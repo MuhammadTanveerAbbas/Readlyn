@@ -12,11 +12,11 @@ export default function Testimonials() {
     >
       {/* Header */}
       <div className="flex flex-col gap-4 max-w-[640px]">
-          <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+          <span className="font-sans text-[11px] font-semibold text-[var(--accent-text)] tracking-[0.2em] uppercase">
               Early access
             </span>
         <h2
-          className="font-display font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-display font-bold text-[var(--text-primary)] leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(2rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -27,7 +27,7 @@ export default function Testimonials() {
         <p className="font-sans text-[13px] text-[var(--text-body)] tracking-[0.3px] leading-[1.8] max-w-[520px]">
           We&apos;re in early access. No fake testimonials, no inflated numbers,
           just an honest tool we&apos;re building in public. Try it, break it,
-          plus tell us what to fix.
+          and tell us what to fix.
         </p>
       </div>
 
@@ -48,7 +48,7 @@ export default function Testimonials() {
             color: "var(--accent)",
             title: "Built in public",
             body: "Every feature, every decision, shared openly. Follow the build on GitHub.",
-            cta: "View on GitHub ➔",
+            cta: "View on GitHub",
             href: "https://github.com/MuhammadTanveerAbbas/Readlyn",
           },
           {
@@ -72,8 +72,8 @@ export default function Testimonials() {
             ),
             color: "var(--orange)",
             title: "Your feedback shapes it",
-            body: "We read every issue, plus every feature request. Early users directly influence what gets built next.",
-            cta: "Open an issue ➔",
+            body: "We read every issue and every feature request. Early users directly influence what gets built next.",
+            cta: "Open an issue",
             href: "https://github.com/MuhammadTanveerAbbas/Readlyn/issues",
           },
           {
@@ -90,24 +90,17 @@ export default function Testimonials() {
             ),
             color: "var(--info)",
             title: "No lock-in, ever",
-            body: "Export clean code you own. No proprietary formats, no vendor dependency. Your work stays yours.",
-            cta: "See export formats ➔",
+            body: "Export PNG, SVG, and JSON, or grab CSS and React snippets from Developer Mode. Your work leaves with you.",
+            cta: "See export formats",
             href: "#showcase",
           },
         ].map((card, i) => (
           <div
             key={i}
             className="group relative flex flex-col gap-5 p-8 rounded-2xl overflow-hidden
-                       border border-white/7 bg-[var(--surface-base)]
-                       hover:border-white/14 transition-all duration-500 hover:-translate-y-1"
+                       border border-[var(--line-subtle)] bg-[var(--surface-base)]
+                       hover:border-[var(--line-default)] transition-all duration-500 hover:-translate-y-1"
           >
-            <div
-              className="absolute top-0 right-0 w-32 h-32 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={{
-                background: `radial-gradient(circle, ${card.color}08 0%, transparent 70%)`,
-              }}
-            />
-
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{
@@ -119,7 +112,7 @@ export default function Testimonials() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="font-display text-[15px] font-bold text-white tracking-[-0.01em]">
+              <h3 className="font-display text-[15px] font-bold text-[var(--text-primary)] tracking-[-0.01em]">
                 {card.title}
               </h3>
               <p className="font-sans text-[12px] text-[var(--text-body)] tracking-[0.3px] leading-[1.8]">

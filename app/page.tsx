@@ -8,7 +8,6 @@ import PixelDivider from "@/components/landing/PixelDivider";
 import Logos from "@/components/landing/Logos";
 import Features from "@/components/landing/Features";
 import HowItWorks from "@/components/landing/HowItWorks";
-import Stats from "@/components/landing/Stats";
 import Testimonials from "@/components/landing/Testimonials";
 import Bento from "@/components/landing/Bento";
 import Comparison from "@/components/landing/Comparison";
@@ -49,7 +48,6 @@ export default function Home() {
       <Logos />
       <Features />
       <HowItWorks />
-      <Stats />
       <Testimonials />
       <Bento />
       <Comparison />

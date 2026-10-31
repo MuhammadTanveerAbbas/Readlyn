@@ -57,7 +57,7 @@ const CURSORS = [
   {
     name: "Alex K.",
     color: "var(--accent)",
-    textColor: "var(--surface-base)",
+    textColor: "var(--accent-ink)",
     animName: "cursor-alex",
     duration: "18s",
     keyframes: `@keyframes cursor-alex {
@@ -73,7 +73,7 @@ const CURSORS = [
   {
     name: "Sara M.",
     color: "var(--orange)",
-    textColor: "var(--text-primary)",
+    textColor: "#ffffff",
     animName: "cursor-sara",
     duration: "22s",
     keyframes: `@keyframes cursor-sara {
@@ -89,7 +89,7 @@ const CURSORS = [
   {
     name: "Jin L.",
     color: "#4ade80",
-    textColor: "#000000",
+    textColor: "#111113",
     animName: "cursor-jin",
     duration: "26s",
     keyframes: `@keyframes cursor-jin {
@@ -105,7 +105,7 @@ const CURSORS = [
   {
     name: "Mila V.",
     color: "var(--info)",
-    textColor: "var(--text-primary)",
+    textColor: "#ffffff",
     animName: "cursor-mila",
     duration: "30s",
     keyframes: `@keyframes cursor-mila {
@@ -173,7 +173,7 @@ export default function CollabCursors() {
               backgroundColor: cursor.color,
               borderRadius: "999px",
               padding: "3px 10px 3px 5px",
-              boxShadow: `0 4px 20px rgba(11,11,12,0.6), 0 0 0 1px rgba(255,255,255,0.18), 0 0 12px ${cursor.color}40`,
+              boxShadow: "0 4px 20px rgba(11,11,12,0.18)",
               whiteSpace: "nowrap",
             }}
           >
@@ -183,7 +183,7 @@ export default function CollabCursors() {
                 width: "18px",
                 height: "18px",
                 borderRadius: "50%",
-                backgroundColor: "rgba(0,0,0,0.18)",
+                backgroundColor: cursor.textColor === "#ffffff" ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.35)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -197,7 +197,7 @@ export default function CollabCursors() {
             {/* Name */}
             <span
               style={{
-                fontFamily: "var(--font-geist), 'Geist', system-ui, sans-serif",
+                fontFamily: "var(--font-sans), 'Figtree', system-ui, sans-serif",
                 fontSize: "11px",
                 fontWeight: 600,
                 color: cursor.textColor,

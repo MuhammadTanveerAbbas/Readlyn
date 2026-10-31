@@ -29,27 +29,27 @@ export default function MultiFormatExportModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-          <h3 className="font-sans text-lg font-bold text-white">Auto-Resize Export</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4 animate-fade-in">
+      <div className="relative w-full max-w-lg rounded-2xl border border-[var(--line-default)] bg-[var(--surface-base)] p-6 shadow-2xl">
+        <div className="flex items-center justify-between border-b border-[var(--line-default)] pb-4 mb-4">
+          <h3 className="font-sans text-lg font-bold text-[var(--text-primary)]">Auto-Resize Export</h3>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/60 hover:bg-white/10 hover:text-white shrink-0"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--line-default)] text-[var(--text-body)] hover:bg-[var(--fill-strong)] hover:text-[var(--text-primary)] shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
         <div className="space-y-2">
           {EXPORT_TARGETS.map((target) => (
-            <label key={target.key} className="flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white cursor-pointer hover:bg-white/10 transition-colors">
+            <label key={target.key} className="flex items-center justify-between rounded-lg border border-[var(--line-default)] bg-[var(--fill-default)] px-3 py-2.5 text-sm text-[var(--text-primary)] cursor-pointer hover:bg-[var(--fill-strong)] transition-colors">
               <span className="font-mono text-xs">{target.label} ({target.width}x{target.height})</span>
               <input type="checkbox" checked={selected.includes(target.key)} onChange={() => toggle(target.key)} className="accent-[var(--accent)]" />
             </label>
           ))}
         </div>
-        <div className="mt-5 flex justify-end gap-2 pt-4 border-t border-white/10">
-          <button onClick={onClose} className="rounded-lg border border-white/10 px-4 py-2 text-xs font-semibold text-white hover:bg-white/10 transition-colors">
+        <div className="mt-5 flex justify-end gap-2 pt-4 border-t border-[var(--line-default)]">
+          <button onClick={onClose} className="rounded-lg border border-[var(--line-default)] px-4 py-2 text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--fill-strong)] transition-colors">
             Cancel
           </button>
           <button
@@ -61,7 +61,7 @@ export default function MultiFormatExportModal({
               });
               onClose();
             }}
-            className="rounded-lg bg-[var(--accent)] px-4 py-2 text-xs font-bold text-white disabled:opacity-50 hover:bg-[var(--accent-hover)] transition-all"
+            className="rounded-lg bg-[var(--accent)] px-4 py-2 text-xs font-bold text-[var(--text-primary)] disabled:opacity-50 hover:bg-[var(--accent-hover)] transition-all"
           >
             Export All Selected
           </button>

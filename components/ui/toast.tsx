@@ -62,7 +62,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-      'inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-[var(--surface-base)] transition-colors hover:bg-[var(--surface-raised)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-[var(--line-default)] group-[.destructive]:hover:border-[var(--danger)]/30 group-[.destructive]:hover:bg-[var(--danger)] group-[.destructive]:hover:text-[var(--text-primary)] group-[.destructive]:focus:ring-[var(--danger)]',
+      'inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-[var(--surface-base)] transition-colors hover:bg-[var(--surface-raised)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-[var(--line-default)] group-[.destructive]:hover:border-[var(--danger)]/30 group-[.destructive]:hover:bg-[var(--danger)] group-[.destructive]:hover:text-white group-[.destructive]:focus:ring-[var(--danger)]',
       className,
     )}
     {...props}
@@ -77,7 +77,7 @@ const ToastClose = React.forwardRef<
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
-      'absolute right-2 top-2 rounded-md p-1 text-[var(--text-primary)]/50 opacity-0 transition-opacity hover:text-[var(--text-primary)] focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-[var(--danger)] group-[.destructive]:hover:text-[var(--text-primary)] group-[.destructive]:focus:ring-[var(--danger)] group-[.destructive]:focus:ring-offset-[var(--surface-base)]',
+      'absolute right-2 top-2 rounded-md p-1 text-[var(--text-primary)]/50 opacity-0 transition-opacity hover:text-[var(--text-primary)] focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-[var(--danger)] group-[.destructive]:hover:text-white group-[.destructive]:focus:ring-[var(--danger)] group-[.destructive]:focus:ring-offset-[var(--surface-base)]',
       className,
     )}
     toast-close=""

@@ -17,7 +17,7 @@ export default function OnboardingModal({ open, onClose, onStartPrompt }: Onboar
   const steps = [
     {
       title: "Welcome to Readlyn Studio",
-      subtitle: "AI Infographic plus Visual Creation Engine",
+      subtitle: "AI Infographic and Visual Creation Engine",
       icon: Sparkles,
       content:
         "Describe any topic or paste raw text. Readlyn generates beautifully balanced, structured infographics in seconds.",
@@ -34,7 +34,7 @@ export default function OnboardingModal({ open, onClose, onStartPrompt }: Onboar
       subtitle: "Production-Grade Styling",
       icon: Palette,
       content:
-        "Export W3C design tokens JSON, set persistent brand colors, plus inspect production CSS/React code directly.",
+        "Export W3C design tokens JSON, set persistent brand colors, and inspect production CSS/React code directly.",
     },
   ];
 
@@ -51,26 +51,26 @@ export default function OnboardingModal({ open, onClose, onStartPrompt }: Onboar
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-md p-4 animate-fade-in">
-      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col items-center text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4 animate-fade-in">
+      <div className="relative w-full max-w-md rounded-2xl border border-[var(--line-default)] bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col items-center text-center">
         <button
           onClick={() => {
             onClose();
             onStartPrompt?.();
           }}
-          className="absolute top-4 right-4 text-xs font-sans text-white/40 hover:text-white"
+          className="absolute top-4 right-4 text-xs font-sans text-[var(--text-faint)] hover:text-[var(--text-primary)]"
         >
           Skip tour
         </button>
 
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--accent)]/15 border border-[var(--accent)]/30 mb-5">
-          <IconComponent className="h-7 w-7 text-[var(--accent)]" />
+          <IconComponent className="h-7 w-7 text-[var(--accent-text)]" />
         </div>
 
-        <h3 className="font-sans text-xl font-bold text-white mb-1">
+        <h3 className="font-sans text-xl font-bold text-[var(--text-primary)] mb-1">
           {current.title}
         </h3>
-        <p className="font-sans text-xs font-semibold text-[var(--accent)] mb-4 uppercase tracking-wider">
+        <p className="font-sans text-xs font-semibold text-[var(--accent-text)] mb-4 uppercase tracking-wider">
           {current.subtitle}
         </p>
         <p className="font-sans text-xs text-[var(--text-body)] leading-relaxed mb-6">
@@ -83,7 +83,7 @@ export default function OnboardingModal({ open, onClose, onStartPrompt }: Onboar
             <div
               key={i}
               className={`h-1.5 rounded-full transition-all ${
-                i === step ? "w-6 bg-[var(--accent)]" : "w-1.5 bg-white/20"
+                i === step ? "w-6 bg-[var(--accent)]" : "w-1.5 bg-[var(--fill-subtle)]0"
               }`}
             />
           ))}
@@ -93,14 +93,14 @@ export default function OnboardingModal({ open, onClose, onStartPrompt }: Onboar
           {step > 0 && (
             <button
               onClick={() => setStep((s) => s - 1)}
-              className="flex-1 py-2.5 rounded-xl border border-white/10 font-sans text-xs font-semibold text-white hover:bg-white/10"
+              className="flex-1 py-2.5 rounded-xl border border-[var(--line-default)] font-sans text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--fill-strong)]"
             >
               Back
             </button>
           )}
           <button
             onClick={nextStep}
-            className="flex-1 py-2.5 rounded-xl bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(245,197,24,0.25)]"
+            className="flex-1 py-2.5 rounded-xl bg-[var(--accent)] font-sans text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--accent-hover)] transition-all flex items-center justify-center gap-1.5"
           >
             {step === steps.length - 1 ? (
               <>

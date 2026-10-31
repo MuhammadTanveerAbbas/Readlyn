@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
   archetype       TEXT,
   theme           TEXT,
   tool_type       TEXT NOT NULL DEFAULT 'infographic'
-                    CHECK (tool_type IN ('infographic', 'parallax')),
+                    CHECK (tool_type IN ('infographic')),
   is_pinned       BOOLEAN NOT NULL DEFAULT false,
   is_trashed      BOOLEAN NOT NULL DEFAULT false,
   created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS public.templates (
   archetype       TEXT,
   theme           TEXT,
   tool_type       TEXT NOT NULL DEFAULT 'infographic'
-                    CHECK (tool_type IN ('infographic', 'parallax')),
+                    CHECK (tool_type IN ('infographic')),
   thumbnail_url   TEXT,
   canvas_json     JSONB,
   is_public       BOOLEAN NOT NULL DEFAULT true,
@@ -122,6 +122,24 @@ CREATE TABLE IF NOT EXISTS public.invoices (
 );
 
 ALTER TABLE public.invoices ADD COLUMN IF NOT EXISTS stripe_invoice_id TEXT UNIQUE;
+
+--  5. Project assets (uploaded images and imported files)
+CREATE TABLE IF NOT EXISTS public.assets (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  project_id      UUID REFERENCES public.projects(id) ON DELETE CASCADE,
+  name            TEXT NOT NULL,
+  mime_type       TEXT NOT NULL,
+  size_bytes      BIGINT NOT NULL DEFAULT 0,
+  storage_path    TEXT NOT NULL,
+  public_url      TEXT,
+  width           INTEGER,
+  height          INTEGER,
+  metadata        JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+ALTER TABLE public.assets ADD COLUMN IF NOT EXISTS metadata JSONB NOT NULL DEFAULT '{}'::jsonb;
 
 -- =============================================================================
 -- INDEXES
@@ -168,6 +186,12 @@ CREATE INDEX IF NOT EXISTS idx_invoices_stripe_subscription
 CREATE INDEX IF NOT EXISTS idx_invoices_created_at
   ON public.invoices(created_at DESC);
 
+CREATE INDEX IF NOT EXISTS idx_assets_user_created
+  ON public.assets(user_id, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_assets_project
+  ON public.assets(project_id, created_at DESC);
+
 -- =============================================================================
 -- ROW LEVEL SECURITY
 -- =============================================================================
@@ -208,6 +232,16 @@ CREATE POLICY "Users manage own templates"
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+--  Assets
+ALTER TABLE public.assets ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users own assets" ON public.assets;
+CREATE POLICY "Users own assets"
+  ON public.assets
+  FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
 --  Subscriptions
 ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
 
@@ -231,60 +265,39 @@ CREATE POLICY "Users read own invoices"
 -- Webhook inserts use service_role, bypasses RLS.
 
 -- =============================================================================
--- STORAGE (parallax-images bucket)
+-- STORAGE (project-assets bucket)
 -- =============================================================================
--- Create the bucket (run once via Supabase Dashboard OR uncomment below).
--- Supabase storage buckets can also be created via SQL in newer versions:
---
---   INSERT INTO storage.buckets (id, name, public, avif_autodetection)
---   VALUES ('parallax-images', 'parallax-images', true, false)
---   ON CONFLICT (id) DO NOTHING;
 
--- Storage RLS: only authenticated users can manage their own files.
-DROP POLICY IF EXISTS "Users upload own parallax images" ON storage.objects;
-CREATE POLICY "Users upload own parallax images"
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('project-assets', 'project-assets', false)
+ON CONFLICT (id) DO NOTHING;
+
+DROP POLICY IF EXISTS "Users read own project assets" ON storage.objects;
+CREATE POLICY "Users read own project assets"
+  ON storage.objects
+  FOR SELECT
+  TO authenticated
+  USING (
+    bucket_id = 'project-assets'
+    AND (storage.foldername(name))[1] = auth.uid()::text
+  );
+
+DROP POLICY IF EXISTS "Users upload own project assets" ON storage.objects;
+CREATE POLICY "Users upload own project assets"
   ON storage.objects
   FOR INSERT
   TO authenticated
   WITH CHECK (
-    bucket_id = 'parallax-images'
+    bucket_id = 'project-assets'
     AND (storage.foldername(name))[1] = auth.uid()::text
   );
 
-DROP POLICY IF EXISTS "Users read own parallax images" ON storage.objects;
-CREATE POLICY "Users read own parallax images"
-  ON storage.objects
-  FOR SELECT
-  TO authenticated
-  USING (
-    bucket_id = 'parallax-images'
-    AND (storage.foldername(name))[1] = auth.uid()::text
-  );
-
-DROP POLICY IF EXISTS "Users delete own parallax images" ON storage.objects;
-CREATE POLICY "Users delete own parallax images"
+DROP POLICY IF EXISTS "Users delete own project assets" ON storage.objects;
+CREATE POLICY "Users delete own project assets"
   ON storage.objects
   FOR DELETE
   TO authenticated
   USING (
-    bucket_id = 'parallax-images'
+    bucket_id = 'project-assets'
     AND (storage.foldername(name))[1] = auth.uid()::text
   );
-
--- Allow public read for rendered images (needed for preview)
-DROP POLICY IF EXISTS "Public read parallax images" ON storage.objects;
-CREATE POLICY "Public read parallax images"
-  ON storage.objects
-  FOR SELECT
-  TO public
-  USING (bucket_id = 'parallax-images');
-
--- =============================================================================
--- SUMMARY, tables created
---   public.projects: user projects (infographics plus parallax)
---   public.generation_history: AI generation snapshots per project
---   public.templates: public plus user created templates (reserved)
---   public.subscriptions: Stripe subscription sync (reserved)
---   public.invoices: Stripe invoice payment records (reserved)
---   storage.objects (RLS): parallax-images bucket policies
--- =============================================================================

@@ -15,6 +15,7 @@ function LoginForm() {
   const [isChecking, setIsChecking] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -78,14 +79,14 @@ function LoginForm() {
       <div className="flex items-center gap-3 my-5">
         <div
           className="flex-1 h-px"
-          style={{ background: "rgba(255,255,255,0.06)" }}
+          style={{ background: "rgba(16,17,19,0.06)" }}
         />
-        <span className="font-sans text-[10px] text-[#333] tracking-[1px]">
+        <span className="font-sans text-[10px] text-[var(--text-faint)] tracking-[1px]">
           OR
         </span>
         <div
           className="flex-1 h-px"
-          style={{ background: "rgba(255,255,255,0.06)" }}
+          style={{ background: "rgba(16,17,19,0.06)" }}
         />
       </div>
 
@@ -108,20 +109,42 @@ function LoginForm() {
             </label>
             <Link
               href="/forgot-password"
-              className="font-sans text-[11px] text-[var(--accent)] opacity-70 hover:opacity-100 transition-opacity tracking-[0.3px]"
+              className="font-sans text-[11px] text-[var(--accent-text)] opacity-70 hover:opacity-100 transition-opacity tracking-[0.3px]"
             >
               Forgot password?
             </Link>
           </div>
-          <input
-            type="password"
-            required
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            className="w-full px-4 py-3 rounded-xl bg-[var(--surface-base)] border border-white/[0.07] text-white text-[13px] font-sans placeholder:text-[#333] focus:outline-none focus:border-[rgba(245,197,24,0.4)] focus:ring-1 focus:ring-[rgba(245,197,24,0.15)] transition-all duration-200"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              required
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              className="w-full px-4 py-3 pr-11 rounded-xl bg-[var(--surface-base)] border border-[var(--line-subtle)] text-[var(--text-primary)] text-[13px] font-sans placeholder:text-[var(--text-faint)] focus:outline-none focus:border-[rgba(245,197,24,0.4)] focus:ring-1 focus:ring-[rgba(245,197,24,0.15)] transition-all duration-200"
+            />
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-body)] transition-colors duration-150"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {error && (
@@ -156,7 +179,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 rounded-xl font-sans text-[13px] font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_24px_rgba(245,197,24,0.25)] hover:shadow-[0_0_36px_rgba(245,197,24,0.4)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+          className="w-full py-3 rounded-xl font-sans text-[13px] font-bold text-[var(--accent-ink)] bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -194,7 +217,7 @@ function LoginForm() {
         No account yet?{" "}
         <Link
           href="/signup"
-          className="text-[var(--text-body)] hover:text-white transition-colors"
+          className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
         >
           Create one free
         </Link>

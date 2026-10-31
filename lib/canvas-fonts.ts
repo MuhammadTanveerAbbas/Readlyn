@@ -19,10 +19,10 @@ import { FONT_FAMILIES } from '@/types/infographic'
 /**
  * Weights the infographic schema allows: 'normal' | 'bold' | '900'.
  *
- * Open Sans is a variable font, so each of these resolves to a real
- * axis position on the same file rather than pulling a separate static cut.
+ * Both families are variable fonts with a 400-800 axis. The browser maps 900
+ * to the heaviest available cut, so loading 400-800 covers every request.
  */
-const CANVAS_WEIGHTS = ['400', '500', '700', '900'] as const
+const CANVAS_WEIGHTS = ['400', '500', '700', '800'] as const
 
 let pending: Promise<void> | null = null
 
@@ -43,7 +43,7 @@ export function ensureCanvasFontsLoaded(): Promise<void> {
 
     for (const family of FONT_FAMILIES) {
       for (const weight of CANVAS_WEIGHTS) {
-        // Quote the family name: all four contain spaces.
+        // Quote the family name: font family names can contain spaces.
         try {
           requests.push(fontFace.load(`${weight} 16px "${family}"`))
         } catch {

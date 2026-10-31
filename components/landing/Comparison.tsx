@@ -5,7 +5,7 @@ import { useReveal } from "@/hooks/use-reveal";
 const capabilities = [
   {
     feature: "AI generates full layout from a prompt",
-    detail: "Groq Llama 3.3 70B produces structured canvas elements",
+    detail: "Groq returns a validated document with structured canvas elements",
     accent: "var(--accent)",
     icon: (
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
@@ -49,7 +49,7 @@ const capabilities = [
   },
   {
     feature: "Fabric.js canvas editor",
-    detail: "Move, resize, plus edit every element after generation",
+    detail: "Move, resize, and edit every element after generation",
     accent: "var(--info)",
     icon: (
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
@@ -59,9 +59,9 @@ const capabilities = [
     ),
   },
   {
-    feature: "Export PNG, JSON, plus multi-size ZIP",
+    feature: "Export PNG, SVG, JSON, and multi-size ZIP",
     detail: "Download assets you can use anywhere",
-    accent: "var(--success-soft)",
+    accent: "var(--success)",
     icon: (
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
         <path
@@ -108,11 +108,11 @@ export default function Comparison() {
       className="flex flex-col w-full bg-[var(--surface-sunken)] py-16 px-4 sm:py-20 sm:px-6 md:py-[120px] md:px-[120px] gap-10 sm:gap-14 md:gap-[72px]"
     >
       <div className="flex flex-col gap-4 max-w-[640px]">
-        <span className="font-sans text-[11px] font-semibold text-[var(--accent)] tracking-[0.2em] uppercase">
+        <span className="font-sans text-[11px] font-semibold text-[var(--accent-text)] tracking-[0.2em] uppercase">
             Capabilities
           </span>
         <h2
-          className="font-display font-bold text-white leading-[1.05] whitespace-pre-line"
+          className="font-display font-bold text-[var(--text-primary)] leading-[1.05] whitespace-pre-line"
           style={{
             fontSize: "clamp(1.75rem, 3.5vw, 3rem)",
             letterSpacing: "-0.03em",
@@ -131,23 +131,15 @@ export default function Comparison() {
           <div
             key={row.feature}
             className="group relative flex flex-col gap-4 p-6 sm:p-7 rounded-2xl overflow-hidden
-                       border border-white/[0.07] bg-[var(--surface-base)]
-                       hover:border-white/[0.14] transition-all duration-500
+                       border border-[var(--line-subtle)] bg-[var(--surface-base)]
+                       hover:border-[var(--line-default)] transition-all duration-500
                        hover:-translate-y-1"
           >
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-              style={{
-                background: `radial-gradient(ellipse 80% 60% at 50% 0%, ${row.accent}08 0%, transparent 70%)`,
-              }}
-            />
-
             <div
               className="relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shrink-0"
               style={{
                 backgroundColor: `${row.accent}12`,
                 border: `1px solid ${row.accent}25`,
-                boxShadow: `0 0 20px ${row.accent}10`,
               }}
             >
               <div style={{ color: row.accent }}>{row.icon}</div>

@@ -1,22 +1,28 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import dynamic from "next/dynamic";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import * as fabric from "fabric";
-import PromptPanel from "@/components/app/PromptPanel";
-import LayersPanel from "@/components/app/LayersPanel";
+import EditorLeftPanel from "@/components/app/EditorLeftPanel";
 import PropertiesPanel from "@/components/app/PropertiesPanel";
 import Toolbar from "@/components/app/Toolbar";
 import ZoomSlider from "@/components/app/ZoomSlider";
-import GenerationHistoryPanel from "@/components/app/GenerationHistoryPanel";
+import AssistantPanel from "@/components/app/AssistantPanel";
 import ContentAwarenessPanel from "@/components/app/ContentAwarenessPanel";
 import MultiFormatExportModal from "@/components/app/MultiFormatExportModal";
 import DesignTokensModal from "@/components/app/DesignTokensModal";
 import DevModeInspectModal from "@/components/app/DevModeInspectModal";
 import BrandKitModal from "@/components/app/BrandKitModal";
 import KeyboardShortcutsModal from "@/components/app/KeyboardShortcutsModal";
-import OnboardingModal from "@/components/app/OnboardingModal";
+import CommandPalette, { type CommandItem } from "@/components/app/CommandPalette";
 import { useOfflineBuffer } from "@/hooks/use-offline-buffer";
 import { useCanvasHistory } from "@/hooks/use-canvas-history";
 import { useCanvasSelection } from "@/hooks/use-canvas-selection";
@@ -28,13 +34,7 @@ import {
   addStatBlockElement,
   addTextElement,
 } from "@/lib/renderElements";
-import {
-  CANVAS_SIZES,
-  type CanvasSize,
-  type InfographicData,
-  type StylePreset,
-  type ThemePalette,
-} from "@/types/infographic";
+import { CANVAS_SIZES, type CanvasSize, type ThemePalette } from "@/types/infographic";
 import type { CanvasRef } from "@/components/app/InfographicCanvas";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -43,10 +43,8 @@ import {
   type OverflowItem,
 } from "@/lib/contentAwareness";
 import { toast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import { parseRouteId } from "@/lib/params";
 import { applyAutoTheme } from "@/lib/autoTheme";
-import { ensureCanvasFontsLoaded } from "@/lib/canvas-fonts";
 import type { SelectionProperties } from "@/hooks/use-canvas-selection";
 
 const InfographicCanvas = dynamic(
@@ -85,34 +83,26 @@ export default function EditorPage() {
   if (idError) {
     throw new Error(idError);
   }
-  const searchParams = useSearchParams();
+
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [canvasSize, setCanvasSize] = useState<CanvasSize>("a4");
   const [theme, setTheme] = useState<ThemePalette>("ocean");
   const [zoom, setZoom] = useState(0.6);
   const [toolMode, setToolMode] = useState<"select" | "hand">("select");
   const [refresh, setRefresh] = useState(0);
-  const [historyOpen, setHistoryOpen] = useState(false);
+
   const [leftPanelOpen, setLeftPanelOpen] = useState(false);
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
+  const [assistantOpen, setAssistantOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const [tokensOpen, setTokensOpen] = useState(false);
   const [devInspectOpen, setDevInspectOpen] = useState(false);
   const [brandKitOpen, setBrandKitOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
-  const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [snapToGrid, setSnapToGrid] = useState(false);
 
-  const [historyItems, setHistoryItems] = useState<
-    Array<{
-      id: string;
-      prompt: string | null;
-      archetype: string | null;
-      theme: string | null;
-      created_at: string;
-      thumbnail_url: string | null;
-    }>
-  >([]);
-  const [exportOpen, setExportOpen] = useState(false);
   const [audit, setAudit] = useState<{
     readability: ReadabilityItem[];
     overflow: OverflowItem[];
@@ -124,16 +114,17 @@ export default function EditorPage() {
     toneSummary: "Tone: pending",
     factChecks: [],
   });
-  const [historyLoading, setHistoryLoading] = useState(false);
+
   const canvasRef = useRef<CanvasRef>(null);
+  const clipboardRef = useRef<fabric.FabricObject | null>(null);
+  const importFileRef = useRef<HTMLInputElement | null>(null);
   const canvasAreaRef = useRef<HTMLDivElement>(null);
-  const isStreamingRef = useRef(false);
   const historyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isSpacePressedRef = useRef(false);
   const panStateRef = useRef({ active: false, x: 0, y: 0 });
   const hasLoadedProjectRef = useRef(false);
-  const autogenHandledRef = useRef(false);
   const zoomRef = useRef(0.6);
+  const lastSavedRef = useRef(Date.now());
 
   const { pushState, undo, redo, canUndo, canRedo } = useCanvasHistory(canvas);
   const { isOffline, isSyncing } = useOfflineBuffer(canvas, projectId);
@@ -147,15 +138,6 @@ export default function EditorPage() {
     deleteObject,
   } = useCanvasSelection(canvas);
   const { width, height } = CANVAS_SIZES[canvasSize];
-
-  // Show onboarding modal on first load if not seen
-  useEffect(() => {
-    const hasSeenOnboarding = localStorage.getItem("readlyn_onboarding_seen");
-    if (!hasSeenOnboarding) {
-      setOnboardingOpen(true);
-      localStorage.setItem("readlyn_onboarding_seen", "true");
-    }
-  }, []);
 
   const loadProject = useCallback(async () => {
     const supabase = createClient();
@@ -171,10 +153,7 @@ export default function EditorPage() {
       .single();
     if (!data) return;
 
-    const restoredSize = findCanvasSizeKey(
-      data.canvas_width,
-      data.canvas_height,
-    );
+    const restoredSize = findCanvasSizeKey(data.canvas_width, data.canvas_height);
     if (restoredSize) setCanvasSize(restoredSize);
     if (data.theme) setTheme(data.theme as ThemePalette);
 
@@ -184,177 +163,6 @@ export default function EditorPage() {
       activeCanvas.requestRenderAll();
     }
   }, [projectId]);
-
-  const loadHistory = useCallback(async () => {
-    setHistoryLoading(true);
-    try {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        setHistoryItems([]);
-        return;
-      }
-      const { data } = await supabase
-        .from("generation_history")
-        .select("id,prompt,archetype,theme,created_at,thumbnail_url")
-        .eq("project_id", projectId)
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      setHistoryItems(data || []);
-    } finally {
-      setHistoryLoading(false);
-    }
-  }, [projectId]);
-
-  const saveHistorySnapshot = useCallback(
-    async (
-      prompt: string,
-      archetype: string,
-      palette: string,
-      model: string,
-    ) => {
-      if (!canvasRef.current?.canvas) return;
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
-      // Thumbnails are canvas renders too they need the webfonts resident or
-      // they get painted in the fallback face.
-      await ensureCanvasFontsLoaded();
-      const thumbnail_url = canvasRef.current.canvas.toDataURL({
-        format: "jpeg",
-        quality: 0.5,
-        multiplier: 0.25,
-      });
-      await supabase.from("generation_history").insert({
-        project_id: projectId,
-        user_id: user.id,
-        canvas_json: canvasRef.current.canvas.toJSON(),
-        prompt,
-        archetype,
-        theme: palette,
-        model,
-        thumbnail_url,
-      });
-      loadHistory();
-    },
-    [loadHistory, projectId],
-  );
-
-  // Keep the dashboard card in sync with the generated result. Without this the
-  // card showed a placeholder forever plus the stored canvas size stayed empty.
-  const saveProjectSnapshot = useCallback(
-    async (
-      palette: ThemePalette,
-      archetype: StylePreset,
-      size: CanvasSize,
-    ) => {
-      const activeCanvas = canvasRef.current?.canvas;
-      if (!activeCanvas || !projectId) return;
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
-      await ensureCanvasFontsLoaded();
-      const thumbnail_url = activeCanvas.toDataURL({
-        format: "jpeg",
-        quality: 0.6,
-        multiplier: 0.3,
-      });
-      await supabase
-        .from("projects")
-        .update({
-          canvas_json: activeCanvas.toJSON(),
-          canvas_width: CANVAS_SIZES[size].width,
-          canvas_height: CANVAS_SIZES[size].height,
-          thumbnail_url,
-          theme: palette,
-          archetype,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", projectId)
-        .eq("user_id", user.id);
-    },
-    [projectId],
-  );
-
-  const handleGenerate = useCallback(async (
-    prompt: string,
-    palette: ThemePalette,
-    size: CanvasSize,
-    style: StylePreset,
-  ) => {
-    try {
-      setIsGenerating(true);
-      isStreamingRef.current = true;
-      setTheme(palette);
-      setCanvasSize(size);
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, theme: palette, size, style }),
-      });
-      if (!response.ok || !response.body) {
-        throw new Error("Generation request failed.");
-      }
-      const usedModel = response.headers.get("x-readlyn-model") || "unknown";
-      canvasRef.current?.prepareForStream({
-        canvasWidth: CANVAS_SIZES[size].width,
-        canvasHeight: CANVAS_SIZES[size].height,
-        background: "#ffffff",
-      });
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      const rendered = new Set<string>();
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-        for (const line of lines) {
-          if (!line.trim()) continue;
-          const partial = JSON.parse(line) as {
-            element?: InfographicData["elements"][number];
-            progress?: { current: number; total: number };
-          };
-          if (partial.progress) {
-            canvasRef.current?.setStreamProgress(partial.progress);
-          }
-          if (partial.element && !rendered.has(partial.element.id)) {
-            rendered.add(partial.element.id);
-            canvasRef.current?.renderElement(partial.element);
-          }
-        }
-      }
-      canvasRef.current?.finishStream();
-      pushState();
-      setRefresh((v) => v + 1);
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      await saveHistorySnapshot(prompt, style, palette, usedModel);
-      await saveProjectSnapshot(palette, style, size);
-    } catch {
-      canvasRef.current?.finishStream();
-      toast({
-        variant: "destructive",
-        title: "Generation failed",
-        description: "The AI response failed to stream. Please try again.",
-        action: (
-          <ToastAction altText="Try again" onClick={() => handleGenerate(prompt, palette, size, style)}>
-            Try Again
-          </ToastAction>
-        ),
-      });
-    } finally {
-      setIsGenerating(false);
-      isStreamingRef.current = false;
-    }
-  }, [pushState, saveHistorySnapshot, saveProjectSnapshot]);
 
   const handleAddElement = (
     type: "heading" | "text" | "rect" | "circle" | "stat" | "line",
@@ -379,11 +187,11 @@ export default function EditorPage() {
         (total, item) => total + item.text.trim().split(/\s+/).length,
         0,
       );
-      toneSummary = `${analysis.textBlocks.length} text blocks checked, ${wordCount} words in total.`;
+      toneSummary = `${analysis.textBlocks.length} text blocks, ${wordCount} words total.`;
       factChecks = analysis.textBlocks
         .filter((item) => /\d/.test(item.text))
         .slice(0, 3)
-        .map((item) => `Number found, please verify the claim in ${item.label}`);
+        .map((item) => `Number found verify the claim in ${item.label}`);
     }
     setAudit({
       readability: analysis.readability,
@@ -405,7 +213,6 @@ export default function EditorPage() {
   }, [width, height]);
 
   const scheduleHistorySnapshot = useCallback(() => {
-    if (isStreamingRef.current) return;
     if (historyTimerRef.current) clearTimeout(historyTimerRef.current);
     historyTimerRef.current = setTimeout(() => {
       historyTimerRef.current = null;
@@ -439,13 +246,6 @@ export default function EditorPage() {
     scheduleHistorySnapshot();
   }, [duplicateObject, scheduleHistorySnapshot]);
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      runAwarenessCheck();
-    }, 2000);
-    return () => clearTimeout(t);
-  }, [refresh, runAwarenessCheck]);
-
   const handleDelete = useCallback(() => {
     deleteObject();
     commitHistory();
@@ -471,7 +271,7 @@ export default function EditorPage() {
       description:
         changed > 0
           ? `${changed} element(s) now match the ${theme} palette.`
-          : "No element used a palette color yet, so nothing changed.",
+          : "No element used a palette colour yet.",
     });
   }, [canvas, theme, commitHistory]);
 
@@ -490,27 +290,14 @@ export default function EditorPage() {
     [selectedObject, canvas, scheduleHistorySnapshot],
   );
 
+  // Space-bar pan
   useEffect(() => {
-    if (!canvas || autogenHandledRef.current) return;
-    if (searchParams.get("autogen") !== "1") return;
-    const prompt = searchParams.get("prompt") || "";
-    if (!prompt) return;
-    autogenHandledRef.current = true;
-    const palette = (searchParams.get("theme") as ThemePalette) || "slate";
-    const size = (searchParams.get("size") as CanvasSize) || "a4";
-    const style = (searchParams.get("style") as StylePreset) || "auto";
-    handleGenerate(prompt, palette, size, style);
-  }, [canvas, searchParams, handleGenerate]);
-
-  // Space plus the hand tool pan the viewport. The listener ignores typing so
-  // spaces still work inside the prompt box plus inside canvas text editing.
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (isEditableTarget(event.target)) return;
-      if (event.code === "Space") isSpacePressedRef.current = true;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (isEditableTarget(e.target)) return;
+      if (e.code === "Space") isSpacePressedRef.current = true;
     };
-    const onKeyUp = (event: KeyboardEvent) => {
-      if (event.code === "Space") isSpacePressedRef.current = false;
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Space") isSpacePressedRef.current = false;
     };
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup", onKeyUp);
@@ -520,21 +307,18 @@ export default function EditorPage() {
     };
   }, []);
 
-  // Wheel zoom keeps the point under the cursor stable by adjusting scroll.
+  // Wheel zoom
   useEffect(() => {
     const area = canvasAreaRef.current;
     if (!area) return;
-    const onWheel = (event: WheelEvent) => {
-      event.preventDefault();
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
       const rect = area.getBoundingClientRect();
-      const pointerX = event.clientX - rect.left;
-      const pointerY = event.clientY - rect.top;
+      const pointerX = e.clientX - rect.left;
+      const pointerY = e.clientY - rect.top;
       const current = zoomRef.current;
-      const factor = event.deltaY > 0 ? 0.92 : 1.08;
-      const next = Math.min(
-        2,
-        Math.max(0.1, Math.round(current * factor * 100) / 100),
-      );
+      const factor = e.deltaY > 0 ? 0.92 : 1.08;
+      const next = Math.min(2, Math.max(0.1, Math.round(current * factor * 100) / 100));
       if (next === current) return;
       const contentX = (area.scrollLeft + pointerX) / current;
       const contentY = (area.scrollTop + pointerY) / current;
@@ -552,113 +336,186 @@ export default function EditorPage() {
     zoomRef.current = zoom;
   }, [zoom]);
 
-  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+  useEffect(() => {
+    if (!contextMenu) return;
+    const close = () => setContextMenu(null);
+    window.addEventListener("pointerdown", close);
+    return () => window.removeEventListener("pointerdown", close);
+  }, [contextMenu]);
+
+  // Pointer pan handlers
+  const handlePointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    setContextMenu(null);
     const shouldPan = toolMode === "hand" || isSpacePressedRef.current;
     if (!shouldPan) return;
     const area = canvasAreaRef.current;
     if (!area) return;
-    panStateRef.current = { active: true, x: event.clientX, y: event.clientY };
-    area.setPointerCapture(event.pointerId);
+    panStateRef.current = { active: true, x: e.clientX, y: e.clientY };
+    area.setPointerCapture(e.pointerId);
     area.style.cursor = "grabbing";
   };
 
-  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+  const handlePointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (!panStateRef.current.active) return;
     const area = canvasAreaRef.current;
     if (!area) return;
-    area.scrollLeft -= event.clientX - panStateRef.current.x;
-    area.scrollTop -= event.clientY - panStateRef.current.y;
-    panStateRef.current.x = event.clientX;
-    panStateRef.current.y = event.clientY;
+    area.scrollLeft -= e.clientX - panStateRef.current.x;
+    area.scrollTop -= e.clientY - panStateRef.current.y;
+    panStateRef.current.x = e.clientX;
+    panStateRef.current.y = e.clientY;
   };
 
-  const handlePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+  const handlePointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (!panStateRef.current.active) return;
     panStateRef.current.active = false;
     const area = canvasAreaRef.current;
-    area?.releasePointerCapture(event.pointerId);
+    area?.releasePointerCapture(e.pointerId);
     if (area) area.style.cursor = toolMode === "hand" ? "grab" : "default";
   };
 
-  useEffect(() => {
-    loadHistory();
-  }, [loadHistory]);
-
-  // The canvas is loaded dynamically, so project data is fetched only after the
-  // canvas instance exists. Without this the saved design never appeared.
+  // Load project once canvas is ready
   useEffect(() => {
     if (!canvas || hasLoadedProjectRef.current) return;
     hasLoadedProjectRef.current = true;
     loadProject();
   }, [canvas, loadProject]);
 
+  // Fit to screen after canvas/size change
   useEffect(() => {
     if (!canvas) return;
-    const timer = setTimeout(() => fitToScreen(), 120);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => fitToScreen(), 120);
+    return () => clearTimeout(t);
   }, [canvas, canvasSize, fitToScreen]);
 
+  // Run content check after canvas changes
+  useEffect(() => {
+    const t = setTimeout(() => runAwarenessCheck(), 2000);
+    return () => clearTimeout(t);
+  }, [refresh, runAwarenessCheck]);
+
+  // Cleanup history timer
   useEffect(() => {
     return () => {
       if (historyTimerRef.current) clearTimeout(historyTimerRef.current);
     };
   }, []);
 
+  // Keyboard shortcuts
   useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (isEditableTarget(event.target)) return;
-      const key = event.key.toLowerCase();
-      const withModifier = event.metaKey || event.ctrlKey;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (isEditableTarget(e.target)) return;
+      const key = e.key.toLowerCase();
+      const mod = e.metaKey || e.ctrlKey;
 
-      if (withModifier && key === "z") {
-        event.preventDefault();
-        if (event.shiftKey) redo();
+      if (mod && key === "z") {
+        e.preventDefault();
+        if (e.shiftKey) redo();
         else undo();
         return;
       }
-      if (withModifier && key === "d") {
-        event.preventDefault();
+      if (mod && key === "k") {
+        e.preventDefault();
+        setCommandPaletteOpen(true);
+        return;
+      }
+      if (mod && key === "d") {
+        e.preventDefault();
         handleDuplicate();
         return;
       }
-      if (event.key === "Delete" || event.key === "Backspace") {
+      if (mod && key === "c") {
+        e.preventDefault();
+        const active = canvas?.getActiveObject();
+        if (active) {
+          active.clone().then((cloned) => {
+            clipboardRef.current = cloned;
+          });
+        }
+        return;
+      }
+      if (mod && key === "v") {
+        e.preventDefault();
+        if (clipboardRef.current && canvas) {
+          clipboardRef.current.clone().then((cloned) => {
+            cloned.set({ left: (cloned.left || 0) + 20, top: (cloned.top || 0) + 20 });
+            canvas.add(cloned);
+            canvas.setActiveObject(cloned);
+            canvas.renderAll();
+            pushState();
+          });
+        }
+        return;
+      }
+      if (mod && key === "a") {
+        e.preventDefault();
+        if (canvas) {
+          const objects = canvas.getObjects();
+          if (objects.length) {
+            canvas.discardActiveObject();
+            const sel = new fabric.ActiveSelection(objects, { canvas });
+            canvas.setActiveObject(sel);
+            canvas.renderAll();
+          }
+        }
+        return;
+      }
+      if (mod && e.shiftKey && key === "g") {
+        e.preventDefault();
+        const active = canvas?.getActiveObject();
+        if (!canvas || !active || active.type !== "activeSelection") return;
+        const objs = (active as fabric.ActiveSelection).getObjects().slice();
+        const group = new fabric.Group(objs, { left: active.left, top: active.top });
+        canvas.remove(...objs);
+        canvas.add(group);
+        canvas.setActiveObject(group);
+        canvas.renderAll();
+        pushState();
+        return;
+      }
+      if (mod && e.altKey && key === "g") {
+        e.preventDefault();
+        const active = canvas?.getActiveObject();
+        if (!canvas || !active || active.type !== "group") return;
+        const group = active as fabric.Group;
+        const objs = group.getObjects().slice();
+        canvas.remove(group);
+        canvas.add(...objs);
+        const sel = new fabric.ActiveSelection(objs, { canvas });
+        canvas.setActiveObject(sel);
+        canvas.renderAll();
+        pushState();
+        return;
+      }
+      if (e.key === "Delete" || e.key === "Backspace") {
         if (selectedObject) {
-          event.preventDefault();
+          e.preventDefault();
           handleDelete();
         }
         return;
       }
-      if (event.key === "?") {
+      if (e.key === "?") {
         setShortcutsOpen(true);
         return;
       }
-      if (event.key.startsWith("Arrow")) {
+      if (e.key.startsWith("Arrow")) {
         if (!selectedObject) return;
-        event.preventDefault();
-        const step = event.shiftKey ? 10 : 1;
-        if (event.key === "ArrowLeft") nudgeSelected(-step, 0);
-        if (event.key === "ArrowRight") nudgeSelected(step, 0);
-        if (event.key === "ArrowUp") nudgeSelected(0, -step);
-        if (event.key === "ArrowDown") nudgeSelected(0, step);
+        e.preventDefault();
+        const step = e.shiftKey ? 10 : 1;
+        if (e.key === "ArrowLeft") nudgeSelected(-step, 0);
+        if (e.key === "ArrowRight") nudgeSelected(step, 0);
+        if (e.key === "ArrowUp") nudgeSelected(0, -step);
+        if (e.key === "ArrowDown") nudgeSelected(0, step);
         return;
       }
-      if (withModifier) return;
+      if (mod) return;
       if (key === "v") setToolMode("select");
       if (key === "h") setToolMode("hand");
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [
-    redo,
-    undo,
-    handleDuplicate,
-    handleDelete,
-    nudgeSelected,
-    selectedObject,
-  ]);
+  }, [canvas, redo, undo, handleDuplicate, handleDelete, nudgeSelected, pushState, selectedObject]);
 
-  const lastSavedRef = useRef(Date.now());
-
+  // Auto-save every 8 seconds
   useEffect(() => {
     if (!canvas || !projectId) return;
     const interval = setInterval(async () => {
@@ -666,7 +523,10 @@ export default function EditorPage() {
       if (now - lastSavedRef.current < 5000) return;
       try {
         const supabase = createClient();
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
         if (userError || !user) return;
         await supabase
           .from("projects")
@@ -684,18 +544,42 @@ export default function EditorPage() {
     return () => clearInterval(interval);
   }, [canvas, projectId]);
 
+  const commands: CommandItem[] = useMemo(
+    () => [
+      { id: "undo", label: "Undo", shortcut: "Ctrl+Z", run: undo },
+      { id: "redo", label: "Redo", shortcut: "Ctrl+Shift+Z", run: redo },
+      { id: "duplicate", label: "Duplicate selected", shortcut: "Ctrl+D", run: handleDuplicate },
+      { id: "delete", label: "Delete selected", shortcut: "Delete", run: handleDelete },
+      { id: "fit", label: "Fit to screen", run: fitToScreen },
+      {
+        id: "snap",
+        label: snapToGrid ? "Disable snap to grid" : "Enable snap to grid",
+        run: () => setSnapToGrid((v) => !v),
+      },
+      { id: "select", label: "Select tool", shortcut: "V", run: () => setToolMode("select") },
+      { id: "hand", label: "Hand tool", shortcut: "H", run: () => setToolMode("hand") },
+      { id: "export", label: "Export", run: () => setExportOpen(true) },
+      { id: "export-svg", label: "Export SVG", run: () => canvasRef.current?.exportSVG() },
+      { id: "import-file", label: "Import image or JSON", run: () => importFileRef.current?.click() },
+      { id: "devmode", label: "Dev Mode inspect", run: () => setDevInspectOpen(true) },
+      { id: "shortcuts", label: "Keyboard shortcuts", shortcut: "?", run: () => setShortcutsOpen(true) },
+      { id: "assistant", label: "Toggle AI Assistant", run: () => setAssistantOpen((v) => !v) },
+    ],
+    [undo, redo, handleDuplicate, handleDelete, fitToScreen, snapToGrid],
+  );
+
   return (
     <div className="h-screen w-screen overflow-hidden bg-[var(--surface-sunken)]">
-      {/* Offline / Sync Banner */}
+      {/* Status banners */}
       {isOffline && (
-        <div className="bg-amber-500/20 border-b border-amber-500/30 px-4 py-1 text-center font-sans text-xs text-amber-300 flex items-center justify-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-          Offline mode active, changes are buffered locally, plus will sync when connected.
+        <div className="bg-[var(--fill-default)] border-b border-[var(--line-default)] px-4 py-1 text-center text-xs text-[var(--warning)] flex items-center justify-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--warning)] animate-pulse" />
+          Offline changes are saved locally and will sync when reconnected.
         </div>
       )}
       {isSyncing && (
-        <div className="bg-blue-500/20 border-b border-blue-500/30 px-4 py-1 text-center font-sans text-xs text-blue-300">
-          Syncing buffered local edits to cloud...
+        <div className="bg-[var(--info-soft)] border-b border-[var(--info)]/30 px-4 py-1 text-center text-xs text-[var(--info)]">
+          Syncing local changes to cloud…
         </div>
       )}
 
@@ -709,7 +593,7 @@ export default function EditorPage() {
         onRedo={redo}
         onToggleLeftPanel={() => setLeftPanelOpen((v) => !v)}
         onToggleRightPanel={() => setRightPanelOpen((v) => !v)}
-        onOpenHistory={() => setHistoryOpen((v) => !v)}
+        onToggleAssistant={() => setAssistantOpen((v) => !v)}
         onOpenMultiExport={() => setExportOpen(true)}
         onOpenDesignTokens={() => setTokensOpen(true)}
         onOpenDevInspect={() => setDevInspectOpen(true)}
@@ -718,11 +602,7 @@ export default function EditorPage() {
         onExportPNG={() => canvasRef.current?.exportPNG()}
         onExportJSON={() => canvasRef.current?.exportJSON()}
         onClearAll={() => {
-          if (
-            window.confirm(
-              "Clear all elements from canvas? This cannot be undone.",
-            )
-          ) {
+          if (window.confirm("Clear all elements? This cannot be undone.")) {
             canvasRef.current?.clearAll();
             pushState();
           }
@@ -732,59 +612,9 @@ export default function EditorPage() {
         onFitToScreen={fitToScreen}
         onSetZoom={setZoom}
       />
-      <GenerationHistoryPanel
-        open={historyOpen}
-        items={historyItems}
-        isLoading={historyLoading}
-        onClose={() => setHistoryOpen(false)}
-        onRestore={async (id) => {
-          setHistoryLoading(true);
-          try {
-            const supabase = createClient();
-            const {
-              data: { user },
-            } = await supabase.auth.getUser();
-            if (!user) return;
-            const { data } = await supabase
-              .from("generation_history")
-              .select("canvas_json")
-              .eq("id", id)
-              .eq("user_id", user.id)
-              .single();
-            if (!data?.canvas_json || !canvasRef.current?.canvas) return;
-            if (
-              !window.confirm(
-                "This will replace your current canvas. Are you sure?",
-              )
-            )
-              return;
-            await canvasRef.current.canvas.loadFromJSON(data.canvas_json);
-            canvasRef.current.canvas.requestRenderAll();
-            pushState();
-          } finally {
-            setHistoryLoading(false);
-          }
-        }}
-        onDelete={async (id) => {
-          setHistoryLoading(true);
-          try {
-            const supabase = createClient();
-            const {
-              data: { user },
-            } = await supabase.auth.getUser();
-            if (!user) return;
-            await supabase
-              .from("generation_history")
-              .delete()
-              .eq("id", id)
-              .eq("user_id", user.id);
-            loadHistory();
-          } finally {
-            setHistoryLoading(false);
-          }
-        }}
-      />
+
       <div className="flex h-[calc(100vh-44px)]">
+        {/* Mobile overlay */}
         {(leftPanelOpen || rightPanelOpen) && (
           <div
             className="fixed inset-0 z-20 bg-[var(--scrim)] lg:hidden"
@@ -794,27 +624,32 @@ export default function EditorPage() {
             }}
           />
         )}
+
+        {/* Left panel */}
         <div
-          className={`${leftPanelOpen ? "flex" : "hidden"} lg:flex fixed lg:static inset-y-11 lg:inset-auto left-0 z-30 w-[260px] lg:w-[240px] border-r border-white/[0.07] bg-[var(--surface-base)] flex-col shadow-2xl lg:shadow-none`}
+          className={`${leftPanelOpen ? "flex" : "hidden"} lg:flex fixed lg:static inset-y-11 lg:inset-auto left-0 z-30 w-[260px] lg:w-[240px] border-r border-[var(--line-subtle)] bg-[var(--surface-base)] flex-col`}
         >
-          <PromptPanel
-            onGenerate={handleGenerate}
-            onAddElement={handleAddElement}
-            isGenerating={isGenerating}
-          />
-          <LayersPanel
+          <EditorLeftPanel
             canvas={canvas}
+            onAddElement={handleAddElement}
             onSelectObject={() => setRefresh((v) => v + 1)}
-            refreshTrigger={refresh}
             onCanvasChanged={handleCanvasChanged}
+            refreshTrigger={refresh}
+            onImportImage={() => importFileRef.current?.click()}
           />
         </div>
+
+        {/* Canvas area */}
         <div
           ref={canvasAreaRef}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            if (selectedObject) setContextMenu({ x: e.clientX, y: e.clientY });
+          }}
           className="relative flex flex-1 overflow-auto overscroll-contain bg-[color-mix(in_srgb,var(--surface-sunken)_85%,white_0.5%)]"
           style={{ cursor: toolMode === "hand" ? "grab" : "default" }}
         >
@@ -825,18 +660,18 @@ export default function EditorPage() {
               height={height}
               zoom={zoom}
               toolMode={toolMode}
+              snapToGrid={snapToGrid}
               onReady={setCanvas}
               onObjectModified={handleCanvasChanged}
             />
           </div>
         </div>
-        <ZoomSlider
-          zoom={zoom}
-          onZoomChange={setZoom}
-          onFitToScreen={fitToScreen}
-        />
+
+        <ZoomSlider zoom={zoom} onZoomChange={setZoom} onFitToScreen={fitToScreen} />
+
+        {/* Right panel */}
         <div
-          className={`${rightPanelOpen ? "flex" : "hidden"} lg:flex fixed lg:static inset-y-11 lg:inset-auto right-0 z-30 w-[260px] border-l border-white/[0.07] bg-[var(--surface-base)] flex-col overflow-hidden shadow-2xl lg:shadow-none`}
+          className={`${rightPanelOpen ? "flex" : "hidden"} lg:flex fixed lg:static inset-y-11 lg:inset-auto right-0 z-30 w-[260px] border-l border-[var(--line-subtle)] bg-[var(--surface-base)] flex-col overflow-hidden`}
         >
           <div className="flex-1 overflow-y-auto scrollbar-hide">
             <PropertiesPanel
@@ -860,6 +695,70 @@ export default function EditorPage() {
         </div>
       </div>
 
+      {/* Floating assistant panel */}
+      <AssistantPanel open={assistantOpen} onClose={() => setAssistantOpen(false)} />
+
+      {/* Context menu */}
+      {contextMenu && selectedObject && (
+        <div
+          className="fixed z-[90] w-44 overflow-hidden rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] p-1 shadow-[var(--elevation-floating)]"
+          style={{ left: contextMenu.x, top: contextMenu.y }}
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          {[
+            { label: "Duplicate", shortcut: "Ctrl+D", run: handleDuplicate },
+            { label: "Bring to front", shortcut: "", run: handleBringToFront },
+            { label: "Send to back", shortcut: "", run: handleSendToBack },
+            { label: "Delete", shortcut: "Del", run: handleDelete },
+          ].map((item) => (
+            <button
+              key={item.label}
+              onClick={() => {
+                item.run();
+                setContextMenu(null);
+              }}
+              className={`flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-xs transition-colors hover:bg-[var(--fill-default)] ${
+                item.label === "Delete" ? "text-[var(--danger)]" : "text-[var(--text-primary)]"
+              }`}
+            >
+              <span>{item.label}</span>
+              {item.shortcut && (
+                <span className="text-[10px] text-[var(--text-muted)]">{item.shortcut}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <CommandPalette
+        open={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        commands={commands}
+      />
+
+      {/* Hidden file input for imports */}
+      <input
+        ref={importFileRef}
+        type="file"
+        accept="application/json,image/png,image/jpeg,image/webp,image/svg+xml,.svg"
+        className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            if (file.type === "application/json" || file.name.endsWith(".json")) {
+              await canvasRef.current?.importJSON(file);
+            } else if (file.type === "image/svg+xml" || file.name.endsWith(".svg")) {
+              await canvasRef.current?.importSVG(file);
+            } else {
+              await canvasRef.current?.importImage(file);
+            }
+            pushState();
+          }
+          e.target.value = "";
+        }}
+      />
+
+      {/* Modals */}
       <MultiFormatExportModal
         open={exportOpen}
         onClose={() => setExportOpen(false)}
@@ -868,10 +767,7 @@ export default function EditorPage() {
         sourceWidth={width}
         sourceHeight={height}
       />
-      <DesignTokensModal
-        open={tokensOpen}
-        onClose={() => setTokensOpen(false)}
-      />
+      <DesignTokensModal open={tokensOpen} onClose={() => setTokensOpen(false)} />
       <DevModeInspectModal
         open={devInspectOpen}
         onClose={() => setDevInspectOpen(false)}
@@ -882,18 +778,7 @@ export default function EditorPage() {
         onClose={() => setBrandKitOpen(false)}
         canvas={canvas}
       />
-      <KeyboardShortcutsModal
-        open={shortcutsOpen}
-        onClose={() => setShortcutsOpen(false)}
-      />
-      <OnboardingModal
-        open={onboardingOpen}
-        onClose={() => setOnboardingOpen(false)}
-        onStartPrompt={() => {
-          const el = document.getElementById("prompt-input");
-          if (el instanceof HTMLTextAreaElement) el.focus();
-        }}
-      />
+      <KeyboardShortcutsModal open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
     </div>
   );
 }

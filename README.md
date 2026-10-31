@@ -4,7 +4,7 @@
 
 # Readlyn
 
-**AI-powered infographic generator, describe any topic, get a stunning visual in seconds**
+**Turn a prompt into a structured, editable infographic. Powered by Groq.**
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://readlyn.vercel.app)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Readlyn-181717?style=for-the-badge&logo=github)](https://github.com/MuhammadTanveerAbbas/Readlyn)
@@ -13,19 +13,14 @@
 [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
 [![Vercel AI SDK](https://img.shields.io/badge/Vercel_AI_SDK-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://sdk.vercel.ai)
-[![Upstash](https://img.shields.io/badge/Upstash-00C9A7?style=for-the-badge&logo=upstash&logoColor=white)](https://upstash.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev)
 
 ---
 
-<div align="center">
-
-| 9 Layouts | 5 Themes | 3 Canvas Sizes | Free to Start |
-|:---------:|:--------:|:--------------:|:-------------:|
-| Steps · Stats · Timeline · Compare · List · Pyramid · Funnel · Cycle · Auto | Ocean · Ember · Forest · Slate · Midnight | A4 Portrait · Square · Wide | No credit card · 100 generations/day |
-
-</div>
+| 9 Layouts | 5 Themes | 4 Export Formats | Free to Start |
+|:---------:|:--------:|:----------------:|:-------------:|
+| Steps, Stats, Timeline, Compare, List, Pyramid, Funnel, Cycle, Auto | Ocean, Ember, Forest, Slate, Midnight | PNG, SVG, JSON, multi-size ZIP | No credit card during early access |
 
 </div>
 
@@ -39,380 +34,359 @@
 
 ## Overview
 
-Readlyn turns plain text prompts into professional infographics using Groq with runtime model discovery plus automatic model fallback. The configured default is `openai/gpt-oss-120b` (override with `GROQ_MODEL`). You describe your topic, pick a layout style plus theme, then the AI streams a fully structured infographic onto a Fabric.js canvas, ready to export as PNG or JSON. Built for content creators, marketers, plus developers who need visual content fast.
+Readlyn turns a text prompt into a structured infographic. The server calls Groq through the Vercel AI SDK, validates the response against a Zod document schema, and streams elements onto a Fabric.js canvas. From there you can edit every element, import assets, and export the result.
+
+The AI layer lives in `lib/ai/config.ts` and `lib/groq.ts`. Model IDs are checked against Groq's live catalog at runtime, with automatic fallback when a model is unavailable or rate limited. The default generation model is `openai/gpt-oss-120b`, and every task model can be overridden with an environment variable.
 
 ---
 
-## 🧾 Product Status (Early Access)
+## Product Status (Early Access)
 
-Readlyn is in early access. This README describes what the code actually does today.
+Readlyn is in early access. This README describes what the code does today.
 
 - Every feature is unlocked for everyone during early access.
-- Fair use cap: 100 generations per day per user (`FAIR_USE_DAILY_GENERATIONS` in `config/plans.ts`).
-- Free plan: unlimited active projects, 100 generations per day (fair use).
-- Paid tiers (Pro, Team) are placeholders. Their extra features are labelled "(coming soon)".
-- There is no billing or Stripe integration yet, so choosing a paid tier changes nothing.
+- There is no app-level generation cap. Groq's provider rate limits still apply.
+- There is no billing integration. Pro and Team cards are placeholders, and choosing one changes nothing.
+- Paid features are labelled "(coming soon)" in the pricing config and the UI.
 
 ### Not built yet
 
-These do not exist in the product today:
-
-- SVG export
-- Real time collaboration
-- Team features
 - Billing or Stripe integration
+- Real time collaboration
+- Team workspaces, roles, and permissions
 - Figma import
 - Custom font upload
-- Image elements in the infographic editor
 - Named checkpoints
+- Rulers, alignment guides, and multiple artboards
+- Gradient, shadow, and blur controls in the inspector
 
 ---
 
-## ✨ Features
+## Features
 
-- 🤖 **AI Infographic Generation** Describe any topic, plus Groq generates a complete, data-rich infographic with facts plus statistics. Models are discovered at runtime with automatic fallback.
-- 🎨 **9 Layout Archetypes** Steps, Stats, Timeline, Compare, List, Pyramid, Funnel, Cycle, or Auto, each with mathematically pre-computed element positions
-- 🖌️ **5 Color Themes** Ocean, Ember, Forest, Slate, plus Midnight palettes applied consistently across every generated element
-- 📐 **3 Canvas Sizes** A4 Portrait (800x1100), Square (1080x1080), plus Wide (1920x600)
-- ⚡ **Streaming Generation** Elements stream to the canvas in real time while the AI generates them
-- 🖱️ **Interactive Canvas Editor** Drag, resize, rotate, plus edit any element on the Fabric.js canvas with select plus hand tool modes
-- 🔢 **Layers Panel** Visibility toggle, lock/unlock, reorder via drag, plus per-layer delete
-- ⚙️ **Properties Panel** Transform (X, Y, W, H, rotation, opacity), appearance (fill, stroke, border radius), typography, front, back, duplicate, delete, plus Auto Theme
-- ↩️ **Undo / Redo** Full canvas history that captures every edit (Ctrl+Z / Cmd+Z, Ctrl+Shift+Z)
-- ⌨️ **Keyboard Shortcuts** V (select), H (hand), Space+drag pan, wheel zoom, Delete/Backspace, Ctrl+D duplicate, arrow nudge, `?` opens the shortcuts panel
-- 🔍 **Zoom Controls** Zoom in/out, fit-to-screen, mouse wheel zoom toward cursor, plus pan with the hand tool
-- 📤 **PNG plus JSON Export** Download a high-res PNG, or save the raw JSON schema for later
-- 📦 **Multi-Format ZIP Export** Scales content into A4, Square, Wide, Story, plus LinkedIn frames
-- 🗂 **Generation History** Per project snapshots with thumbnails, restore, plus delete
-- 🎯 **Content Check** Readability plus overflow analysis with honest labels
-- 🎛 **Design Tokens Modal** W3C format JSON design tokens
-- 🧰 **Dev Mode Inspect** CSS, React, plus SVG snippets for the current canvas
-- 🏷️ **Brand Kit** Saved to localStorage, plus applied to the canvas
-- 📴 **Offline Buffer plus Autosave** Queues edits while the browser is offline, plus debounced autosave in the editor
-- 🔒 **Auth with Supabase** Email/password sign up, login, forgot password, plus protected routes via Next.js proxy
-- ⚙️ **Settings Page** Account management, including account deletion
-- 🖼️ **Parallax Studio** Standalone layer-based parallax scene builder with 6 presets, config panel, desktop/tablet/mobile viewport modes, image upload, plus clean HTML/CSS/JS code export
-- 🛡 **Security** CSRF protection, rate limiting, input sanitization, plus UUID route validation
-- 🩺 **Ops** Health endpoint (`/api/health`), sitemap, plus robots
+### Generation
 
----
+- **Prompt to document** Describe a topic, choose a layout and theme, and receive a validated infographic document with text, shapes, and line elements already positioned.
+- **Streaming output** Elements appear on the canvas as the model produces them.
+- **Runtime model discovery** `lib/groq.ts` reads Groq's model catalog, picks a working model for the task, and falls back automatically.
+- **Task-based model config** General, design, code, analysis, edit, JSON, fast, and vision tasks each have their own default model and fallback chain.
+- **9 layout archetypes** Steps, Stats, Timeline, Compare, List, Pyramid, Funnel, Cycle, and Auto, each with pre-computed element positions in `lib/archetypeLayouts.ts`.
+- **5 color themes** Ocean, Ember, Forest, Slate, and Midnight.
+- **3 canvas sizes** A4 portrait (800 x 1100), square (1080 x 1080), and wide (1920 x 600).
 
-## 🎨 Design System
+### Editor
 
-Readlyn uses a hand-crafted dark design language (think Resend meets Framer). The entire UI is driven by CSS custom properties defined in `globals.css`:
+- **Fabric.js canvas** Drag, resize, rotate, multi-select, group, ungroup, copy, paste, and edit text in place.
+- **Layers panel** Visibility, lock, drag reorder, selection, and delete.
+- **Properties inspector** Position, size, rotation, opacity, fill, stroke, stroke width, corner radius, font family, size, weight, alignment, line height, and letter spacing.
+- **Undo and redo** A full canvas history with debounced snapshots.
+- **Zoom and pan** Zoom slider, fit to screen, mouse wheel zoom toward the cursor, select tool, hand tool, and space-drag panning.
+- **Command palette** Press `Ctrl+K` or `Cmd+K` to search and run editor commands.
+- **Context menu** Right-click a selected element to duplicate, reorder, or delete it.
+- **Snap to grid** Optional grid overlay and 20px movement snapping.
+- **Keyboard shortcuts** Undo, redo, duplicate, delete, select all, copy, paste, group, ungroup, arrow nudge, tool switching, fit to screen, and `?` for the shortcut reference.
+- **Auto Theme** Recolor the document from its current palette in one action.
 
-- **Background scale** `--bg-base` (#080808), `--bg-panel` (#0f0f0f), `--bg-elevated` (#161616). No pure black.
-- **Accent (`--accent`: #F5C518)** Used sparingly: primary CTAs, active states, icon containers, plus inline accent text only.
-- **Semantic tokens** `--text-primary`, `--text-secondary`, `--text-body`, `--text-muted-val`, `--text-dim` for typography, plus `--destructive`, `--success`, `--purple`, `--blue`, `--orange` for status plus accent colors.
-- **Typography** Mixed-case headings with tight tracking (`-0.02em` to `-0.03em`). All-caps reserved for labels plus badges only.
-- **Noise texture** Subtle SVG fractal noise overlay on all pages for depth.
-- **Scroll animations** `useReveal()` hook triggers `animate-fade-up` at 15% viewport entry on every section.
-- **Micro-interactions** `hover:scale-[1.02] active:scale-[0.98]` on buttons, border brightens plus top accent line on cards, yellow focus ring on inputs, chevron rotation on FAQ accordion.
-- **Auth pages** Card with deep shadow, labeled inputs, yellow glow submit button, `animate-fade-up` on mount.
-- **Canvas editor** Panels at `--bg-panel`, borders at `--border-default`, active tool uses `--accent`, generate button with glow.
+### Import and export
 
----
+- **PNG export** Rendered from the current canvas.
+- **SVG export** Clean vector output for the current document.
+- **JSON export and import** Round-trip the full document.
+- **SVG and image import** Import an SVG, PNG, JPEG, or WebP file onto the canvas.
+- **Multi-format ZIP** Renders A4, square, wide, story, and LinkedIn frames, and includes a React component generated from the canvas.
+- **Developer Mode** CSS, React, SVG, and JSON output for any selected element.
+- **Design tokens** W3C design token JSON for the current system.
 
-## 🛠 Tech Stack
+### Workspace
 
-| Category           | Technology                                                                    |
-| ------------------ | ----------------------------------------------------------------------------- |
-| Framework          | Next.js 16 + React 19 + TypeScript                                            |
-| Styling            | Tailwind CSS v4 + Radix UI                                                    |
-| Canvas             | Fabric.js v6                                                                  |
-| Parallax           | Pure CSS transforms (no extra dependencies)                                   |
-| AI                 | Groq via Vercel AI SDK (runtime model discovery plus auto fallback, default `openai/gpt-oss-120b`) |
-| Rate Limiting      | Upstash Redis (with in-memory fallback for development)                       |
-| Auth & Database    | Supabase (Auth plus Postgres)                                                 |
-| Input Sanitization | isomorphic-dompurify                                                          |
-| Testing            | Vitest (unit) plus Playwright (e2e)                                           |
-| Fonts              | Open Sans (single variable font, all weights)                                 |
-| Deployment         | Vercel                                                                        |
+- **Project dashboard** Create, open, pin, rename, and delete projects.
+- **Generation history** Per-project snapshots with thumbnails, restore, and delete.
+- **Brand kit** Saved locally and applied to the canvas.
+- **Content check** Readability grade, text overflow detection, and a tone summary.
+- **Autosave and offline buffer** Debounced saves to Supabase, with queued edits while offline.
+- **Authentication** Email and password sign up, login, password reset, and protected routes through `proxy.ts`.
+- **Settings** Account details and account deletion.
+- **AI document API** Authenticated operations for create, update, delete, move, duplicate, restyle, inspect, and export.
 
 ---
 
-## 🚀 Quick Start
+## Design System
+
+The interface is driven by CSS custom properties in `app/globals.css`. There is one source of truth for surfaces, type, spacing, radius, and motion.
+
+- **Surfaces** `--surface-sunken` (#0b0b0c), `--surface-base` (#121214), `--surface-raised` (#191a1d), `--surface-overlay` (#212227), `--surface-inset` (#0e0e10).
+- **Text** `--text-primary`, `--text-secondary`, `--text-body`, `--text-muted`, and `--text-faint` for a predictable hierarchy.
+- **Accent** `--accent` (#f5c518) is reserved for primary actions, active states, and focus rings. `--accent-hover` handles pointer states.
+- **Semantic colors** `--success`, `--warning`, `--danger`, `--info`, and `--orange`, each with a soft variant for tinted surfaces.
+- **Type scale** Nine steps from 10px to 39px, with Bricolage Grotesque for headings and Figtree for body and UI text.
+- **Canvas type** Bricolage Grotesque and Figtree are self-hosted webfonts because Fabric.js paints into a canvas element and cannot resolve CSS variables.
+- **Spacing and radius** Fixed spacing steps (4 to 96px), radius steps (4 to 18px), and a full 9999px option.
+- **Motion** Shared durations (120ms, 200ms, 350ms) and easing curves, with a reduced-motion override.
+- **Noise and reveals** A subtle SVG noise overlay and a `useReveal()` intersection observer for section entrances.
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+| --- | --- |
+| Framework | Next.js 16, React 19, TypeScript |
+| Styling | Tailwind CSS v4, Radix UI primitives |
+| Canvas | Fabric.js v6 |
+| AI | Groq via Vercel AI SDK v6, Zod-validated structured output, runtime model discovery and fallback |
+| Auth and data | Supabase Auth, Postgres, and Storage |
+| Validation | Zod schemas for documents, API requests, and route params |
+| Sanitization | isomorphic-dompurify |
+| Testing | Vitest |
+| Fonts | Bricolage Grotesque for display and canvas headings, Figtree for body copy, UI and canvas text |
+| Deployment | Vercel |
+
+---
+
+## Quick Start
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm (recommended) or npm
-- Supabase account
-- Groq API key (free at [console.groq.com](https://console.groq.com/keys))
+- Node.js 18 or newer
+- pnpm
+- A Supabase project
+- A Groq API key from [console.groq.com](https://console.groq.com/keys)
 
 ### Installation
 
 ```bash
-# 1. Clone the repo
 git clone https://github.com/MuhammadTanveerAbbas/Readlyn.git
 cd Readlyn
-
-# 2. Install dependencies
 pnpm install
-
-# 3. Set up environment variables
 cp .env.example .env.local
-# Fill in your values (see the Environment Variables section below)
-
-# 4. Run the development server
+# Fill in the values described below
 pnpm dev
-
-# 5. Open in browser
-http://localhost:3000
 ```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+### Database
+
+Run `supabase/schema.sql` in the Supabase SQL editor. It is idempotent and creates:
+
+- `public.projects`
+- `public.generation_history`
+- `public.templates`
+- `public.assets`
+- `public.subscriptions` and `public.invoices` (reserved, no billing yet)
+- Indexes for common lookups
+- Row Level Security policies for every table
+- The private `project-assets` storage bucket with user-scoped read, upload, and delete policies
 
 ---
 
-## 🔐 Environment Variables
-
-Create a `.env.local` file in the root directory (or copy `.env.example`):
+## Environment Variables
 
 ```env
-# Required
+# Supabase
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# Groq
 GROQ_API_KEY=your-groq-api-key
 
-# Optional, AI model override (default openai/gpt-oss-120b)
-# GROQ_MODEL=openai/gpt-oss-120b
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# Optional (rate limiting)  https://console.upstash.com/redis
-# Without these, rate limiting falls back to an in-memory store.
-UPSTASH_REDIS_REST_URL=https://your-upstash-url.upstash.io
-UPSTASH_REDIS_REST_TOKEN=your-upstash-token
+# Cron
+CRON_SECRET=your-cron-secret
+
+# Optional model overrides
+# GROQ_MODEL_GENERAL=openai/gpt-oss-120b
+# GROQ_MODEL_DESIGN=openai/gpt-oss-120b
+# GROQ_MODEL_CODE=openai/gpt-oss-120b
+# GROQ_MODEL_ANALYSIS=openai/gpt-oss-120b
+# GROQ_MODEL_EDIT=openai/gpt-oss-120b
+# GROQ_MODEL_JSON=openai/gpt-oss-120b
+# GROQ_MODEL_FAST=openai/gpt-oss-20b
+# GROQ_MODEL_VISION=qwen/qwen3.8-27b
 ```
 
-Get your keys:
-
-- **Supabase:** [https://supabase.com](https://supabase.com) ➔ Project Settings ➔ API
-- **Groq:** [https://console.groq.com/keys](https://console.groq.com/keys) ➔ Create API Key (free tier available)
-- **Upstash Redis:** [https://console.upstash.com/redis](https://console.upstash.com/redis) ➔ Create a database ➔ Copy REST URL plus Token
-
-> `GROQ_API_KEY` is server-side only (no `NEXT_PUBLIC_` prefix). The `NEXT_PUBLIC_` Supabase vars are safe to expose to the browser.
-
-### Testing
-
-```bash
-pnpm test        # Run unit tests (Vitest)
-pnpm test:watch  # Watch mode (Vitest)
-pnpm test:e2e    # End to end tests (Playwright)
-```
-
-Unit tests use **Vitest** with path alias resolution (`@/` ➔ `./`). Test files live in `tests/` (infographic, security, plans, export-transform, archetype-layouts). `pnpm test:e2e` runs Playwright. No Playwright config file or e2e specs are committed yet, so you may need to add them locally.
+`GROQ_API_KEY` and `SUPABASE_SERVICE_ROLE_KEY` are server-side only. The `NEXT_PUBLIC_` Supabase values are safe to expose to the browser.
 
 ---
 
-## 🛡 Security
-
-- **CSRF Protection** All state-changing API routes (`/api/generate`, `/api/account/delete`, `/api/export-multi`, `/api/keep-alive`) validate that the `Origin` header matches the deployed host.
-- **Rate Limiting** The `/api/generate` route enforces the fair use cap of 100 generations per day per user (`FAIR_USE_DAILY_GENERATIONS` in `config/plans.ts`). Uses Upstash Redis in production, falls back to an in-memory `Map` when Upstash env vars are absent.
-- **Input Sanitization** Prompt text is stripped of HTML tags plus control characters before it is sent to the AI. Generated output is sanitized via `isomorphic-dompurify` to prevent XSS.
-- **Route Params** All dynamic route segments (`[id]`) are validated as UUIDs via `parseRouteId()`.
-
----
-
-## 📋 Plans plus Fair Use
-
-Plan definitions live in `config/plans.ts`.
-
-- **Free ($0, forever)** Unlimited active projects, 100 AI generations per day (fair use), all 9 archetypes plus 5 themes, canvas editing, history, export, design tokens, brand kit, plus dev mode inspect.
-- **Pro ($15 per month)** plus **Team ($35 per user per month)** Early access placeholder tiers. Their extra features are labelled "(coming soon)". No billing is wired up, so upgrading does nothing today.
-- **Fair use** `FAIR_USE_DAILY_GENERATIONS = 100` caps generations per day per user for every account. It is a safety net, not a plan gate.
-
-To adjust limits, edit `PLANS` plus `FAIR_USE_DAILY_GENERATIONS` in `config/plans.ts`.
-
----
-
-### Supabase Setup
-
-After creating your Supabase project, run the schema in `supabase/schema.sql` via the Supabase SQL editor to create the required tables (`projects`, `templates`, `generation_history`) plus enable Row Level Security.
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 readlyn/
 |-- app/
-|   |-- (auth)/              # Login, signup, forgot-password pages
-|   |-- (protected)/         # Dashboard, app editor, settings, tools (auth-gated)
-|   |-- api/generate/        # AI generation (Vercel AI SDK, CSRF, rate limit, sanitize)
-|   |-- api/export-multi/    # Multi-format ZIP export
-|   |-- api/account/delete/  # Account deletion endpoint
-|   |-- api/keep-alive/      # Keep-alive ping
-|   |-- api/health/          # Health endpoint
-|   |-- globals.css          # Design tokens (CSS custom properties), noise texture, animations
-|   |-- robots.txt           # Robots rules
-|   |-- sitemap.xml          # Sitemap
+|   |-- (auth)/                  # Login, signup, password reset
+|   |-- (protected)/             # Dashboard, editor, settings
+|   |-- api/ai/document/         # Authenticated AI document operations
+|   |-- api/generate/            # Streaming infographic generation
+|   |-- api/export-multi/        # Multi-format ZIP export
+|   |-- api/account/delete/      # Account deletion
+|   |-- api/keep-alive/          # Cron keep-alive
+|   |-- api/health/              # Health and model status
+|   |-- privacy/                 # Privacy policy
+|   |-- terms/                   # Terms of service
+|   |-- globals.css              # Design tokens, base styles, motion
 |   |-- layout.tsx
 |-- components/
-|   |-- app/                 # Editor UI (Canvas, Toolbar, Layers, Properties, Prompt, modals)
-|   |-- auth/                # AuthCard with refined dark card design
-|   |-- landing/             # Landing page sections (all "use client" with useReveal)
-|   |-- parallax/            # Parallax Studio (Preview, ConfigPanel, ImagePicker, ExportModal)
-|   |-- ui/                  # Shared UI primitives
+|   |-- app/                     # Editor UI, panels, modals, command palette
+|   |-- landing/                 # Landing page sections
+|   |-- legal/                   # Shared legal page shell
+|   |-- ui/                      # Shared primitives
 |-- config/
-|   |-- plans.ts             # Plan definitions plus fair use cap
+|   |-- plans.ts                 # Plan definitions
 |-- hooks/
-|   |-- use-canvas-history.ts    # Undo plus redo history
-|   |-- use-canvas-selection.ts  # Selection sync
+|   |-- use-canvas-history.ts    # Undo and redo history
+|   |-- use-canvas-selection.ts  # Selection state and property updates
 |   |-- use-offline-buffer.ts    # Offline edit queue
-|   |-- use-reveal.ts            # IntersectionObserver scroll animation hook
+|   |-- use-reveal.ts            # Scroll reveal observer
 |   |-- use-toast.ts             # Toast notifications
 |-- lib/
-|   |-- archetypeLayouts.ts   # Pre-computed pixel positions for all layout archetypes
-|   |-- aspectRatioReflow.ts  # Aspect ratio reflow helpers (currently unused)
-|   |-- autoTheme.ts          # Auto Theme color logic
-|   |-- code-generator.ts     # HTML/CSS/JS export for parallax scenes
-|   |-- contentAwareness.ts   # Content check (readability plus overflow) helpers
-|   |-- csrf.ts               # Origin plus Host CSRF validation for API routes
-|   |-- defaultInfographic.ts # Default infographic document
-|   |-- design-tokens.json    # W3C design tokens
-|   |-- env.ts                # Environment variable validation
-|   |-- exportMultiFormat.ts  # PNG plus ZIP export logic
-|   |-- groq.ts               # Groq model discovery, fallback, plus self healing
-|   |-- parallax-types.ts     # Parallax Studio types, defaults, constants
-|   |-- parallax-upload.ts    # Supabase Storage upload for parallax images
-|   |-- params.ts             # UUID route param validator
-|   |-- presets.ts            # 6 parallax scene presets
-|   |-- rate-limit.ts         # Upstash Redis rate limiter (with in-memory fallback)
-|   |-- renderElements.ts     # Fabric.js object factory plus canvas renderer
-|   |-- sanitize.ts           # Prompt plus output sanitization (isomorphic-dompurify)
-|   |-- themeColors.ts        # Theme palette colors
-|   |-- utils.ts              # Small helpers
-|   |-- supabase/             # Client, server, middleware helpers
-|-- tests/
-|   |-- infographic.test.ts
-|   |-- security.test.ts
-|   |-- plans.test.ts
-|   |-- export-transform.test.ts
-|   |-- archetype-layouts.test.ts
-|-- types/
-|   |-- infographic.ts        # Zod schemas plus TypeScript types for all element types
+|   |-- ai/config.ts             # Task model config and env overrides
+|   |-- ai/document-tools.ts     # Validated document operations
+|   |-- archetypeLayouts.ts      # Positions for every layout archetype
+|   |-- canvas-fonts.ts          # Font preload for Fabric.js
+|   |-- contentAwareness.ts      # Readability and overflow checks
+|   |-- csrf.ts                  # Origin validation for API routes
+|   |-- exportMultiFormat.ts     # ZIP export and frame transforms
+|   |-- groq.ts                  # Model discovery, selection, fallback
+|   |-- react-export.ts          # React component export
+|   |-- renderElements.ts        # Fabric.js object factory and renderer
+|   |-- sanitize.ts              # Prompt and output sanitization
+|   |-- supabase/                # Browser, server, and proxy clients
 |-- supabase/
-|   |-- schema.sql            # Database schema (run this in Supabase SQL editor)
-|-- proxy.ts                  # Auth middleware (route protection)
-|-- vitest.config.ts          # Vitest configuration
-|-- .env.example
-|-- package.json
+|   |-- schema.sql               # Tables, indexes, RLS, storage policies
+|-- e2e/                         # Playwright end-to-end specs
+|-- tests/                       # Vitest unit tests
+|-- types/
+|   |-- infographic.ts           # Zod schemas and TypeScript types
+|-- proxy.ts                     # Auth route protection
 ```
 
 ---
 
-## 📦 Available Scripts
+## Scripts
 
-| Command          | Description                       |
-| ---------------- | --------------------------------- |
-| `pnpm dev`       | Start development server          |
-| `pnpm build`     | Build for production              |
-| `pnpm start`     | Start production server           |
-| `pnpm lint`      | Run ESLint                        |
-| `pnpm typecheck` | Run TypeScript type checking      |
-| `pnpm test`      | Run Vitest unit tests             |
-| `pnpm test:watch`| Run Vitest in watch mode          |
-| `pnpm test:e2e`  | Run Playwright end to end tests   |
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start the development server |
+| `pnpm build` | Production build |
+| `pnpm start` | Start the production server |
+| `pnpm lint` | Run ESLint |
+| `pnpm typecheck` | Run TypeScript without emitting |
+| `pnpm test` | Run Vitest unit tests |
+| `pnpm test:watch` | Run Vitest in watch mode |
+| `pnpm test:e2e` | Run the Playwright end-to-end specs |
 
----
-
-## 🌐 Deployment
-
-This project is deployed on **Vercel**.
-
-### Deploy Your Own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/MuhammadTanveerAbbas/Readlyn)
-
-1. Click the button above
-2. Connect your GitHub account
-3. Add the following environment variables in the Vercel dashboard:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `GROQ_API_KEY`
-   - `GROQ_MODEL` (optional, model override)
-   - `UPSTASH_REDIS_REST_URL` (optional, rate limiting)
-   - `UPSTASH_REDIS_REST_TOKEN` (optional, rate limiting)
-4. Deploy
-
-> The `/api/generate` route uses streaming, with a 60-second max duration, so it works on Vercel's Hobby plan.
+The unit suite covers the infographic schema, layout positions, export transforms, document operations, plans, and security helpers. Playwright specs in `e2e/` cover the landing page, auth flows, API smoke checks, and responsive layouts.
 
 ---
 
-## 🗺 Roadmap
+## Security
+
+- **CSRF origin checks** `/api/generate`, `/api/ai/document`, `/api/export-multi`, and `/api/account/delete` validate the request origin in `lib/csrf.ts`.
+- **Server-side auth** The AI document route reads the Supabase session and rejects unauthenticated requests.
+- **Row Level Security** Every table has RLS enabled with user-scoped policies. Storage policies restrict the `project-assets` bucket to the owner's folder.
+- **Input sanitization** Prompt text is stripped of HTML and control characters, and generated output is sanitized with isomorphic-dompurify.
+- **Route validation** Dynamic route segments are validated as UUIDs with `parseRouteId()`.
+- **Provider limits** AI requests are subject to Groq's rate limits. Readlyn does not add a separate generation cap.
+
+---
+
+## AI Document API
+
+`POST /api/ai/document` accepts a validated document and one operation:
+
+| Operation | Payload |
+| --- | --- |
+| `inspect` | none |
+| `export` | none |
+| `create` | `element` |
+| `update` | `id`, `patch` |
+| `delete` | `id` |
+| `move` | `id`, `x`, `y` |
+| `duplicate` | `id` |
+| `styles` | `id`, `styles` |
+
+Requests require an authenticated Supabase session and a matching origin header. Operations are implemented in `lib/ai/document-tools.ts` and covered by unit tests.
+
+---
+
+## Deployment
+
+Readlyn is built for Vercel.
+
+1. Import the repository at [vercel.com/new](https://vercel.com/new).
+2. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `GROQ_API_KEY`, `NEXT_PUBLIC_APP_URL`, and `CRON_SECRET`.
+3. Run `supabase/schema.sql` against your production database.
+4. Deploy.
+
+The generate route uses streaming with a 60 second max duration.
+
+---
+
+## Roadmap
 
 ### Shipped
 
-- [x] AI infographic generation with Groq (runtime model discovery plus auto fallback)
-- [x] 9 layout archetypes with pre-computed positions
-- [x] 5 color themes (ocean, ember, forest, slate, midnight)
-- [x] 3 canvas sizes (A4, square, wide)
-- [x] Interactive Fabric.js canvas editor (drag, resize, rotate)
-- [x] Layers panel with visibility, lock, reorder, plus delete
-- [x] Properties panel (transform, appearance, typography) plus Auto Theme
-- [x] Undo plus redo capturing all edits
-- [x] Keyboard shortcuts (undo, redo, V, H, space pan, wheel zoom, delete, Ctrl+D, arrow nudge, `?`)
-- [x] PNG plus JSON export
-- [x] Multi-format ZIP export (A4, square, wide, story, LinkedIn)
-- [x] Design tokens modal plus dev mode inspect
-- [x] Brand kit stored in localStorage
-- [x] Generation history per project (restore, delete, thumbnails)
-- [x] Content check (readability plus overflow)
-- [x] Offline buffer plus autosave
-- [x] Supabase authentication
-- [x] Streaming partial generation
-- [x] Settings page with account deletion
-- [x] Parallax Studio (presets, config panel, viewport modes, code export, image upload)
-- [x] CSRF protection on all API routes
-- [x] Rate limiting via Upstash Redis (with dev fallback)
-- [x] Input sanitization (strip HTML, control chars, DOMPurify)
-- [x] UUID validation on all dynamic route params
-- [x] Fair use cap (100 generations per day per user)
-- [x] Health endpoint, sitemap, plus robots
+- [x] Streaming AI generation with Groq model discovery and fallback
+- [x] Zod-validated structured document output
+- [x] 9 layout archetypes and 5 color themes
+- [x] 3 canvas sizes
+- [x] Fabric.js editor with drag, resize, rotate, group, and text editing
+- [x] Layers, inspector, undo and redo, zoom and pan
+- [x] Command palette, context menu, and snap to grid
+- [x] Keyboard shortcuts and clipboard actions
+- [x] PNG, SVG, and JSON export
+- [x] Multi-size ZIP export with a React component
+- [x] JSON, SVG, and image import
+- [x] Developer Mode with CSS, React, SVG, and JSON output
+- [x] Design tokens and brand kit
+- [x] Generation history with restore and delete
+- [x] Content check for readability and overflow
+- [x] Autosave and offline edit buffer
+- [x] Supabase authentication and account deletion
+- [x] CSRF checks, sanitization, and UUID validation
+- [x] Row Level Security and storage policies
+- [x] Health endpoint, sitemap, and robots
 
 ### Not shipped yet
 
-- [ ] SVG export
+- [ ] Billing and Stripe integration
 - [ ] Real time collaboration
-- [ ] Team features
-- [ ] Billing (Stripe) integration
+- [ ] Team workspaces, roles, and permissions
 - [ ] Figma import
 - [ ] Custom font upload
-- [ ] Image elements in the infographic editor
 - [ ] Named checkpoints
-- [ ] React component plus HTML/CSS code export (coming soon)
-- [ ] More canvas sizes (Instagram Story, Twitter/X banner beyond the ZIP export frames)
+- [ ] Rulers, alignment guides, and artboards
+- [ ] Gradient, shadow, and blur inspector controls
+- [ ] Dedicated mobile app
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome!
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Fork the repository.
+2. Create a feature branch.
+3. Make the change and run `pnpm typecheck`, `pnpm lint`, and `pnpm test`.
+4. Open a pull request with a short description of the change and how you verified it.
 
 ---
 
-## 📄 License
+## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+MIT. See `LICENSE` for details.
 
 ---
-
-## 👨‍💻 Built by Muhammad Tanveer Abbas
 
 <div align="center">
 
 **Muhammad Tanveer Abbas**
-SaaS Developer | Building production-ready MVPs in 14 to 21 days
 
 [![GitHub](https://img.shields.io/badge/GitHub-MuhammadTanveerAbbas-181717?style=for-the-badge&logo=github)](https://github.com/MuhammadTanveerAbbas)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/muhammadtanveerabbas)
 
 **Repository:** [https://github.com/MuhammadTanveerAbbas/Readlyn](https://github.com/MuhammadTanveerAbbas/Readlyn)
-
-_If this project helped you, please consider giving it a ⭐_
 
 </div>

@@ -2,7 +2,7 @@
 
 import JSZip from "jszip";
 import designTokens from "@/lib/design-tokens.json";
-import { generateInfographicReactComponent } from "@/lib/code-generator";
+import { generateInfographicReactComponent } from "@/lib/react-export";
 import { ensureCanvasFontsLoaded } from "@/lib/canvas-fonts";
 
 interface ExportTarget {
@@ -73,7 +73,7 @@ export async function exportMultiFormatZip(
     offscreen.backgroundColor = "#ffffff";
 
     // Scale the whole artboard so it fits inside the target frame, then center
-    // it. Scaling each object keeps text, strokes plus layout proportional.
+    // it. Scaling each object keeps text, strokes and layout proportional.
     const { ratio, offsetX, offsetY } = computeExportTransform(
       { width: sourceWidth, height: sourceHeight },
       target,

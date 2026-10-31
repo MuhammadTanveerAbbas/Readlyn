@@ -1,26 +1,16 @@
-import type { Metadata } from "next";
-import { Bricolage_Grotesque, Figtree } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
-const bricolageGrotesque = Bricolage_Grotesque({
-  variable: "--font-bricolage",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
-const figtree = Figtree({
-  variable: "--font-figtree",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-});
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  colorScheme: "light",
+};
 
 const siteUrl = "https://readlyn.vercel.app";
 const siteTitle = "Readlyn | AI Infographic Generator";
 const siteDescription =
-  "Describe any topic, plus get a stunning, data-rich infographic in seconds. Powered by Groq AI with automatic model fallback, 9 layout archetypes, 5 color themes, plus a full Fabric.js canvas editor.";
+  "Describe any topic and get a data-rich infographic in seconds. Powered by Groq AI with automatic model fallback, 9 layout archetypes, 5 color themes, and a full Fabric.js canvas editor.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -33,7 +23,7 @@ export const metadata: Metadata = {
     "AI infographic generator",
     "infographic maker",
     "Groq AI",
-    "Llama 3.3",
+    "gpt-oss",
     "canvas editor",
     "data visualization",
     "content creation",
@@ -92,9 +82,7 @@ export default function RootLayout({
         <link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-icon.svg" />
       </head>
-      <body
-        className={`${bricolageGrotesque.variable} ${figtree.variable} h-full bg-[var(--surface-sunken)] overflow-x-hidden font-sans antialiased`}
-      >
+      <body className="h-full bg-[var(--surface-sunken)] overflow-x-hidden font-sans antialiased">
         {children}
         <Toaster />
       </body>

@@ -7,7 +7,6 @@ import {
   Redo2,
   Download,
   FileJson,
-  History,
   Files,
   Trash2,
   ZoomIn,
@@ -18,10 +17,11 @@ import {
   ArrowLeft,
   Code2,
   Palette,
-  HelpCircle,
   Sparkles,
+  HelpCircle,
   PanelLeft,
   PanelRight,
+  Bot,
 } from "lucide-react";
 
 interface ToolbarProps {
@@ -34,7 +34,7 @@ interface ToolbarProps {
   onRedo: () => void;
   onToggleLeftPanel?: () => void;
   onToggleRightPanel?: () => void;
-  onOpenHistory: () => void;
+  onToggleAssistant?: () => void;
   onOpenMultiExport: () => void;
   onOpenDesignTokens?: () => void;
   onOpenDevInspect?: () => void;
@@ -61,7 +61,7 @@ export default function Toolbar({
   onRedo,
   onToggleLeftPanel,
   onToggleRightPanel,
-  onOpenHistory,
+  onToggleAssistant,
   onOpenMultiExport,
   onOpenDesignTokens,
   onOpenDevInspect,
@@ -110,26 +110,26 @@ export default function Toolbar({
 
   const buttonClasses = (disabled = false) => `
     h-7 px-2.5 flex items-center gap-1 rounded
-    border border-transparent hover:border-white/[0.08] hover:bg-white/[0.05]
-    text-[11px] text-[var(--text-body)] hover:text-white
+    border border-transparent hover:border-[var(--line-default)] hover:bg-[var(--fill-default)]
+    text-[11px] text-[var(--text-body)] hover:text-[var(--text-primary)]
     transition-all duration-150 cursor-pointer
     ${disabled ? "opacity-40 cursor-not-allowed" : ""}
   `;
 
   return (
-    <div className="h-11 bg-[var(--surface-base)] border-b border-white/[0.07] px-4 flex items-center justify-between gap-2">
+    <div className="h-11 bg-[var(--surface-base)] border-b border-[var(--line-subtle)] px-4 flex items-center justify-between gap-2">
       {/* Left: Back + Logo + Tools */}
       <div className="flex items-center gap-2">
         {showBackButton && (
           <>
             <button
               onClick={handleBack}
-              className="h-8 w-8 flex items-center justify-center rounded-lg border border-white/[0.08] hover:border-white/15 bg-[var(--surface-raised)] hover:bg-[var(--surface-raised)] text-[var(--text-body)] hover:text-white transition-all duration-200 group"
+              className="h-8 w-8 flex items-center justify-center rounded-lg border border-[var(--line-default)] hover:border-[var(--line-default)] bg-[var(--surface-raised)] hover:bg-[var(--surface-raised)] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-all duration-200 group"
               title="Back to Dashboard"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             </button>
-            <div className="h-5 w-px bg-white/[0.05]" />
+            <div className="h-5 w-px bg-[var(--fill-default)]" />
           </>
         )}
 
@@ -141,22 +141,22 @@ export default function Toolbar({
             height={18}
             style={{ imageRendering: "pixelated" }}
           />
-          <h1 className="text-[13px] font-semibold text-white tracking-[-0.01em] hidden sm:block">
+          <h1 className="text-[13px] font-semibold text-[var(--text-primary)] tracking-[-0.01em] hidden sm:block">
             Readlyn
           </h1>
-          <div className="text-[9px] font-bold border border-[var(--accent)]/30 bg-[var(--accent)]/10 rounded px-1.5 py-0.5 text-[var(--accent)] font-sans hidden sm:block">
+          <div className="text-[9px] font-bold border border-[var(--accent)]/30 bg-[var(--accent)]/10 rounded px-1.5 py-0.5 text-[var(--accent-text)] font-sans hidden sm:block">
             EARLY ACCESS
           </div>
         </div>
 
-        <div className="flex items-center gap-0.5 bg-[var(--surface-raised)] border border-white/[0.08] rounded-lg p-0.5 ml-1">
+        <div className="flex items-center gap-0.5 bg-[var(--surface-raised)] border border-[var(--line-default)] rounded-lg p-0.5 ml-1">
           <button
             onClick={() => onToolModeChange("select")}
             title="Select tool (V)"
             className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
               toolMode === "select"
-                ? "bg-[var(--accent)] text-white"
-                : "text-[var(--text-body)] hover:text-white hover:bg-white/[0.06]"
+                ? "bg-[var(--accent)] text-[var(--text-primary)]"
+                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--fill-default)]"
             }`}
           >
             <MousePointer2 className="w-3.5 h-3.5" />
@@ -166,8 +166,8 @@ export default function Toolbar({
             title="Hand tool (H)"
             className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
               toolMode === "hand"
-                ? "bg-[var(--accent)] text-white"
-                : "text-[var(--text-body)] hover:text-white hover:bg-white/[0.06]"
+                ? "bg-[var(--accent)] text-[var(--text-primary)]"
+                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--fill-default)]"
             }`}
           >
             <Hand className="w-3.5 h-3.5" />
@@ -177,9 +177,9 @@ export default function Toolbar({
         {onToggleLeftPanel && (
           <button
             onClick={onToggleLeftPanel}
-            className="h-7 w-7 flex items-center justify-center rounded border border-white/[0.08] hover:bg-white/[0.05] text-[var(--text-body)] hover:text-white transition-all lg:hidden"
-            title="Toggle prompt plus layers panel"
-            aria-label="Toggle prompt plus layers panel"
+            className="h-7 w-7 flex items-center justify-center rounded border border-[var(--line-default)] hover:bg-[var(--fill-default)] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-all lg:hidden"
+            title="Toggle prompt and layers panel"
+            aria-label="Toggle prompt and layers panel"
           >
             <PanelLeft className="w-3.5 h-3.5" />
           </button>
@@ -187,7 +187,7 @@ export default function Toolbar({
         {onToggleRightPanel && (
           <button
             onClick={onToggleRightPanel}
-            className="h-7 w-7 flex items-center justify-center rounded border border-white/[0.08] hover:bg-white/[0.05] text-[var(--text-body)] hover:text-white transition-all lg:hidden"
+            className="h-7 w-7 flex items-center justify-center rounded border border-[var(--line-default)] hover:bg-[var(--fill-default)] text-[var(--text-body)] hover:text-[var(--text-primary)] transition-all lg:hidden"
             title="Toggle properties panel"
             aria-label="Toggle properties panel"
           >
@@ -216,7 +216,7 @@ export default function Toolbar({
           <Redo2 className="w-3.5 h-3.5" />
           <span className="hidden md:inline">Redo</span>
         </button>
-        <div className="h-5 w-px bg-white/[0.07] mx-1 hidden md:block" />
+        <div className="h-5 w-px bg-[var(--fill-default)] mx-1 hidden md:block" />
 
         {onOpenDevInspect && (
           <button
@@ -224,7 +224,7 @@ export default function Toolbar({
             className={buttonClasses()}
             title="Inspect CSS, HTML, SVG & React Component code"
           >
-            <Code2 className="w-3.5 h-3.5 text-emerald-400" />
+            <Code2 className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
             <span className="hidden lg:inline">Dev Mode</span>
           </button>
         )}
@@ -235,8 +235,8 @@ export default function Toolbar({
             className={buttonClasses()}
             title="Brand Memory & Palette Kit"
           >
-            <Palette className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden lg:inline">Brand Memory</span>
+            <Palette className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
+            <span className="hidden lg:inline">Brand Kit</span>
           </button>
         )}
 
@@ -246,29 +246,32 @@ export default function Toolbar({
             className={buttonClasses()}
             title="W3C Design Tokens JSON"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
             <span className="hidden lg:inline">Tokens</span>
           </button>
         )}
 
-        <button
-          onClick={onOpenHistory}
-          className={buttonClasses()}
-          title="Open generation history"
-        >
-          <History className="w-3.5 h-3.5" />
-          <span className="hidden xl:inline">History</span>
-        </button>
         <button
           onClick={onOpenMultiExport}
           className={buttonClasses()}
           title="Export in multiple formats"
         >
           <Files className="w-3.5 h-3.5" />
-          <span className="hidden xl:inline">Multi Export</span>
+          <span className="hidden xl:inline">Export</span>
         </button>
 
-        <div className="h-5 w-px bg-white/[0.07] mx-1 hidden md:block" />
+        {onToggleAssistant && (
+          <button
+            onClick={onToggleAssistant}
+            className={buttonClasses()}
+            title="AI Assistant"
+          >
+            <Bot className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
+            <span className="hidden xl:inline">Assistant</span>
+          </button>
+        )}
+
+        <div className="h-5 w-px bg-[var(--fill-default)] mx-1 hidden md:block" />
 
         <button
           onClick={onExportPNG}
@@ -293,7 +296,7 @@ export default function Toolbar({
             className={buttonClasses()}
             title="Keyboard Shortcuts Reference (?)"
           >
-            <HelpCircle className="w-3.5 h-3.5 text-[var(--accent)]" />
+            <HelpCircle className="w-3.5 h-3.5 text-[var(--accent-text)]" />
           </button>
         )}
 
@@ -308,10 +311,10 @@ export default function Toolbar({
 
       {/* Right: Zoom controls */}
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-1 bg-[var(--surface-raised)] rounded-full px-2 py-1 border border-white/[0.08] flex-shrink-0">
+        <div className="flex items-center gap-1 bg-[var(--surface-raised)] rounded-full px-2 py-1 border border-[var(--line-default)] flex-shrink-0">
           <button
             onClick={onZoomOut}
-            className="p-1 hover:bg-white/[0.06] rounded transition-colors"
+            className="p-1 hover:bg-[var(--fill-default)] rounded transition-colors"
             title="Zoom out"
           >
             <ZoomOut className="w-3.5 h-3.5 text-[var(--text-body)]" />
@@ -321,19 +324,19 @@ export default function Toolbar({
             value={`${zoomInput}%`}
             onChange={handleZoomInputChange}
             onBlur={handleZoomInputBlur}
-            className="w-10 h-5 text-center text-[10px] font-mono text-white bg-transparent border-none outline-none hidden sm:block"
+            className="w-10 h-5 text-center text-[10px] font-mono text-[var(--text-primary)] bg-transparent border-none outline-none hidden sm:block"
           />
           <button
             onClick={onZoomIn}
-            className="p-1 hover:bg-white/[0.06] rounded transition-colors"
+            className="p-1 hover:bg-[var(--fill-default)] rounded transition-colors"
             title="Zoom in"
           >
             <ZoomIn className="w-3.5 h-3.5 text-[var(--text-body)]" />
           </button>
-          <div className="h-4 w-px bg-white/[0.07] mx-0.5 hidden sm:block" />
+          <div className="h-4 w-px bg-[var(--fill-default)] mx-0.5 hidden sm:block" />
           <button
             onClick={onFitToScreen}
-            className="px-2 py-1 text-[11px] text-[var(--text-body)] hover:text-white hover:bg-white/[0.06] rounded transition-colors hidden sm:flex items-center"
+            className="px-2 py-1 text-[11px] text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--fill-default)] rounded transition-colors hidden sm:flex items-center"
             title="Fit to screen"
           >
             <Maximize className="w-3.5 h-3.5" />

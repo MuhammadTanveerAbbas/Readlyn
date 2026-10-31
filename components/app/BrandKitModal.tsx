@@ -86,21 +86,21 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4 animate-fade-in">
+      <div className="relative w-full max-w-md rounded-2xl border border-[var(--line-default)] bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col">
+        <div className="flex items-center justify-between border-b border-[var(--line-default)] pb-4">
           <div>
-            <h3 className="font-sans text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="font-sans text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
               Brand Kit
             </h3>
             <p className="font-sans text-xs text-[var(--text-muted)]">
-              Palette plus typography stored in this browser.
+              Palette and typography stored in this browser.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/60 hover:bg-white/10 hover:text-white shrink-0"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--line-default)] text-[var(--text-body)] hover:bg-[var(--fill-strong)] hover:text-[var(--text-primary)] shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
@@ -108,20 +108,20 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
 
         <div className="py-4 space-y-4">
           <div>
-            <label className="block font-sans text-xs text-white/70 mb-1">
+            <label className="block font-sans text-xs text-[var(--text-body)] mb-1">
               Brand Name
             </label>
             <input
               type="text"
               value={brandName}
               onChange={(e) => setBrandName(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 font-sans text-xs text-white focus:outline-none focus:border-[var(--accent)]"
+              className="w-full px-3 py-2 rounded-xl bg-[var(--fill-default)] border border-[var(--line-default)] font-sans text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]"
             />
           </div>
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block font-sans text-[10px] text-white/60 mb-1">
+              <label className="block font-sans text-[10px] text-[var(--text-body)] mb-1">
                 Primary Color
               </label>
               <div className="flex items-center gap-2">
@@ -129,13 +129,13 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
                   type="color"
                   value={primaryColor}
                   onChange={(e) => setPrimaryColor(e.target.value)}
-                  className="w-8 h-8 rounded border border-white/10 cursor-pointer bg-transparent"
+                  className="w-8 h-8 rounded border border-[var(--line-default)] cursor-pointer bg-transparent"
                 />
-                <span className="font-mono text-[10px] text-white/80">{primaryColor}</span>
+                <span className="font-mono text-[10px] text-[var(--text-secondary)]">{primaryColor}</span>
               </div>
             </div>
             <div>
-              <label className="block font-sans text-[10px] text-white/60 mb-1">
+              <label className="block font-sans text-[10px] text-[var(--text-body)] mb-1">
                 Secondary Color
               </label>
               <div className="flex items-center gap-2">
@@ -143,13 +143,13 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
                   type="color"
                   value={secondaryColor}
                   onChange={(e) => setSecondaryColor(e.target.value)}
-                  className="w-8 h-8 rounded border border-white/10 cursor-pointer bg-transparent"
+                  className="w-8 h-8 rounded border border-[var(--line-default)] cursor-pointer bg-transparent"
                 />
-                <span className="font-mono text-[10px] text-white/80">{secondaryColor}</span>
+                <span className="font-mono text-[10px] text-[var(--text-secondary)]">{secondaryColor}</span>
               </div>
             </div>
             <div>
-              <label className="block font-sans text-[10px] text-white/60 mb-1">
+              <label className="block font-sans text-[10px] text-[var(--text-body)] mb-1">
                 Accent Color
               </label>
               <div className="flex items-center gap-2">
@@ -157,27 +157,27 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
                   type="color"
                   value={accentColor}
                   onChange={(e) => setAccentColor(e.target.value)}
-                  className="w-8 h-8 rounded border border-white/10 cursor-pointer bg-transparent"
+                  className="w-8 h-8 rounded border border-[var(--line-default)] cursor-pointer bg-transparent"
                 />
-                <span className="font-mono text-[10px] text-white/80">{accentColor}</span>
+                <span className="font-mono text-[10px] text-[var(--text-secondary)]">{accentColor}</span>
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block font-sans text-xs text-white/70 mb-1">
+            <label className="block font-sans text-xs text-[var(--text-body)] mb-1">
               Primary Font Family
             </label>
             <select
               value={fontFamily}
               onChange={(e) => setFontFamily(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 font-sans text-xs text-white focus:outline-none focus:border-[var(--accent)]"
+              className="w-full px-3 py-2 rounded-xl bg-[var(--fill-default)] border border-[var(--line-default)] font-sans text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]"
             >
               {FONT_FAMILIES.map((family) => (
                 <option
                   key={family}
                   value={family}
-                  className="bg-[var(--surface-base)] text-white"
+                  className="bg-[var(--surface-base)] text-[var(--text-primary)]"
                 >
                   {family}
                 </option>
@@ -186,16 +186,16 @@ export default function BrandKitModal({ open, onClose, canvas }: BrandKitModalPr
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-4 flex justify-end gap-2">
+        <div className="border-t border-[var(--line-default)] pt-4 flex justify-end gap-2">
           <button
             onClick={saveBrandKit}
-            className="px-4 py-2 rounded-lg border border-white/10 font-sans text-xs font-semibold text-white hover:bg-white/10 transition-all"
+            className="px-4 py-2 rounded-lg border border-[var(--line-default)] font-sans text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--fill-strong)] transition-all"
           >
             Save Brand Kit
           </button>
           <button
             onClick={applyBrandToCanvas}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--accent-hover)] transition-all"
           >
             Apply to Canvas
           </button>

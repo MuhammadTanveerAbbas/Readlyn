@@ -31,8 +31,8 @@ export default function ProjectGrid({
 
   const IconComponent = SECTION_ICONS[title];
   const iconColors: Record<string, string> = {
-    "Pinned Projects": "text-[var(--accent)]",
-    "Recent Projects": "text-[var(--success-soft)]",
+    "Pinned Projects": "text-[var(--accent-text)]",
+    "Recent Projects": "text-[var(--success)]",
     "All Projects": "text-[var(--info)]",
   };
 
@@ -41,14 +41,14 @@ export default function ProjectGrid({
       <div className="flex items-center gap-2 mb-4">
         {IconComponent && (
           <IconComponent
-            className={`h-4 w-4 ${iconColors[title] || "text-white/50"}`}
+            className={`h-4 w-4 ${iconColors[title] || "text-[var(--text-muted)]"}`}
           />
         )}
-        <h2 className="text-base font-bold text-white tracking-tight">
+        <h2 className="text-base font-bold text-[var(--text-primary)] tracking-tight">
           {title}
         </h2>
-        <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
-        <span className="text-xs font-medium text-white/40">
+        <div className="h-px flex-1 bg-gradient-to-r from-[var(--line-strong)] to-transparent" />
+        <span className="text-xs font-medium text-[var(--text-faint)]">
           {projects.length} {projects.length === 1 ? "project" : "projects"}
         </span>
       </div>

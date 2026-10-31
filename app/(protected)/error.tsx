@@ -35,10 +35,10 @@ export default function ProtectedError({
           </svg>
         </div>
         <div>
-          <h1 className="text-lg font-semibold text-white">
+          <h1 className="text-lg font-semibold text-[var(--text-primary)]">
             Something went wrong
           </h1>
-          <p className="mt-2 text-sm text-white/50">
+          <p className="mt-2 text-sm text-[var(--text-muted)]">
             An unexpected error occurred. Your work is safe, try refreshing the
             page.
           </p>
@@ -46,13 +46,13 @@ export default function ProtectedError({
         <div className="flex gap-3">
           <button
             onClick={reset}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-sm font-semibold transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[var(--text-primary)] text-sm font-semibold transition-all"
           >
             Try again
           </button>
           <a
             href="/dashboard"
-            className="px-4 py-2 rounded-lg border border-white/10 text-white/70 hover:text-white text-sm transition-all"
+            className="px-4 py-2 rounded-lg border border-[var(--line-default)] text-[var(--text-body)] hover:text-[var(--text-primary)] text-sm transition-all"
           >
             Go to dashboard
           </a>

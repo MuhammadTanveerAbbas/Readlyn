@@ -42,7 +42,7 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "data-[state=active]:bg-[var(--surface-sunken)] dark:data-[state=active]:text-[var(--text-primary)] focus-visible:border-[var(--accent)] focus-visible:ring-[var(--accent)]/50 focus-visible:outline-[var(--accent)] dark:data-[state=active]:border-[var(--line-default)] dark:data-[state=active]:bg-[var(--surface-overlay)] text-[var(--text-primary)] dark:text-[var(--text-muted)] inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "data-[state=active]:bg-[var(--surface-sunken)] data-[state=active]:text-[var(--text-primary)] focus-visible:border-[var(--accent)] focus-visible:ring-[var(--accent)]/50 focus-visible:outline-[var(--accent)] data-[state=active]:border-[var(--line-default)] text-[var(--text-primary)] inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}

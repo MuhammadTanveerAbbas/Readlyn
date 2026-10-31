@@ -16,22 +16,36 @@
       "900": { "$type": "color", "$value": "#713f12" }
     },
     "neutral": {
-      "50": { "$type": "color", "$value": "#fafafa" },
-      "100": { "$type": "color", "$value": "#f4f4f5" },
-      "200": { "$type": "color", "$value": "#e4e4e7" },
+      "50": { "$type": "color", "$value": "#fafaf8" },
+      "100": { "$type": "color", "$value": "#f6f6f3" },
+      "200": { "$type": "color", "$value": "#f0f0ec" },
       "300": { "$type": "color", "$value": "#d4d4d8" },
-      "400": { "$type": "color", "$value": "#a1a1aa" },
-      "500": { "$type": "color", "$value": "#71717a" },
+      "400": { "$type": "color", "$value": "#6f6f78" },
+      "500": { "$type": "color", "$value": "#5f5f68" },
       "600": { "$type": "color", "$value": "#52525b" },
-      "700": { "$type": "color", "$value": "#3f3f46" },
-      "800": { "$type": "color", "$value": "#27272a" },
-      "900": { "$type": "color", "$value": "#080808" }
+      "700": { "$type": "color", "$value": "#2a2a2e" },
+      "800": { "$type": "color", "$value": "#1a1a1e" },
+      "900": { "$type": "color", "$value": "#111113" }
+    },
+    "surface": {
+      "sunken": { "$type": "color", "$value": "#f6f6f3" },
+      "base": { "$type": "color", "$value": "#ffffff" },
+      "raised": { "$type": "color", "$value": "#fafaf8" },
+      "overlay": { "$type": "color", "$value": "#f0f0ec" },
+      "inset": { "$type": "color", "$value": "#f3f3ef" }
+    },
+    "text": {
+      "primary": { "$type": "color", "$value": "#111113" },
+      "secondary": { "$type": "color", "$value": "#2a2a2e" },
+      "body": { "$type": "color", "$value": "#52525b" },
+      "muted": { "$type": "color", "$value": "#5f5f68" },
+      "faint": { "$type": "color", "$value": "#6f6f78" }
     },
     "semantic": {
-      "success": { "$type": "color", "$value": "#22c55e" },
-      "warning": { "$type": "color", "$value": "#f59e0b" },
-      "danger": { "$type": "color", "$value": "#ef4444" },
-      "info": { "$type": "color", "$value": "#3b82f6" }
+      "success": { "$type": "color", "$value": "#15803d" },
+      "warning": { "$type": "color", "$value": "#b45309" },
+      "danger": { "$type": "color", "$value": "#dc2626" },
+      "info": { "$type": "color", "$value": "#2563eb" }
     }
   },
   "spacing": {
@@ -57,8 +71,9 @@
       "4xl": { "$type": "dimension", "$value": "49px" }
     },
     "fontFamily": {
-      "sans": { "$type": "fontFamily", "$value": "Geist, system-ui, sans-serif" },
-      "mono": { "$type": "fontFamily", "$value": "\"Geist Mono\", ui-monospace, monospace" }
+      "sans": { "$type": "fontFamily", "$value": "Figtree, system-ui, sans-serif" },
+      "display": { "$type": "fontFamily", "$value": "Bricolage Grotesque, Figtree, system-ui, sans-serif" },
+      "mono": { "$type": "fontFamily", "$value": "Figtree, ui-monospace, monospace" }
     },
     "lineHeight": {
       "body": { "$type": "number", "$value": 1.5 },
@@ -74,10 +89,10 @@
     "full": { "$type": "dimension", "$value": "9999px" }
   },
   "elevation": {
-    "resting": { "$type": "shadow", "$value": "0 1px 2px rgba(0, 0, 0, 0.4)" },
-    "raised": { "$type": "shadow", "$value": "0 4px 12px rgba(0, 0, 0, 0.5)" },
-    "floating": { "$type": "shadow", "$value": "0 12px 32px rgba(0, 0, 0, 0.6)" },
-    "modal": { "$type": "shadow", "$value": "0 24px 60px rgba(0, 0, 0, 0.8)" }
+    "resting": { "$type": "shadow", "$value": "0 1px 2px rgba(17, 17, 19, 0.06)" },
+    "raised": { "$type": "shadow", "$value": "0 4px 12px rgba(17, 17, 19, 0.08)" },
+    "floating": { "$type": "shadow", "$value": "0 12px 32px rgba(17, 17, 19, 0.12)" },
+    "modal": { "$type": "shadow", "$value": "0 24px 60px rgba(17, 17, 19, 0.18)" }
   },
   "motion": {
     "duration": {

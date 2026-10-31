@@ -116,7 +116,7 @@ export default function SettingsPage() {
       <div className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-[var(--line-default)] bg-[var(--surface-raised)] px-4 md:hidden">
         <button
           onClick={() => setSidebarOpen(true)}
-          className="p-2.5 -ml-2 min-h-11 min-w-11 text-white/60 hover:text-white"
+          className="p-2.5 -ml-2 min-h-11 min-w-11 text-[var(--text-body)] hover:text-[var(--text-primary)]"
           aria-label="Open menu"
         >
           <svg
@@ -130,17 +130,17 @@ export default function SettingsPage() {
             <path d="M3 12h18M3 6h18M3 18h18" />
           </svg>
         </button>
-        <span className="font-bold text-white">Settings</span>
+        <span className="font-bold text-[var(--text-primary)]">Settings</span>
       </div>
 
       <main className="md:ml-[260px] px-4 pb-8 pt-4 sm:px-6 lg:px-8">
         <div className="mb-6 rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-4">
           <div className="mb-1 flex items-center gap-2">
-            <Settings className="h-4 w-4 text-[var(--accent)]" />
+            <Settings className="h-4 w-4 text-[var(--accent-text)]" />
             <h1 className="text-lg font-semibold text-[var(--text-primary)]">Settings</h1>
           </div>
           <p className="text-sm text-[var(--text-body)]">
-            Manage your account, plus security preferences.
+            Manage your account and security preferences.
           </p>
         </div>
 
@@ -150,13 +150,13 @@ export default function SettingsPage() {
             <p className="text-sm text-[var(--text-body)]">Loading account settings...</p>
           </div>
         ) : error ? (
-          <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-center">
-            <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-red-400" />
-            <p className="text-sm font-medium text-red-200">Failed to load settings</p>
-            <p className="mt-1 text-xs text-red-300/70 mb-4">{error}</p>
+          <div className="rounded-xl border border-[var(--danger)]/30 bg-[var(--danger-soft)] p-6 text-center">
+            <AlertTriangle className="h-8 w-8 mx-auto mb-3 text-[var(--danger)]" />
+            <p className="text-sm font-medium text-[var(--danger)]">Failed to load settings</p>
+            <p className="mt-1 text-xs text-[var(--danger)]/80 mb-4">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="text-xs text-red-300 underline"
+              className="text-xs text-[var(--danger)] underline"
             >
               Retry
             </button>
@@ -165,34 +165,34 @@ export default function SettingsPage() {
           <div className="grid gap-4">
             <section className="rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-5">
               <div className="mb-4 flex items-center gap-2">
-                <Mail className="h-4 w-4 text-[var(--accent)]" />
+                <Mail className="h-4 w-4 text-[var(--accent-text)]" />
                 <h2 className="text-sm font-semibold text-[var(--text-primary)]">Account</h2>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-lg border border-[var(--line-subtle)] bg-[var(--surface-raised)] p-3">
-                  <p className="text-[11px] uppercase tracking-wider text-white/40">Email</p>
+                  <p className="text-[11px] uppercase tracking-wider text-[var(--text-faint)]">Email</p>
                   <p className="mt-1 text-sm text-[var(--text-primary)]">{account?.email}</p>
                 </div>
                 <div className="rounded-lg border border-[var(--line-subtle)] bg-[var(--surface-raised)] p-3">
-                  <p className="text-[11px] uppercase tracking-wider text-white/40">Member Since</p>
+                  <p className="text-[11px] uppercase tracking-wider text-[var(--text-faint)]">Member Since</p>
                   <p className="mt-1 text-sm text-[var(--text-primary)]">{account?.createdAt}</p>
                 </div>
               </div>
               <div className="mt-3 rounded-lg border border-[var(--line-subtle)] bg-[var(--surface-raised)] p-3">
-                <p className="text-[11px] uppercase tracking-wider text-white/40">User ID</p>
-                <p className="mt-1 break-all font-mono text-xs text-white/80">{account?.id}</p>
+                <p className="text-[11px] uppercase tracking-wider text-[var(--text-faint)]">User ID</p>
+                <p className="mt-1 break-all font-mono text-xs text-[var(--text-secondary)]">{account?.id}</p>
               </div>
             </section>
 
             <section className="rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-5">
               <div className="mb-4 flex items-center gap-2">
-                <Shield className="h-4 w-4 text-[var(--accent)]" />
+                <Shield className="h-4 w-4 text-[var(--accent-text)]" />
                 <h2 className="text-sm font-semibold text-[var(--text-primary)]">Security</h2>
               </div>
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => router.push("/update-password")}
-                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--line-default)] bg-[var(--surface-raised)] px-4 py-2 text-sm text-white/80 transition-colors hover:border-[var(--accent)]/40 hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--line-default)] bg-[var(--surface-raised)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:border-[var(--accent)]/40 hover:text-[var(--text-primary)]"
                 >
                   <KeyRound className="h-4 w-4" />
                   Update Password
@@ -200,7 +200,7 @@ export default function SettingsPage() {
                 <button
                   onClick={handleSignOut}
                   disabled={isSigningOut}
-                  className="inline-flex items-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300 transition-colors hover:bg-red-500/20 disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--danger)]/40 bg-[var(--danger-soft)] px-4 py-2 text-sm text-[var(--danger)] transition-colors hover:bg-[var(--danger)]/15 disabled:opacity-60"
                 >
                   <LogOut className="h-4 w-4" />
                   {isSigningOut ? "Signing Out..." : "Sign Out"}
@@ -208,19 +208,19 @@ export default function SettingsPage() {
               </div>
             </section>
 
-            <section className="rounded-xl border border-red-500/20 bg-red-500/5 p-5">
+            <section className="rounded-xl border border-[var(--danger)]/20 bg-[var(--danger-soft)] p-5">
               <div className="mb-4 flex items-center gap-2">
-                <Trash2 className="h-4 w-4 text-red-400" />
-                <h2 className="text-sm font-semibold text-red-300">Danger Zone</h2>
+                <Trash2 className="h-4 w-4 text-[var(--danger)]" />
+                <h2 className="text-sm font-semibold text-[var(--danger)]">Danger Zone</h2>
               </div>
-              <p className="text-xs text-red-300/70 mb-4">
+              <p className="text-xs text-[var(--danger)]/80 mb-4">
                 Once you delete your account, all your projects, generation history,
-                plus data will be permanently removed. This action cannot be undone.
+                and data will be permanently removed. This action cannot be undone.
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
-                    className="inline-flex items-center gap-2 rounded-lg bg-red-500/20 border border-red-500/40 px-4 py-2 text-sm text-red-300 transition-colors hover:bg-red-500/30"
+                    className="inline-flex items-center gap-2 rounded-lg bg-[var(--danger)]/10 border border-[var(--danger)]/40 px-4 py-2 text-sm text-[var(--danger)] transition-colors hover:bg-[var(--danger)]/20"
                   >
                     <Trash2 className="h-4 w-4" />
                     Delete Account
@@ -230,17 +230,17 @@ export default function SettingsPage() {
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-[var(--text-primary)]">Delete your account?</AlertDialogTitle>
                     <AlertDialogDescription className="text-[var(--text-body)]">
-                      This will permanently delete your account, plus all projects. You will not be able to recover any data.
+                      This will permanently delete your account and all projects. You will not be able to recover any data.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="bg-white/5 text-white/70 border border-[var(--line-default)] hover:bg-white/10">
+                    <AlertDialogCancel className="bg-[var(--fill-default)] text-[var(--text-body)] border border-[var(--line-default)] hover:bg-[var(--fill-strong)]">
                       Cancel
                     </AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDeleteAccount}
                       disabled={isDeleting}
-                      className="bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500/30"
+                      className="bg-[var(--danger)]/10 text-[var(--danger)] border border-[var(--danger)]/40 hover:bg-[var(--danger)]/20"
                     >
                       {isDeleting ? "Deleting..." : "Delete my account"}
                     </AlertDialogAction>

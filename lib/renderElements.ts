@@ -18,7 +18,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         ...common,
       })
       // Set fill explicitly after creation for proper rendering
-      rect.set('fill', el.fill || '#000000')
+      rect.set('fill', el.fill || '#111113')
       if (el.stroke) rect.set('stroke', el.stroke)
       if (el.strokeWidth) rect.set('strokeWidth', el.strokeWidth)
       return rect
@@ -32,7 +32,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         opacity: el.opacity ?? 1,
         ...common,
       })
-      circle.set('fill', el.fill || '#000000')
+      circle.set('fill', el.fill || '#111113')
       if (el.stroke) circle.set('stroke', el.stroke)
       if (el.strokeWidth) circle.set('strokeWidth', el.strokeWidth)
       return circle
@@ -49,7 +49,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         opacity: el.opacity ?? 1,
         ...common,
       })
-      text.set('fill', el.fill || '#000000')
+      text.set('fill', el.fill || '#111113')
       // Limit text width to prevent overflow
       if (el.width && el.width > 0) {
         text.set('width', el.width)
@@ -62,7 +62,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         strokeDashArray: el.dashed ? [6, 4] : undefined,
         ...common,
       })
-      line.set('stroke', el.stroke || '#000000')
+      line.set('stroke', el.stroke || '#111113')
       line.set('strokeWidth', el.strokeWidth || 1)
       return line
     }
@@ -86,7 +86,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         originY: 'center',
         top: -10,
       })
-      val.set('fill', el.valueFill || '#f5c518')
+      val.set('fill', el.valueFill || '#8a6a00')
       
       const lbl = new fabric.IText(el.label || '', {
         fontSize: 11,
@@ -97,7 +97,7 @@ export function createFabricObject(el: InfographicElement): fabric.FabricObject 
         top: (el.height || 80) / 2 - 18,
         textAlign: 'center',
       })
-      lbl.set('fill', el.labelFill || '#666666')
+      lbl.set('fill', el.labelFill || '#52525b')
       
       return new fabric.Group([bg, val, lbl], {
         left: el.x,
@@ -170,7 +170,7 @@ export function addTextElement(canvas: fabric.Canvas): void {
     top: 100,
     fontSize: 24,
     fontFamily: BODY_FONT,
-    fill: '#ffffff',
+    fill: '#111113',
     selectable: true,
     hasControls: true,
     hasBorders: true,
@@ -186,8 +186,8 @@ export function addHeadingElement(canvas: fabric.Canvas): void {
     top: 100,
     fontSize: 48,
     fontWeight: 'bold',
-    fontFamily: BODY_FONT,
-    fill: '#ffffff',
+    fontFamily: DISPLAY_FONT,
+    fill: '#111113',
     selectable: true,
     hasControls: true,
     hasBorders: true,
@@ -234,7 +234,7 @@ export function addStatBlockElement(canvas: fabric.Canvas): void {
   const bg = new fabric.Rect({
     width: 180,
     height: 100,
-    fill: '#1c1c1c',
+    fill: '#f6f6f3',
     rx: 12,
     ry: 12,
     originX: 'center',
@@ -244,7 +244,7 @@ export function addStatBlockElement(canvas: fabric.Canvas): void {
     fontSize: 48,
     fontWeight: '900',
     fontFamily: DISPLAY_FONT,
-    fill: '#f5c518',
+    fill: '#8a6a00',
     originX: 'center',
     originY: 'center',
     top: -12,
@@ -253,7 +253,7 @@ export function addStatBlockElement(canvas: fabric.Canvas): void {
     fontSize: 14,
     fontWeight: 'normal',
     fontFamily: BODY_FONT,
-    fill: '#94a3b8',
+    fill: '#52525b',
     originX: 'center',
     originY: 'center',
     top: 28,

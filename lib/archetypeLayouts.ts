@@ -278,7 +278,7 @@ function computeSteps(W: number, H: number): SlotPosition[] {
 
 
 
-// STATS  Bento grid with hero stat, plus varied cell sizes
+// STATS  Bento grid with hero stat, and varied cell sizes
 
 
 function computeStats(W: number, H: number): SlotPosition[] {
@@ -359,7 +359,7 @@ function computeStats(W: number, H: number): SlotPosition[] {
   });
 
 
-  // Grid layout: hero stat (full width) plus 3 smaller stats below
+  // Grid layout: hero stat (full width) and 3 smaller stats below
   const gridX = 40;
   const gridY = 180;
   const cellW = (W - 80 - 2 * GRID_GAP) / 3;
@@ -1388,7 +1388,7 @@ function computeFunnel(W: number, H: number): SlotPosition[] {
       role: "stage-number",
       zIndexHint: 52,
     });
-    // Stage heading, plus body
+    // Stage heading, and body
     slots.push({
       id: `stage-${i + 1}-heading`,
       type: "text_slot",

@@ -81,12 +81,12 @@ export default function PropertiesPanel({
     color: "var(--text-secondary)",
   };
   const inputFocusStyle =
-    "focus:border-[rgba(245,197,24,0.4)] focus:ring-1 focus:ring-[rgba(245,197,24,0.15)]";
+    "focus:border-[var(--line-strong)] focus:ring-1 focus:ring-[var(--fill-strong)]";
 
   const labelCls = "text-[10px] font-medium uppercase tracking-wide";
   const labelStyle = { color: "var(--text-body)" };
   const sectionCls = "px-3 py-2.5 space-y-2";
-  const sectionStyle = { borderBottom: "1px solid rgba(255,255,255,0.07)" };
+  const sectionStyle = { borderBottom: "1px solid rgba(16,17,19,0.07)" };
 
   return (
     <div className="flex flex-col">
@@ -182,7 +182,7 @@ export default function PropertiesPanel({
               {
                 label: "Stroke",
                 key: "stroke" as const,
-                val: properties.stroke || "#000000",
+                val: properties.stroke || "#111113",
               },
             ].map(({ label, key, val }) => (
               <div key={key}>
@@ -210,6 +210,20 @@ export default function PropertiesPanel({
                 </div>
               </div>
             ))}
+            <div>
+              <div className={`${labelCls} mb-1`} style={labelStyle}>
+                Stroke Width
+              </div>
+              <input
+                type="number"
+                value={properties.strokeWidth || 0}
+                onChange={(e) =>
+                  onUpdateProperty("strokeWidth", Number(e.target.value))
+                }
+                className={`${inputCls} ${inputFocusStyle}`}
+                style={inputStyle}
+              />
+            </div>
             {objectType === "rect" && (
               <div>
                 <div className={`${labelCls} mb-1`} style={labelStyle}>
@@ -237,6 +251,17 @@ export default function PropertiesPanel({
             Typography
           </div>
           <div className="space-y-1.5">
+            <div>
+              <div className={`${labelCls} mb-1`} style={labelStyle}>
+                Text
+              </div>
+              <textarea
+                value={properties.text || ""}
+                onChange={(e) => onUpdateProperty("text", e.target.value)}
+                className={`${inputCls} ${inputFocusStyle} min-h-[48px] resize-y`}
+                style={inputStyle}
+              />
+            </div>
             <div>
               <div className={`${labelCls} mb-1`} style={labelStyle}>
                 Font
@@ -287,6 +312,37 @@ export default function PropertiesPanel({
                 </select>
               </div>
             </div>
+            <div className="grid grid-cols-2 gap-1.5">
+              <div>
+                <div className={`${labelCls} mb-1`} style={labelStyle}>
+                  Line Height
+                </div>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={properties.lineHeight ?? 1.16}
+                  onChange={(e) =>
+                    onUpdateProperty("lineHeight", Number(e.target.value))
+                  }
+                  className={`${inputCls} ${inputFocusStyle}`}
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <div className={`${labelCls} mb-1`} style={labelStyle}>
+                  Letter Spacing
+                </div>
+                <input
+                  type="number"
+                  value={properties.charSpacing ?? 0}
+                  onChange={(e) =>
+                    onUpdateProperty("charSpacing", Number(e.target.value))
+                  }
+                  className={`${inputCls} ${inputFocusStyle}`}
+                  style={inputStyle}
+                />
+              </div>
+            </div>
             <div className="flex gap-1">
               {[
                 { val: "left", icon: AlignLeft },
@@ -302,7 +358,7 @@ export default function PropertiesPanel({
                       properties.textAlign === val ? "var(--surface-overlay)" : "transparent",
                     borderColor:
                       properties.textAlign === val
-                        ? "rgba(245,197,24,0.4)"
+                        ? "var(--line-strong)"
                         : "var(--line-default)",
                   }}
                 >
@@ -343,7 +399,7 @@ export default function PropertiesPanel({
         {onAutoTheme && (
           <button
             onClick={onAutoTheme}
-            className="mb-2 h-6 w-full rounded border border-white/10 text-[10px] text-white hover:border-[var(--accent)]"
+            className="mb-2 h-6 w-full rounded border border-[var(--line-default)] text-[10px] text-[var(--text-primary)] hover:border-[var(--accent)]"
           >
             ✦ Auto Theme
           </button>
@@ -378,8 +434,8 @@ export default function PropertiesPanel({
               onClick={onClick}
               className={`h-6 flex items-center justify-center gap-1 rounded text-[10px] transition-all active:scale-95 ${
                 danger
-                  ? "bg-red-500/10 border border-transparent text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white hover:border-[var(--danger)]"
-                  : "border border-[var(--line-default)] text-[var(--text-body)] hover:border-[rgba(245,197,24,0.3)] hover:text-white"
+                  ? "bg-[var(--danger-soft)] border border-transparent text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white hover:border-[var(--danger)]"
+                  : "border border-[var(--line-default)] text-[var(--text-body)] hover:border-[var(--line-strong)] hover:text-[var(--text-primary)]"
               }`}
             >
               <Icon className="w-3 h-3" />

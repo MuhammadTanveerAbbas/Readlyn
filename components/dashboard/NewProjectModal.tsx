@@ -93,7 +93,6 @@ export default function NewProjectModal({
           user_id: user.id,
           theme,
           archetype: style,
-          tool_type: "infographic",
         })
         .select("id")
         .single();
@@ -117,37 +116,28 @@ export default function NewProjectModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4">
-      <div className="w-full max-w-3xl rounded-2xl border border-white/10 bg-[var(--surface-base)] shadow-[0_40px_100px_rgba(11,11,12,0.6)] relative overflow-hidden">
-        {/* Header gradient */}
-        <div
-          className="absolute top-0 left-0 right-0 h-32 opacity-30"
-          style={{
-            background:
-              "radial-gradient(circle at 50% 0%, rgba(245,197,24,0.2), transparent 70%)",
-          }}
-        />
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4">
+      <div className="w-full max-w-3xl rounded-2xl border border-[var(--line-default)] bg-[var(--surface-base)] shadow-[0_40px_100px_rgba(17,17,19,0.12)] relative overflow-hidden">
         {/* Header */}
-        <div className="relative z-10 flex items-center justify-between p-6 border-b border-white/10">
+        <div className="relative z-10 flex items-center justify-between p-6 border-b border-[var(--line-default)]">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20">
-              <Sparkles className="h-5 w-5 text-[var(--accent)]" />
+              <Sparkles className="h-5 w-5 text-[var(--accent-text)]" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">
+              <h2 className="text-lg font-bold text-[var(--text-primary)]">
                 Create New Project
               </h2>
-              <p className="text-xs text-white/50">
+              <p className="text-xs text-[var(--text-muted)]">
                 Choose how you want to start
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] transition-all"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--line-default)] bg-[var(--fill-subtle)] hover:bg-[var(--fill-strong)] transition-all"
           >
-            <X className="h-4 w-4 text-white/70" />
+            <X className="h-4 w-4 text-[var(--text-body)]" />
           </button>
         </div>
 
@@ -159,8 +149,8 @@ export default function NewProjectModal({
               onClick={() => setTab("ai")}
               className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
                 tab === "ai"
-                  ? "bg-[var(--accent)] text-white shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
-                  : "bg-[var(--surface-raised)] text-white/70 hover:bg-[var(--surface-overlay)] border border-white/10"
+                  ? "bg-[var(--accent)] text-[var(--text-primary)]"
+                  : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:bg-[var(--surface-overlay)] border border-[var(--line-default)]"
               }`}
             >
               <Wand2 className="h-4 w-4" />
@@ -170,8 +160,8 @@ export default function NewProjectModal({
               onClick={() => setTab("blank")}
               className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
                 tab === "blank"
-                  ? "bg-[var(--accent)] text-white shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
-                  : "bg-[var(--surface-raised)] text-white/70 hover:bg-[var(--surface-overlay)] border border-white/10"
+                  ? "bg-[var(--accent)] text-[var(--text-primary)]"
+                  : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:bg-[var(--surface-overlay)] border border-[var(--line-default)]"
               }`}
             >
               <FileText className="h-4 w-4" />
@@ -182,17 +172,17 @@ export default function NewProjectModal({
           {/* AI Prompt */}
           {tab === "ai" && (
             <div className="mb-6">
-              <label className="block text-sm font-semibold text-white mb-2">
+              <label className="block text-sm font-semibold text-[var(--text-primary)] mb-2">
                 Describe your infographic
               </label>
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="w-full h-32 rounded-xl border border-white/10 bg-[var(--surface-base)] p-4 text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all resize-none"
-                placeholder="E.g., 'Create a sales report showing Q4 2024 revenue growth across 5 regions with bar charts plus key metrics'"
+                className="w-full h-32 rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-4 text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all resize-none"
+                placeholder="E.g., 'Create a sales report showing Q4 2024 revenue growth across 5 regions with bar charts and key metrics'"
               />
-              <p className="text-xs text-white/40 mt-2">
-                Be specific about data, layout, plus visual elements you want
+              <p className="text-xs text-[var(--text-faint)] mt-2">
+                Be specific about data, layout, and visual elements you want
               </p>
             </div>
           )}
@@ -201,13 +191,13 @@ export default function NewProjectModal({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             {/* Canvas Size */}
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-2 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-[var(--text-body)] mb-2 uppercase tracking-wider">
                 Canvas Size
               </label>
               <select
                 value={size}
                 onChange={(e) => setSize(e.target.value as CanvasSize)}
-                className="w-full h-11 rounded-lg border border-white/10 bg-[var(--surface-base)] px-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
+                className="w-full h-11 rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] px-3 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
               >
                 <option value="a4">A4 Portrait</option>
                 <option value="square">Square</option>
@@ -217,14 +207,14 @@ export default function NewProjectModal({
 
             {/* Theme */}
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-2 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-[var(--text-body)] mb-2 uppercase tracking-wider">
                 Color Theme
               </label>
               <div className="relative">
                 <select
                   value={theme}
                   onChange={(e) => setTheme(e.target.value as ThemePalette)}
-                  className="w-full h-11 rounded-lg border border-white/10 bg-[var(--surface-base)] pl-10 pr-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
+                  className="w-full h-11 rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] pl-10 pr-3 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
                 >
                   {Object.entries(THEME_COLORS).map(([key, { name }]) => (
                     <option key={key} value={key}>
@@ -241,14 +231,14 @@ export default function NewProjectModal({
 
             {/* Style */}
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-2 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-[var(--text-body)] mb-2 uppercase tracking-wider">
                 Layout Style
               </label>
               <div className="relative">
                 <select
                   value={style}
                   onChange={(e) => setStyle(e.target.value as StylePreset)}
-                  className="w-full h-11 rounded-lg border border-white/10 bg-[var(--surface-base)] pl-10 pr-3 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
+                  className="w-full h-11 rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] pl-10 pr-3 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer appearance-none"
                 >
                   <option value="auto">Auto</option>
                   <option value="steps">Steps</option>
@@ -263,7 +253,7 @@ export default function NewProjectModal({
                 {(() => {
                   const StyleIcon = STYLE_ICONS[style];
                   return (
-                    <StyleIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50 pointer-events-none" />
+                    <StyleIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)] pointer-events-none" />
                   );
                 })()}
               </div>
@@ -272,7 +262,7 @@ export default function NewProjectModal({
 
           {/* Error Message */}
           {errorMsg && (
-            <div className="mb-4 rounded-lg border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-200">
+            <div className="mb-4 rounded-lg border border-[var(--danger)]/40 bg-[var(--danger-soft)] p-3 text-sm text-[var(--danger)]">
               {errorMsg}
             </div>
           )}
@@ -282,14 +272,14 @@ export default function NewProjectModal({
             <button
               onClick={onClose}
               disabled={pending}
-              className="px-5 py-2.5 rounded-lg border border-white/10 text-sm font-semibold text-white hover:bg-white/[0.05] transition-all disabled:opacity-50"
+              className="px-5 py-2.5 rounded-lg border border-[var(--line-default)] text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--fill-default)] transition-all disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               disabled={pending || (tab === "ai" && !prompt.trim())}
               onClick={() => createProject(tab === "ai")}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--accent)] text-white text-sm font-bold hover:bg-[var(--accent-hover)] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_rgba(245,197,24,0.3)]"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--accent)] text-[var(--text-primary)] text-sm font-bold hover:bg-[var(--accent-hover)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {pending ? (
                 <>

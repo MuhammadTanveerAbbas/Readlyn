@@ -1,6 +1,6 @@
 export default function Logos() {
   return (
-    <section className="flex flex-col items-center w-full bg-[var(--surface-sunken)] py-14 px-6 md:px-[120px] gap-8 border-y border-white/5">
+    <section className="flex flex-col items-center w-full bg-[var(--surface-sunken)] py-14 px-6 md:px-[120px] gap-8 border-y border-[var(--line-subtle)]">
       <span className="font-sans text-[11px] text-[var(--text-muted)] tracking-[0.25em] uppercase">
         What you get out of the box
       </span>
@@ -47,13 +47,13 @@ export default function Logos() {
                 />
               </svg>
             ),
-            label: "PNG export",
-            detail: "Download your infographic instantly.",
+            label: "PNG, SVG, JSON export",
+            detail: "Three formats. No lock-in.",
           },
         ].map((item, i) => (
           <div
             key={i}
-            className="flex items-start gap-4 rounded-xl border border-white/6 bg-white/2 px-5 py-4"
+            className="flex items-start gap-4 rounded-xl border border-[var(--line-subtle)] bg-[var(--fill-subtle)] px-5 py-4"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--accent)]/20 bg-[var(--accent)]/8">
               {item.icon}

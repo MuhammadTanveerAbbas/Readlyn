@@ -96,15 +96,6 @@ const legalLinks = [
 
 const socials = [
   {
-    label: "GitHub",
-    href: "https://github.com/MuhammadTanveerAbbas/Readlyn",
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 15 15" fill="currentColor">
-        <path d="M7.5 1A6.5 6.5 0 0 0 1 7.5c0 2.87 1.86 5.3 4.44 6.16.32.06.44-.14.44-.3v-1.05c-1.8.39-2.18-.87-2.18-.87-.3-.75-.72-1-.72-1-.59-.4.04-.4.04-.4.65.05 1 .67 1 .67.58 1 1.52.71 1.9.54.06-.42.23-.71.41-.87-1.44-.16-2.95-.72-2.95-3.2 0-.71.25-1.29.67-1.74-.07-.16-.29-.82.06-1.71 0 0 .55-.18 1.8.67A6.27 6.27 0 0 1 7.5 4.8c.56 0 1.12.07 1.64.22 1.25-.85 1.8-.67 1.8-.67.35.89.13 1.55.06 1.71.42.45.67 1.03.67 1.74 0 2.49-1.52 3.04-2.96 3.2.23.2.44.6.44 1.2v1.78c0 .17.12.37.44.3A6.5 6.5 0 0 0 14 7.5 6.5 6.5 0 0 0 7.5 1z" />
-      </svg>
-    ),
-  },
-  {
     label: "LinkedIn",
     href: "https://linkedin.com/in/muhammadtanveerabbas",
     icon: (
@@ -113,28 +104,40 @@ const socials = [
       </svg>
     ),
   },
+  {
+    label: "GitHub",
+    href: "https://github.com/MuhammadTanveerAbbas",
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 15 15" fill="currentColor">
+        <path d="M7.5 1A6.5 6.5 0 0 0 1 7.5c0 2.87 1.86 5.3 4.44 6.16.32.06.44-.14.44-.3v-1.05c-1.8.39-2.18-.87-2.18-.87-.3-.75-.72-1-.72-1-.59-.4.04-.4.04-.4.65.05 1 .67 1 .67.58 1 1.52.71 1.9.54.06-.42.23-.71.41-.87-1.44-.16-2.95-.72-2.95-3.2 0-.71.25-1.29.67-1.74-.07-.16-.29-.82.06-1.71 0 0 .55-.18 1.8.67A6.27 6.27 0 0 1 7.5 4.8c.56 0 1.12.07 1.64.22 1.25-.85 1.8-.67 1.8-.67.35.89.13 1.55.06 1.71.42.45.67 1.03.67 1.74 0 2.49-1.52 3.04-2.96 3.2.23.2.44.6.44 1.2v1.78c0 .17.12.37.44.3A6.5 6.5 0 0 0 14 7.5 6.5 6.5 0 0 0 7.5 1z" />
+      </svg>
+    ),
+  },
+  {
+    label: "X",
+    href: "https://x.com/m_tanveerabbas",
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+    ),
+  },
 ];
 
 const divider = (
   <div
     className="relative z-10 w-full h-px"
-    style={{
-      background:
-        "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent 100%)",
-    }}
+    style={{ backgroundColor: "var(--line-default)" }}
   />
 );
 
 export default function Footer() {
   return (
     <footer className="relative flex flex-col w-full bg-[var(--surface-sunken)] overflow-hidden">
-      {/* top separator white gradient, no yellow */}
+      {/* top separator */}
       <div
         className="absolute top-0 inset-x-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 80%, transparent 100%)",
-        }}
+        style={{ backgroundColor: "var(--line-default)" }}
       />
 
       {/* grid texture */}
@@ -142,7 +145,7 @@ export default function Footer() {
         className="absolute inset-0 pointer-events-none opacity-[0.015]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+            "linear-gradient(rgba(16,17,19,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(16,17,19,0.5) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
@@ -159,14 +162,14 @@ export default function Footer() {
               height={20}
               style={{ imageRendering: "pixelated" }}
             />
-            <span className="font-sans text-[13px] font-bold text-white tracking-[2.5px]">
+            <span className="font-sans text-[13px] font-bold text-[var(--text-primary)] tracking-[2.5px]">
               READLYN
             </span>
           </div>
 
           <p className="font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] leading-[1.9] max-w-[220px]">
-            AI infographic generator describe a topic, get a structured visual
-            in seconds.
+            AI infographic generator. Describe a topic, get a structured
+            visual in seconds.
           </p>
 
           <div
@@ -195,7 +198,7 @@ export default function Footer() {
                 href={link.href}
                 className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
-                <span className="text-white/30 group-hover:text-white/70 transition-opacity duration-200">
+                <span className="text-[var(--text-faint)] group-hover:text-[var(--text-body)] transition-opacity duration-200">
                   {link.icon}
                 </span>
                 {link.label}
@@ -218,7 +221,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
-                <span className="text-white/30 group-hover:text-white/70 transition-opacity duration-200">
+                <span className="text-[var(--text-faint)] group-hover:text-[var(--text-body)] transition-opacity duration-200">
                   {link.icon}
                 </span>
                 {link.label}
@@ -239,7 +242,7 @@ export default function Footer() {
                 href={link.href}
                 className="group flex items-center gap-2 font-sans text-[12px] text-[var(--text-muted)] tracking-[0.3px] hover:text-[var(--text-body)] transition-colors duration-200 w-fit"
               >
-                <span className="text-white/30 group-hover:text-white/70 transition-opacity duration-200">
+                <span className="text-[var(--text-faint)] group-hover:text-[var(--text-body)] transition-opacity duration-200">
                   {link.icon}
                 </span>
                 {link.label}
@@ -265,7 +268,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.label}
-              className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/[0.07] bg-white/[0.03] text-[var(--text-muted)] hover:border-white/20 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
+              className="flex items-center justify-center w-9 h-9 rounded-lg border border-[var(--line-subtle)] bg-[var(--fill-subtle)] text-[var(--text-muted)] hover:border-[var(--line-strong)] hover:text-[var(--text-primary)] hover:bg-[var(--fill-default)] transition-all duration-200"
             >
               {s.icon}
             </a>
@@ -278,7 +281,7 @@ export default function Footer() {
       {/* ── ROW 3 : Copyright bar ── */}
       <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-6 md:px-10 lg:px-[120px] py-6">
         <div className="flex items-center gap-4">
-          <span className="font-sans text-[10px] text-[#555] tracking-[0.5px]">
+          <span className="font-sans text-[10px] text-[var(--text-muted)] tracking-[0.5px]">
             © 2026 Readlyn
           </span>
           <span className="w-px h-3" style={{ background: "var(--line-default)" }} />
@@ -289,12 +292,12 @@ export default function Footer() {
 
         <div className="flex items-center gap-4">
           <a
-            href="https://themvpguy.vercel.app"
+            href="https://muhammadtanveerabbas.vercel.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-[10px] text-[#555] tracking-[0.5px] hover:text-[var(--text-body)] transition-colors duration-200"
+            className="font-sans text-[10px] text-[var(--text-muted)] tracking-[0.5px] hover:text-[var(--text-body)] transition-colors duration-200"
           >
-            Made by The MVP Guy
+            Built by Tanveer
           </a>
         </div>
       </div>

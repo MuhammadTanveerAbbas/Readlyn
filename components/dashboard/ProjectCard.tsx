@@ -195,16 +195,16 @@ export default function ProjectCard({
               e.preventDefault();
               e.stopPropagation();
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-[var(--scrim)] opacity-80 backdrop-blur-sm transition-opacity hover:bg-[var(--scrim)] hover:opacity-100"
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] opacity-80 transition-opacity hover:bg-[var(--surface-raised)] hover:opacity-100"
             aria-label="Project actions"
           >
-            <MoreHorizontal className="h-3.5 w-3.5 text-white/70" />
+            <MoreHorizontal className="h-3.5 w-3.5 text-[var(--text-body)]" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
           sideOffset={8}
-          className="z-[100] w-44 border-white/10 bg-[var(--surface-base)] text-white"
+          className="z-[100] w-44 border-[var(--line-default)] bg-[var(--surface-base)] text-[var(--text-primary)]"
         >
           <DropdownMenuItem onSelect={() => handleRename()}>
             Rename project
@@ -221,7 +221,7 @@ export default function ProjectCard({
               setMenuOpen(false);
               setDeleteDialogOpen(true);
             }}
-            className="text-red-400 focus:bg-red-500/10 focus:text-red-300"
+            className="text-[var(--danger)] focus:bg-[var(--danger-soft)] focus:text-[var(--danger)]"
           >
             Delete project
           </DropdownMenuItem>
@@ -231,12 +231,12 @@ export default function ProjectCard({
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent
           onClick={(e) => e.stopPropagation()}
-          className="border-white/10 bg-[var(--surface-base)] text-white"
+          className="border-[var(--line-default)] bg-[var(--surface-base)] text-[var(--text-primary)]"
         >
           <AlertDialogHeader>
             <AlertDialogTitle>Delete project?</AlertDialogTitle>
-            <AlertDialogDescription className="text-white/60">
-              This action permanently deletes &quot;{title}&quot;, plus cannot be undone.
+            <AlertDialogDescription className="text-[var(--text-body)]">
+              This action permanently deletes &quot;{title}&quot; and cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -245,7 +245,7 @@ export default function ProjectCard({
                 e.stopPropagation();
                 setDeleteDialogOpen(false);
               }}
-              className="border-white/10 bg-transparent text-white hover:bg-white/5"
+              className="border-[var(--line-default)] bg-transparent text-[var(--text-primary)] hover:bg-[var(--fill-default)]"
             >
               Cancel
             </AlertDialogCancel>
@@ -255,7 +255,7 @@ export default function ProjectCard({
                 handleDelete();
               }}
               disabled={deleting}
-              className="bg-red-500 text-white hover:bg-red-600"
+              className="bg-[var(--danger)] text-white hover:bg-[var(--danger)]/90"
             >
               {deleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
@@ -268,7 +268,7 @@ export default function ProjectCard({
   // List View Mode
   if (viewMode === "list") {
     return (
-      <div className="relative group rounded-xl border border-white/[0.08] bg-[var(--surface-base)] transition-all hover:border-white/[0.15] hover:bg-[var(--surface-raised)] p-3">
+      <div className="relative group rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] transition-all hover:border-[var(--line-strong)] hover:bg-[var(--surface-raised)] p-3">
         <div className="flex items-center gap-4">
           <Link
             href={`/editor/${project.id}`}
@@ -300,14 +300,14 @@ export default function ProjectCard({
             {/* Title & metadata */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="truncate text-sm font-semibold text-white group-hover:text-[var(--accent)] transition-colors">
+                <h3 className="truncate text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-text)] transition-colors">
                   {title}
                 </h3>
                 {project.is_pinned && (
-                  <Pin className="h-3 w-3 shrink-0 text-[var(--accent)] fill-[var(--accent)]" />
+                  <Pin className="h-3 w-3 shrink-0 text-[var(--accent-text)] fill-[var(--accent)]" />
                 )}
               </div>
-              <div className="flex items-center gap-3 text-xs text-white/40 mt-0.5">
+              <div className="flex items-center gap-3 text-xs text-[var(--text-faint)] mt-0.5">
                 <span className="capitalize">{archetype} layout</span>
                 <span>•</span>
                 <span className="capitalize">{theme}</span>
@@ -315,7 +315,7 @@ export default function ProjectCard({
             </div>
 
             {/* Date */}
-            <div className="hidden sm:flex items-center gap-1.5 text-xs text-white/40 shrink-0">
+            <div className="hidden sm:flex items-center gap-1.5 text-xs text-[var(--text-faint)] shrink-0">
               <Calendar className="h-3.5 w-3.5" />
               <span>{formatDate(project.updated_at)}</span>
             </div>
@@ -330,18 +330,16 @@ export default function ProjectCard({
 
   // Grid View Mode (Default)
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-[var(--surface-base)] transition-all duration-300 hover:scale-[1.02] hover:border-white/[0.15] hover:shadow-[0_20px_60px_rgba(11,11,12,0.5),0_0_0_1px_rgba(245,197,24,0.1)]">
+    <div className="group relative overflow-hidden rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] transition-all duration-300 hover:scale-[1.02] hover:border-[var(--line-strong)]">
       {/* Top accent line */}
       <div
         className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${themeColor}, transparent)`,
-        }}
+        style={{ backgroundColor: themeColor }}
       />
 
       <Link href={`/editor/${project.id}`} className="block">
         {/* Thumbnail */}
-        <div className="relative aspect-[4/3] bg-gradient-to-br from-[var(--surface-raised)] via-[var(--surface-raised)] to-[var(--surface-base)] overflow-hidden">
+        <div className="relative aspect-[4/3] bg-[var(--surface-raised)] overflow-hidden">
           {project.thumbnail_url && !imageError ? (
             <img
               src={project.thumbnail_url}
@@ -364,24 +362,21 @@ export default function ProjectCard({
                 />
               </div>
               <div className="text-center">
-                <p className="text-xs font-medium text-white/60">
+                <p className="text-xs font-medium text-[var(--text-body)]">
                   No preview yet
                 </p>
-                <p className="text-[10px] text-white/30 mt-1">Click to edit</p>
+                <p className="text-[10px] text-[var(--text-faint)] mt-1">Click to edit</p>
               </div>
             </div>
           )}
 
-          {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--scrim)] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
           {/* Bottom left theme badge */}
-          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-[var(--scrim)] backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-[var(--surface-base)] border border-[var(--line-default)] opacity-0 group-hover:opacity-100 transition-opacity">
             <div
               className="h-2 w-2 rounded-full"
               style={{ background: themeColor }}
             />
-            <span className="text-[10px] font-medium text-white/80 uppercase tracking-wider">
+            <span className="text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-wider">
               {theme}
             </span>
           </div>
@@ -390,23 +385,23 @@ export default function ProjectCard({
         {/* Content */}
         <div className="p-3.5">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-white group-hover:text-[var(--accent)] transition-colors">
+            <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent-text)] transition-colors">
               {title}
             </h3>
-            <Sparkles className="h-3.5 w-3.5 text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+            <Sparkles className="h-3.5 w-3.5 text-[var(--accent-text)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
           </div>
 
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5">
-              <ArchetypeIcon className="h-3.5 w-3.5 text-white/50" />
-              <span className="text-[11px] font-medium text-white/50 uppercase tracking-wide">
+              <ArchetypeIcon className="h-3.5 w-3.5 text-[var(--text-muted)]" />
+              <span className="text-[11px] font-medium text-[var(--text-muted)] uppercase tracking-wide">
                 {archetype}
               </span>
             </div>
 
             <div className="flex items-center gap-1">
-              <Calendar className="h-3 w-3 text-white/30" />
-              <span className="text-[10px] text-white/40">
+              <Calendar className="h-3 w-3 text-[var(--text-faint)]" />
+              <span className="text-[10px] text-[var(--text-faint)]">
                 {formatDate(project.updated_at)}
               </span>
             </div>
@@ -417,20 +412,13 @@ export default function ProjectCard({
       {/* Top right badges & actions */}
       <div className="absolute right-2 top-2 z-20 flex items-center gap-1.5">
         {project.is_pinned && (
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--scrim)] backdrop-blur-sm border border-[var(--accent)]/30">
-            <Pin className="h-3.5 w-3.5 text-[var(--accent)] fill-[var(--accent)]" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--surface-base)] border border-[var(--accent)]/30">
+            <Pin className="h-3.5 w-3.5 text-[var(--accent-text)] fill-[var(--accent)]" />
           </div>
         )}
         {ActionsDropdown}
       </div>
 
-      {/* Hover glow effect */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{
-          background: `radial-gradient(circle at 50% 0%, ${themeColor}08, transparent 70%)`,
-        }}
-      />
     </div>
   );
 }

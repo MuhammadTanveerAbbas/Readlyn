@@ -118,40 +118,40 @@ export default function DashboardPage() {
       />
       
       {/* Mobile header */}
-      <div className="md:hidden flex items-center gap-3 px-4 h-16 border-b border-white/[0.06] bg-[var(--surface-base)] sticky top-0 z-20">
+      <div className="md:hidden flex items-center gap-3 px-4 h-16 border-b border-[var(--line-subtle)] bg-[var(--surface-base)] sticky top-0 z-20">
         <button 
           onClick={() => setSidebarOpen(true)} 
-          className="p-2.5 -ml-2 min-h-11 min-w-11 text-white/60 hover:text-white"
+          className="p-2.5 -ml-2 min-h-11 min-w-11 text-[var(--text-body)] hover:text-[var(--text-primary)]"
           aria-label="Open menu"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M3 12h18M3 6h18M3 18h18" />
           </svg>
         </button>
-        <span className="font-bold text-white">Readlyn</span>
+        <span className="font-bold text-[var(--text-primary)]">Readlyn</span>
       </div>
 
       <main className="md:ml-[240px] px-4 pb-6 pt-4 sm:px-6 lg:px-8">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-[var(--surface-base)] p-4">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-4">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[var(--accent)]" />
-              <h1 className="text-lg font-semibold text-white">Dashboard</h1>
+              <Sparkles className="h-4 w-4 text-[var(--accent-text)]" />
+              <h1 className="text-lg font-semibold text-[var(--text-primary)]">Dashboard</h1>
             </div>
-            <div className="flex items-center gap-3 text-xs text-white/50">
+            <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
               <span className="inline-flex items-center gap-1">
-                <TrendingUp className="h-3.5 w-3.5 text-[var(--success-soft)]" />
+                <TrendingUp className="h-3.5 w-3.5 text-[var(--success)]" />
                 {projects.length} projects
               </span>
               <span className="inline-flex items-center gap-1">
-                <Zap className="h-3.5 w-3.5 text-[var(--accent)]" />
+                <Zap className="h-3.5 w-3.5 text-[var(--accent-text)]" />
                 {pinned.length} pinned
               </span>
             </div>
           </div>
           <button
             onClick={() => setOpenModal(true)}
-            className="group inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-black transition-all hover:bg-[var(--accent-hover)]"
+            className="group inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-[var(--accent-ink)] transition-all hover:bg-[var(--accent-hover)]"
           >
             <Rocket className="h-4 w-4" />
             Create New Project
@@ -168,29 +168,29 @@ export default function DashboardPage() {
         />
 
         {loading ? (
-          <div className="rounded-xl border border-white/10 bg-[var(--surface-base)] p-12 text-center">
+          <div className="rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-12 text-center">
             <div className="flex justify-center mb-4">
               <div className="h-12 w-12 rounded-full border-2 border-[var(--accent)] border-t-transparent animate-spin" />
             </div>
-            <p className="text-sm text-white/60">Loading your projects...</p>
+            <p className="text-sm text-[var(--text-body)]">Loading your projects...</p>
           </div>
         ) : error ? (
-          <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-8 text-center">
+          <div className="rounded-xl border border-[var(--danger)]/40 bg-[var(--danger-soft)] p-8 text-center">
             <div className="flex justify-center mb-3">
-              <div className="h-12 w-12 rounded-full bg-red-500/20 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-full bg-[var(--danger)]/15 flex items-center justify-center">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" strokeWidth="2">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 7v5M12 15v1" />
                 </svg>
               </div>
             </div>
-            <p className="text-sm font-semibold text-red-200 mb-1">
+            <p className="text-sm font-semibold text-[var(--danger)] mb-1">
               Error Loading Projects
             </p>
-            <p className="text-xs text-red-300/70 mb-4">{error}</p>
+            <p className="text-xs text-[var(--danger)]/80 mb-4">{error}</p>
             <button
               onClick={loadProjects}
-              className="inline-flex items-center gap-2 rounded-lg bg-red-500/20 border border-red-500/40 px-4 py-2 text-sm text-red-300 transition-colors hover:bg-red-500/30"
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--danger)]/10 border border-[var(--danger)]/40 px-4 py-2 text-sm text-[var(--danger)] transition-colors hover:bg-[var(--danger)]/20"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M1 4v6h6M23 20v-6h-6" />
@@ -199,29 +199,20 @@ export default function DashboardPage() {
             </button>
           </div>
         ) : visibleProjects.length === 0 ? (
-          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[var(--surface-base)] to-[var(--surface-raised)] p-8 sm:p-16 text-center relative overflow-hidden">
-            {/* Background decoration */}
-            <div
-              className="absolute inset-0 opacity-20"
-              style={{
-                backgroundImage:
-                  "radial-gradient(circle at 50% 50%, rgba(245,197,24,0.1), transparent 60%)",
-              }}
-            />
-
+          <div className="rounded-2xl border border-[var(--line-default)] bg-[var(--surface-base)] p-8 sm:p-16 text-center relative overflow-hidden">
             <div className="relative z-10">
               <div className="flex justify-center mb-6">
                 <div className="relative">
                   <div className="h-20 w-20 rounded-2xl bg-[var(--accent)] flex items-center justify-center">
-                    <Sparkles className="h-10 w-10 text-black" />
+                    <Sparkles className="h-10 w-10 text-[var(--accent-ink)]" />
                   </div>
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-2">
+              <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">
                 {search ? "No projects found" : "No projects yet"}
               </h3>
-              <p className="text-sm text-white/50 max-w-md mx-auto mb-6">
+              <p className="text-sm text-[var(--text-muted)] max-w-md mx-auto mb-6">
                 {search
                   ? `No projects match "${search}". Try a different search term.`
                   : "Start creating your first infographic. Click the button below to begin your journey."}
@@ -230,7 +221,7 @@ export default function DashboardPage() {
               {!search && (
                 <button
                   onClick={() => setOpenModal(true)}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black text-sm font-bold transition-all hover:scale-105 active:scale-95"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[var(--accent-ink)] text-sm font-bold transition-all hover:scale-105 active:scale-95"
                 >
                   <Sparkles className="h-4 w-4" />
                   Create Your First Project

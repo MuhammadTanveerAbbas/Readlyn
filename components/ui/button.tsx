@@ -18,7 +18,7 @@ const buttonVariants = cva(
           'bg-[var(--surface-raised)] text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)]',
         ghost:
           'text-[var(--text-body)] hover:bg-[var(--surface-raised)] hover:text-[var(--text-primary)]',
-        link: 'text-[var(--accent)] underline-offset-4 hover:underline',
+        link: 'text-[var(--accent-text)] underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

@@ -34,8 +34,8 @@ export default function EditorError({
           </svg>
         </div>
         <div>
-          <h1 className="text-lg font-semibold text-white">Editor crashed</h1>
-          <p className="mt-2 text-sm text-white/50">
+          <h1 className="text-lg font-semibold text-[var(--text-primary)]">Editor crashed</h1>
+          <p className="mt-2 text-sm text-[var(--text-muted)]">
             The editor encountered an unexpected error. Your canvas state may be
             recoverable from generation history.
           </p>
@@ -43,13 +43,13 @@ export default function EditorError({
         <div className="flex gap-3">
           <button
             onClick={reset}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-sm font-semibold transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[var(--text-primary)] text-sm font-semibold transition-all"
           >
             Reload editor
           </button>
           <a
             href="/dashboard"
-            className="px-4 py-2 rounded-lg border border-white/10 text-white/70 hover:text-white text-sm transition-all"
+            className="px-4 py-2 rounded-lg border border-[var(--line-default)] text-[var(--text-body)] hover:text-[var(--text-primary)] text-sm transition-all"
           >
             Back to dashboard
           </a>

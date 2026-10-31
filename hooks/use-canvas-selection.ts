@@ -17,6 +17,8 @@ export interface SelectionProperties {
   fontWeight?: string
   fontFamily?: string
   textAlign?: string
+  lineHeight?: number
+  charSpacing?: number
   rx?: number
   text?: string
 }
@@ -58,6 +60,8 @@ export function useCanvasSelection(canvas: fabric.Canvas | null) {
       props.fontFamily = (obj as fabric.IText).fontFamily
       props.textAlign = (obj as fabric.IText).textAlign
       props.text = (obj as fabric.IText).text
+      props.lineHeight = (obj as fabric.IText).lineHeight
+      props.charSpacing = (obj as fabric.IText).charSpacing
     }
 
     if ('rx' in obj) {
@@ -161,6 +165,21 @@ export function useCanvasSelection(canvas: fabric.Canvas | null) {
         case 'textAlign':
           if ('textAlign' in selectedObject) {
             ;(selectedObject as fabric.IText).set('textAlign', value as string)
+          }
+          break
+        case 'text':
+          if ('text' in selectedObject) {
+            ;(selectedObject as fabric.IText).set('text', value as string)
+          }
+          break
+        case 'lineHeight':
+          if ('lineHeight' in selectedObject) {
+            ;(selectedObject as fabric.IText).set('lineHeight', value as number)
+          }
+          break
+        case 'charSpacing':
+          if ('charSpacing' in selectedObject) {
+            ;(selectedObject as fabric.IText).set('charSpacing', value as number)
           }
           break
         case 'rx':

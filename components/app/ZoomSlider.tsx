@@ -39,7 +39,7 @@ export default function ZoomSlider({
       className="hidden lg:flex w-9 flex-shrink-0 flex-col items-center py-3 gap-3"
       style={{
         backgroundColor: "var(--surface-base)",
-        borderLeft: "1px solid rgba(255,255,255,0.07)",
+        borderLeft: "1px solid rgba(16,17,19,0.07)",
       }}
     >
       {/* Zoom In */}

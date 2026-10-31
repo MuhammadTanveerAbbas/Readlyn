@@ -10,82 +10,58 @@ export default function FinalCTA() {
       ref={ref as React.RefObject<HTMLDivElement>}
       className="relative flex flex-col items-center w-full py-32 md:py-40 px-6 text-center overflow-hidden bg-[var(--surface-sunken)]"
     >
-      {/* Background layers */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,197,24,0.06) 0%, transparent 65%)",
-        }}
-      />
+      {/* Neutral grid texture */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.02]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+            "linear-gradient(rgba(16,17,19,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(16,17,19,0.5) 1px, transparent 1px)",
           backgroundSize: "80px 80px",
         }}
       />
 
-      {/* Decorative orbs */}
-      <div
-        className="absolute -left-32 top-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(245,197,24,0.06) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute -right-32 top-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,107,53,0.08) 0%, transparent 70%)",
-        }}
-      />
-
       {/* Badge */}
-      <div className="relative inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-[#888888] text-[11px] font-medium tracking-[0.15em] uppercase mb-10">
+      <div className="relative inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[var(--line-default)] bg-[var(--fill-subtle)] text-[var(--text-muted)] text-[11px] font-medium tracking-[0.15em] uppercase mb-10">
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-60" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--success)] opacity-60" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--success)]" />
         </span>
         Ready to launch faster?
       </div>
 
       {/* Title */}
       <h2
-        className="font-display font-black text-white text-center w-full max-w-[900px] mb-6"
+        className="font-display font-black text-[var(--text-primary)] text-center w-full max-w-[900px] mb-6"
         style={{
           fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
           letterSpacing: "-0.035em",
           lineHeight: 1.02,
         }}
       >
-        From concept to code.{" "}
+        From prompt to published.{" "}
         <span
           style={{
-            color: "var(--accent)",
-            textShadow: "0 0 40px rgba(245,197,24,0.3)",
+            color: "var(--accent-text)",
           }}
         >
-          Ship without friction.
+          Ship visuals without friction.
         </span>
       </h2>
 
       {/* Subtitle */}
       <p className="font-sans text-[13px] text-[var(--text-muted)] tracking-[0.5px] text-center max-w-[520px] mb-12 leading-[1.8]">
         We&apos;re building Readlyn in public. Try it free, no credit card
-        needed, plus tell us what to improve.
+        needed, and tell us what to improve.
       </p>
 
       {/* CTAs */}
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <a
           href="/signup"
-          className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl font-sans text-[14px] font-bold text-white
+          className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl font-sans text-[14px] font-bold text-[var(--text-primary)]
                      bg-[var(--accent)] hover:bg-[var(--accent-hover)]
-                     shadow-[0_0_30px_rgba(245,197,24,0.35)]
-                     hover:shadow-[0_0_50px_rgba(245,197,24,0.55)]
+                    
+                    
                      transition-all duration-200
                      hover:scale-[1.02] active:scale-[0.98]"
         >
@@ -109,8 +85,8 @@ export default function FinalCTA() {
         <a
           href="https://github.com/MuhammadTanveerAbbas/Readlyn"
           className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl
-                     border border-white/10 text-[#888888]
-                     hover:border-white/25 hover:text-white
+                     border border-[var(--line-default)] text-[var(--text-muted)]
+                     hover:border-[var(--line-strong)] hover:text-[var(--text-primary)]
                      transition-all duration-200 font-sans text-[12px] tracking-[1px]
                      hover:scale-[1.02] active:scale-[0.98]"
         >

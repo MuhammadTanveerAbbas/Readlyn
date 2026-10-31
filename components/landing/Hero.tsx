@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import CollabCursors from "@/components/landing/CollabCursors";
 
 /* Typewriter */
 function Typewriter({ lines }: { lines: string[] }) {
@@ -34,7 +33,7 @@ function Typewriter({ lines }: { lines: string[] }) {
   }, [ci, del, li, lines]);
 
   return (
-    <span className="font-sans text-[var(--accent)] text-[13px] tracking-[1px]">
+    <span className="font-sans text-[var(--accent-text)] text-[13px] tracking-[1px]">
       {lines[li]?.slice(0, ci) ?? ""}
       <span
         className="inline-block w-[2px] h-[13px] bg-[var(--accent)] align-middle ml-px"
@@ -45,7 +44,7 @@ function Typewriter({ lines }: { lines: string[] }) {
 }
 
 /* Floating particles */
-function Particles() {
+function _Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -128,7 +127,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
   const layers = [
     { label: "FRAME / HERO", color: "var(--accent)", indent: 0, active: true },
     { label: "NAVBAR", color: "var(--text-muted)", indent: 8 },
-    { label: "HEADLINE", color: "var(--success-soft)", indent: 8 },
+    { label: "HEADLINE", color: "var(--success)", indent: 8 },
     { label: "SUBTEXT", color: "var(--text-muted)", indent: 8 },
     { label: "CTA GROUP", color: "var(--orange)", indent: 8 },
     { label: "BTN / PRIMARY", color: "var(--orange)", indent: 16 },
@@ -141,25 +140,14 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
       className="relative w-full rounded-2xl overflow-hidden"
       style={{
         border: "1px solid var(--line-default)",
-        boxShadow:
-          "0 0 0 1px rgba(255,255,255,0.03), 0 40px 100px rgba(11,11,12,0.6), 0 0 80px rgba(245,197,24,0.07)",
+        boxShadow: "0 20px 60px rgba(17,17,19,0.10)",
         background: "var(--surface-base)",
       }}
     >
-      {/* Animated top border glow */}
-      <div
-        className="absolute top-0 inset-x-0 h-px pointer-events-none z-20"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(245,197,24,0.6) 30%, rgba(245,197,24,0.9) 50%, rgba(245,197,24,0.6) 70%, transparent 100%)",
-          animation: "border-slide 3s ease-in-out infinite",
-        }}
-      />
-
       {/* Top bar */}
       <div
         className="flex items-center justify-between px-4 h-10 border-b"
-        style={{ borderColor: "rgba(255,255,255,0.06)", background: "#111" }}
+        style={{ borderColor: "rgba(16,17,19,0.06)", background: "var(--surface-raised)" }}
       >
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
@@ -168,12 +156,9 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
         </div>
         <div
           className="flex items-center gap-2 px-3 py-1 rounded-md font-sans text-[10px] text-[var(--text-muted)] tracking-[1px]"
-          style={{ background: "var(--surface-base)", border: "1px solid #1E1E1E" }}
+          style={{ background: "var(--surface-base)", border: "1px solid var(--line-default)" }}
         >
-          <span
-            className="w-1.5 h-1.5 rounded-full bg-[var(--success-soft)]"
-            style={{ boxShadow: "0 0 6px var(--success-soft)" }}
-          />
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
           readlyn.app / canvas
         </div>
         <div className="flex items-center gap-2">
@@ -183,7 +168,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               className="font-sans text-[10px] px-2 py-0.5 rounded"
               style={{
                 background: i === 0 ? "var(--accent)" : "var(--surface-overlay)",
-                color: i === 0 ? "#000" : "var(--text-muted)",
+                color: i === 0 ? "var(--accent-ink)" : "var(--text-muted)",
               }}
             >
               {t}
@@ -198,13 +183,13 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
         <div
           className="w-[155px] shrink-0 flex flex-col border-r"
           style={{
-            borderColor: "rgba(255,255,255,0.06)",
+            borderColor: "rgba(16,17,19,0.06)",
             background: "var(--surface-base)",
           }}
         >
           <div
-            className="px-3 py-2 font-sans text-[8px] text-[var(--accent)] tracking-[2px] border-b"
-            style={{ borderColor: "rgba(255,255,255,0.06)" }}
+            className="px-3 py-2 font-sans text-[8px] text-[var(--accent-text)] tracking-[2px] border-b"
+            style={{ borderColor: "rgba(16,17,19,0.06)" }}
           >
             LAYERS
           </div>
@@ -215,7 +200,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               style={{
                 paddingLeft: `${12 + l.indent}px`,
                 background: l.active ? "var(--surface-overlay)" : "transparent",
-                color: l.active ? "var(--text-secondary)" : "var(--surface-overlay)",
+                color: l.active ? "var(--text-secondary)" : "var(--text-faint)",
                 borderLeft: l.active
                   ? "2px solid var(--accent)"
                   : "2px solid transparent",
@@ -238,17 +223,6 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
           className="flex-1 relative overflow-hidden"
           style={{ background: "var(--surface-base)" }}
         >
-          {/* Scan line */}
-          <div
-            className="absolute inset-x-0 h-px pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent, rgba(245,197,24,0.2), transparent)",
-              animation: "scan 3s linear infinite",
-              top: 0,
-            }}
-          />
-
           {/* Frame */}
           <div
             className="absolute"
@@ -261,7 +235,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               borderRadius: "4px",
             }}
           >
-            <span className="absolute -top-5 left-0 font-sans text-[8px] text-[var(--accent)] tracking-[1px]">
+            <span className="absolute -top-5 left-0 font-sans text-[8px] text-[var(--accent-text)] tracking-[1px]">
               INFOGRAPHIC / HERO
             </span>
             {[
@@ -291,15 +265,15 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               <div className="grid grid-cols-3 gap-1.5 mt-1">
                 {[
                   ["var(--accent)", "42%"],
-                  ["var(--success-soft)", "8.4k"],
+                  ["var(--success)", "8.4k"],
                   ["var(--info)", "$12k"],
                 ].map(([c, v], i) => (
                   <div
                     key={i}
                     className="rounded p-1.5 flex flex-col gap-1"
                     style={{
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid rgba(255,255,255,0.06)",
+                      background: "rgba(16,17,19,0.03)",
+                      border: "1px solid rgba(16,17,19,0.06)",
                     }}
                   >
                     <span
@@ -340,7 +314,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                       width: `${w}%`,
                       background:
                         i === 0
-                          ? "rgba(255,255,255,0.12)"
+                          ? "rgba(16,17,19,0.12)"
                           : "var(--line-subtle)",
                     }}
                   />
@@ -360,13 +334,13 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
         <div
           className="w-[145px] shrink-0 flex flex-col border-l"
           style={{
-            borderColor: "rgba(255,255,255,0.06)",
+            borderColor: "rgba(16,17,19,0.06)",
             background: "var(--surface-base)",
           }}
         >
           <div
-            className="px-3 py-2 font-sans text-[8px] text-[var(--accent)] tracking-[2px] border-b"
-            style={{ borderColor: "rgba(255,255,255,0.06)" }}
+            className="px-3 py-2 font-sans text-[8px] text-[var(--accent-text)] tracking-[2px] border-b"
+            style={{ borderColor: "rgba(16,17,19,0.06)" }}
           >
             INSPECT
           </div>
@@ -384,7 +358,7 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
                 key={i}
                 className="flex items-center justify-between py-[5px] border-b"
                 style={{
-                  borderColor: "rgba(255,255,255,0.04)",
+                  borderColor: "rgba(16,17,19,0.04)",
                   opacity: mounted ? 1 : 0,
                   transition: `opacity 0.4s ease ${0.15 + i * 0.05}s`,
                 }}
@@ -406,20 +380,20 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
               </div>
             ))}
           </div>
-          {/* AI badge */}
+          {/* Status badge */}
           <div
             className="mx-3 mt-2 px-2 py-1.5 rounded-lg flex items-center gap-1.5"
             style={{
-              background: "rgba(245,197,24,0.07)",
-              border: "1px solid rgba(245,197,24,0.15)",
+              background: "var(--fill-subtle)",
+              border: "1px solid var(--line-subtle)",
             }}
           >
             <span
-              className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"
+              className="w-1.5 h-1.5 rounded-full bg-[var(--info)]"
               style={{ animation: "pulse 2s ease-in-out infinite" }}
             />
-            <span className="font-sans text-[7px] text-[var(--accent)] tracking-[1px]">
-              AI GENERATING
+            <span className="font-sans text-[7px] text-[var(--text-muted)] tracking-[1px]">
+              PROCESSING
             </span>
           </div>
         </div>
@@ -427,13 +401,13 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
 
       {/* Status bar */}
       <div
-        className="flex items-center justify-between px-4 h-8 border-t font-sans text-[8px] text-[#333] tracking-[1px]"
-        style={{ borderColor: "rgba(255,255,255,0.06)", background: "var(--surface-base)" }}
+        className="flex items-center justify-between px-4 h-8 border-t font-sans text-[8px] text-[var(--text-faint)] tracking-[1px]"
+        style={{ borderColor: "rgba(16,17,19,0.06)", background: "var(--surface-base)" }}
       >
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <span
-              className="w-1.5 h-1.5 rounded-full bg-[var(--success-soft)]"
+              className="w-1.5 h-1.5 rounded-full bg-[var(--success)]"
               style={{ animation: "pulse 2s ease-in-out infinite" }}
             />
             READY
@@ -443,17 +417,10 @@ function CanvasMock({ mounted }: { mounted: boolean }) {
         </div>
         <div className="flex items-center gap-4">
           <span>POWERED BY AI</span>
-          <span className="text-[var(--accent)] opacity-60">v2.0.1</span>
+          <span className="text-[var(--accent-text)] opacity-60">EARLY ACCESS</span>
         </div>
       </div>
 
-      {/* Bottom fade */}
-      <div
-        className="absolute bottom-0 inset-x-0 h-24 pointer-events-none z-10"
-        style={{
-          background: "linear-gradient(to top, var(--surface-sunken) 30%, transparent)",
-        }}
-      />
     </div>
   );
 }
@@ -486,29 +453,12 @@ export default function Hero() {
         .hero-canvas  { animation: float-up 0.9s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
       `}</style>
 
-      {/* Modern background blue-indigo mesh gradient */}
-      {/* Layer 1: blue-purple radial at top-center */}
-      <div
-        className="absolute inset-x-0 top-0 h-[600px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 55% at 50% -10%, rgba(99,102,241,0.12) 0%, rgba(139,92,246,0.06) 40%, transparent 70%)",
-        }}
-      />
-      {/* Layer 2: subtle blue radial at top-right */}
-      <div
-        className="absolute top-0 right-0 h-[400px] w-[500px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 60% at 100% 0%, rgba(96,165,250,0.07) 0%, transparent 65%)",
-        }}
-      />
-      {/* Layer 3: very faint dot-grid texture */}
+      {/* Faint neutral dot-grid texture */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)",
+            "radial-gradient(circle, rgba(16,17,19,0.03) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -518,10 +468,10 @@ export default function Hero() {
         {/* Left: text */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-[480px] shrink-0">
           {/* Badge */}
-          <div className="hero-enter-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] mb-6">
+          <div className="hero-enter-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--line-default)] bg-[var(--fill-subtle)] mb-6">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-70" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--success)] opacity-70" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--success)]" />
             </span>
             <span className="font-sans text-[10px] text-[var(--text-body)] tracking-[0.18em] uppercase">
               Early access open
@@ -530,7 +480,7 @@ export default function Hero() {
 
           {/* Headline */}
           <h1
-            className="hero-enter-1 font-display text-white"
+            className="hero-enter-1 font-display text-[var(--text-primary)]"
             style={{
               fontSize: "clamp(2.8rem, 5.5vw, 4.2rem)",
               fontWeight: 800,
@@ -542,8 +492,7 @@ export default function Hero() {
             <br />
             <span
               style={{
-                color: "var(--accent)",
-                textShadow: "0 0 50px rgba(245,197,24,0.3)",
+                color: "var(--accent-text)",
               }}
             >
               Get an infographic.
@@ -552,13 +501,13 @@ export default function Hero() {
 
           {/* Sub */}
           <p className="hero-enter-2 font-sans text-[var(--text-muted)] text-[13px] leading-[1.9] tracking-[0.3px] mt-5 max-w-[400px]">
-            Type a topic, pick a layout plus theme. Get a complete, editable
+            Type a topic, pick a layout and theme. Get a complete, editable
             infographic in seconds.
           </p>
 
           {/* Typewriter */}
           <div className="hero-enter-3 flex items-center gap-2 mt-4">
-            <span className="font-sans text-[11px] text-[#333] tracking-[1px]">
+            <span className="font-sans text-[11px] text-[var(--text-faint)] tracking-[1px]">
               Generating:
             </span>
             <Typewriter
@@ -567,7 +516,7 @@ export default function Hero() {
                 "Product Roadmap Overview",
                 "Market Analysis Chart",
                 "Team OKR Summary",
-                "Parallax Scene Builder",
+                "Marketing Infographic",
               ]}
             />
           </div>
@@ -577,7 +526,7 @@ export default function Hero() {
             {/* Primary: Start free spark/bolt icon */}
             <a
               href="/signup"
-              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[13px] font-bold text-black bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_0_28px_rgba(245,197,24,0.35)] hover:shadow-[0_0_44px_rgba(245,197,24,0.55)] hover:scale-[1.02] active:scale-[0.98]"
+              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[13px] font-bold text-[var(--accent-ink)] bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
               {/* Bolt / spark */}
               <svg
@@ -601,7 +550,7 @@ export default function Hero() {
             {/* Secondary: Log in key icon */}
             <a
               href="/login"
-              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[12px] text-[var(--text-body)] tracking-[0.5px] border border-white/10 hover:border-white/20 hover:text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-xl font-sans text-[12px] text-[var(--text-body)] tracking-[0.5px] border border-[var(--line-default)] hover:border-[var(--line-strong)] hover:text-[var(--text-primary)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
               {/* Key icon */}
               <svg
@@ -619,7 +568,7 @@ export default function Hero() {
             </a>
           </div>
 
-          <p className="hero-enter-4 font-sans text-[10px] text-[var(--surface-overlay)] tracking-[2px] mt-3">
+          <p className="hero-enter-4 font-sans text-[10px] text-[var(--text-muted)] tracking-[2px] mt-3">
             No credit card  Free plan  Early access
           </p>
         </div>
@@ -627,17 +576,9 @@ export default function Hero() {
         {/* Right: canvas mock */}
         <div className="hero-canvas relative flex-1 w-full min-w-0">
           <CanvasMock mounted={mounted} />
-          <CollabCursors />
         </div>
       </div>
 
-      {/* Bottom fade */}
-      <div
-        className="absolute bottom-0 inset-x-0 h-28 pointer-events-none z-20"
-        style={{
-          background: "linear-gradient(to top, var(--surface-sunken) 0%, transparent 100%)",
-        }}
-      />
     </section>
   );
 }

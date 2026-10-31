@@ -16,7 +16,7 @@ export default function DevModeInspectModal({
   onClose,
   selectedObject,
 }: DevModeInspectModalProps) {
-  const [activeTab, setActiveTab] = useState<"css" | "react" | "svg">("css");
+  const [activeTab, setActiveTab] = useState<"css" | "react" | "svg" | "json">("css");
 
   if (!open) return null;
 
@@ -65,7 +65,18 @@ export function InfographicElement() {
 </svg>`
     : `<svg width="100" height="100"><rect width="100" height="100" fill="#f5c518"/></svg>`;
 
-  const activeCode = activeTab === "css" ? cssCode : activeTab === "react" ? reactCode : svgCode;
+  const jsonCode = selectedObject
+    ? JSON.stringify(selectedObject.toObject(), null, 2)
+    : "{}";
+
+  const activeCode =
+    activeTab === "css"
+      ? cssCode
+      : activeTab === "react"
+        ? reactCode
+        : activeTab === "svg"
+          ? svgCode
+          : jsonCode;
 
   const copyCode = () => {
     navigator.clipboard.writeText(activeCode);
@@ -76,13 +87,13 @@ export function InfographicElement() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] backdrop-blur-sm p-4 animate-fade-in">
-      <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--scrim)] p-4 animate-fade-in">
+      <div className="relative w-full max-w-xl rounded-2xl border border-[var(--line-default)] bg-[var(--surface-base)] p-6 shadow-2xl flex flex-col">
+        <div className="flex items-center justify-between border-b border-[var(--line-default)] pb-4">
           <div>
-            <h3 className="font-sans text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="font-sans text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
-              Dev Mode, CSS plus Code Inspect
+              Dev Mode, CSS and Code Inspect
             </h3>
             <p className="font-sans text-xs text-[var(--text-muted)]">
               {selectedObject ? `Inspecting ${selectedObject.type} element` : "No element selected (showing canvas item)"}
@@ -90,7 +101,7 @@ export function InfographicElement() {
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-white/60 hover:bg-white/10 hover:text-white shrink-0"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--line-default)] text-[var(--text-body)] hover:bg-[var(--fill-strong)] hover:text-[var(--text-primary)] shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
@@ -98,32 +109,32 @@ export function InfographicElement() {
 
         {/* Measurements box */}
         <div className="grid grid-cols-4 gap-3 my-4">
-          <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 text-center">
-            <span className="block font-sans text-[10px] text-white/50">X Position</span>
-            <span className="font-mono font-bold text-xs text-white">{left}px</span>
+          <div className="p-2.5 rounded-xl border border-[var(--line-default)] bg-[var(--fill-default)] text-center">
+            <span className="block font-sans text-[10px] text-[var(--text-muted)]">X Position</span>
+            <span className="font-mono font-bold text-xs text-[var(--text-primary)]">{left}px</span>
           </div>
-          <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 text-center">
-            <span className="block font-sans text-[10px] text-white/50">Y Position</span>
-            <span className="font-mono font-bold text-xs text-white">{top}px</span>
+          <div className="p-2.5 rounded-xl border border-[var(--line-default)] bg-[var(--fill-default)] text-center">
+            <span className="block font-sans text-[10px] text-[var(--text-muted)]">Y Position</span>
+            <span className="font-mono font-bold text-xs text-[var(--text-primary)]">{top}px</span>
           </div>
-          <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 text-center">
-            <span className="block font-sans text-[10px] text-white/50">Width</span>
-            <span className="font-mono font-bold text-xs text-white">{width}px</span>
+          <div className="p-2.5 rounded-xl border border-[var(--line-default)] bg-[var(--fill-default)] text-center">
+            <span className="block font-sans text-[10px] text-[var(--text-muted)]">Width</span>
+            <span className="font-mono font-bold text-xs text-[var(--text-primary)]">{width}px</span>
           </div>
-          <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 text-center">
-            <span className="block font-sans text-[10px] text-white/50">Height</span>
-            <span className="font-mono font-bold text-xs text-white">{height}px</span>
+          <div className="p-2.5 rounded-xl border border-[var(--line-default)] bg-[var(--fill-default)] text-center">
+            <span className="block font-sans text-[10px] text-[var(--text-muted)]">Height</span>
+            <span className="font-mono font-bold text-xs text-[var(--text-primary)]">{height}px</span>
           </div>
         </div>
 
         {/* Tab Selection */}
-        <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+        <div className="flex items-center gap-2 border-b border-[var(--line-default)] pb-3">
           <button
             onClick={() => setActiveTab("css")}
             className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "css"
-                ? "bg-[var(--accent)] text-white font-bold"
-                : "text-white/70 hover:bg-white/5"
+                ? "bg-[var(--accent)] text-[var(--text-primary)] font-bold"
+                : "text-[var(--text-body)] hover:bg-[var(--fill-default)]"
             }`}
           >
             CSS
@@ -132,8 +143,8 @@ export function InfographicElement() {
             onClick={() => setActiveTab("react")}
             className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "react"
-                ? "bg-[var(--accent)] text-white font-bold"
-                : "text-white/70 hover:bg-white/5"
+                ? "bg-[var(--accent)] text-[var(--text-primary)] font-bold"
+                : "text-[var(--text-body)] hover:bg-[var(--fill-default)]"
             }`}
           >
             React
@@ -142,25 +153,35 @@ export function InfographicElement() {
             onClick={() => setActiveTab("svg")}
             className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
               activeTab === "svg"
-                ? "bg-[var(--accent)] text-white font-bold"
-                : "text-white/70 hover:bg-white/5"
+                ? "bg-[var(--accent)] text-[var(--text-primary)] font-bold"
+                : "text-[var(--text-body)] hover:bg-[var(--fill-default)]"
             }`}
           >
             SVG
           </button>
+          <button
+            onClick={() => setActiveTab("json")}
+            className={`px-3 py-1 rounded-lg text-xs font-sans transition-all ${
+              activeTab === "json"
+                ? "bg-[var(--accent)] text-[var(--text-primary)] font-bold"
+                : "text-[var(--text-body)] hover:bg-[var(--fill-default)]"
+            }`}
+          >
+            JSON
+          </button>
         </div>
 
-        <pre className="p-4 my-4 rounded-xl bg-[var(--scrim)] border border-white/10 font-mono text-xs text-amber-300 overflow-x-auto max-h-56">
+        <pre className="p-4 my-4 rounded-xl bg-[var(--surface-sunken)] border border-[var(--line-default)] font-mono text-xs text-[var(--text-secondary)] overflow-x-auto max-h-56">
           {activeCode}
         </pre>
 
-        <div className="border-t border-white/10 pt-4 flex justify-between items-center">
+        <div className="border-t border-[var(--line-default)] pt-4 flex justify-between items-center">
           <span className="font-sans text-[10px] text-[var(--text-muted)]">
             Developers can directly copy production ready code
           </span>
           <button
             onClick={copyCode}
-            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-white hover:bg-[var(--accent-hover)] transition-all"
+            className="px-4 py-2 rounded-lg bg-[var(--accent)] font-sans text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--accent-hover)] transition-all"
           >
             Copy Snippet
           </button>

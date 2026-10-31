@@ -25,23 +25,23 @@ export default function SearchFilterBar({
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-faint)]" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search projects..."
-            className="h-11 w-full rounded-lg border border-white/[0.08] bg-[var(--surface-base)] pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all"
+            className="h-11 w-full rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] pl-10 pr-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all"
           />
         </div>
 
         {/* Sort */}
         <div className="flex gap-2">
           <div className="relative">
-            <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40 pointer-events-none" />
+            <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-faint)] pointer-events-none" />
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="h-11 appearance-none rounded-lg border border-white/[0.08] bg-[var(--surface-base)] pl-10 pr-10 text-sm text-white focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
+              className="h-11 appearance-none rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] pl-10 pr-10 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 transition-all cursor-pointer"
             >
               <option value="updated">Last Edited</option>
               <option value="created">Date Created</option>
@@ -49,7 +49,7 @@ export default function SearchFilterBar({
             </select>
             <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
               <svg
-                className="h-4 w-4 text-white/40"
+                className="h-4 w-4 text-[var(--text-faint)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -65,13 +65,13 @@ export default function SearchFilterBar({
           </div>
 
           {/* View mode toggle */}
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-[var(--surface-base)] p-1">
+          <div className="flex items-center gap-1 rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] p-1">
             <button
               onClick={() => setViewMode("grid")}
               className={`flex h-9 w-9 items-center justify-center rounded-md transition-all ${
                 viewMode === "grid"
-                  ? "bg-[var(--accent)] text-white"
-                  : "text-white/50 hover:text-white hover:bg-white/[0.05]"
+                  ? "bg-[var(--accent)] text-[var(--text-primary)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--fill-default)]"
               }`}
               title="Grid view"
             >
@@ -81,8 +81,8 @@ export default function SearchFilterBar({
               onClick={() => setViewMode("list")}
               className={`flex h-9 w-9 items-center justify-center rounded-md transition-all ${
                 viewMode === "list"
-                  ? "bg-[var(--accent)] text-white"
-                  : "text-white/50 hover:text-white hover:bg-white/[0.05]"
+                  ? "bg-[var(--accent)] text-[var(--text-primary)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--fill-default)]"
               }`}
               title="List view"
             >
@@ -95,12 +95,12 @@ export default function SearchFilterBar({
       {/* Active filters indicator */}
       {search && (
         <div className="mt-3 flex items-center gap-2">
-          <span className="text-xs text-white/50">Searching for:</span>
+          <span className="text-xs text-[var(--text-muted)]">Searching for:</span>
           <div className="flex items-center gap-1.5 rounded-md bg-[var(--accent)]/10 border border-[var(--accent)]/20 px-2 py-1">
-            <span className="text-xs font-medium text-[var(--accent)]">{search}</span>
+            <span className="text-xs font-medium text-[var(--accent-text)]">{search}</span>
             <button
               onClick={() => setSearch("")}
-              className="text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
+              className="text-[var(--accent-text)] hover:text-[var(--accent-hover)] transition-colors"
             >
               <svg
                 className="h-3 w-3"

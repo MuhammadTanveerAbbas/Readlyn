@@ -13,11 +13,11 @@ import { ensureCanvasFontsLoaded } from "@/lib/canvas-fonts";
 import { toast } from "@/hooks/use-toast";
 import type { InfographicData } from "@/types/infographic";
 
-// The artboard plus the selection handles must use real color values. Canvas
+// The artboard and the selection handles must use real color values. Canvas
 // rendering cannot resolve CSS custom properties, so the accent hex lives here.
 const ARTBOARD_BACKGROUND = "#ffffff";
-const SELECTION_COLOR = "#f5c518";
-const SELECTION_STROKE_COLOR = "#0f0f0f";
+const SELECTION_COLOR = "#3b82f6";
+const SELECTION_STROKE_COLOR = "#111113";
 
 export interface CanvasRef {
   canvas: fabric.Canvas | null;
@@ -30,6 +30,10 @@ export interface CanvasRef {
   setStreamProgress: (progress: { current: number; total: number }) => void;
   exportPNG: () => void | Promise<void>;
   exportJSON: () => void;
+  exportSVG: () => void;
+  importJSON: (file: File) => Promise<void>;
+  importImage: (file: File) => Promise<void>;
+  importSVG: (file: File) => Promise<void>;
   clearAll: () => void;
   getObjects: () => fabric.FabricObject[];
 }
@@ -39,13 +43,24 @@ interface InfographicCanvasProps {
   height: number;
   zoom: number;
   toolMode?: "select" | "hand";
+  snapToGrid?: boolean;
+  gridSize?: number;
   onReady?: (canvas: fabric.Canvas) => void;
   onObjectModified?: () => void;
 }
 
 const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
   (
-    { width, height, zoom, toolMode = "select", onReady, onObjectModified },
+    {
+      width,
+      height,
+      zoom,
+      toolMode = "select",
+      snapToGrid = false,
+      gridSize = 20,
+      onReady,
+      onObjectModified,
+    },
     ref,
   ) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -122,7 +137,24 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
       canvas.requestRenderAll();
     }, [toolMode]);
 
-    // Zoom plus panning are handled by the editor viewport container, so this
+    useEffect(() => {
+      const canvas = fabricRef.current;
+      if (!canvas || !snapToGrid) return;
+      const handleMoving = (event: fabric.TEvent) => {
+        const target = (event as unknown as { target?: fabric.FabricObject }).target;
+        if (!target) return;
+        target.set({
+          left: Math.round((target.left || 0) / gridSize) * gridSize,
+          top: Math.round((target.top || 0) / gridSize) * gridSize,
+        });
+      };
+      canvas.on("object:moving", handleMoving);
+      return () => {
+        canvas.off("object:moving", handleMoving);
+      };
+    }, [snapToGrid, gridSize]);
+
+    // Zoom and panning are handled by the editor viewport container, so this
     // component only listens for object level changes.
     useEffect(() => {
       const canvas = fabricRef.current;
@@ -242,6 +274,104 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
           description: "Infographic exported as JSON",
         });
       },
+      exportSVG: () => {
+        if (!fabricRef.current) return;
+        const svg = fabricRef.current.toSVG();
+        const blob = new Blob([svg], { type: "image/svg+xml" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "infographic.svg";
+        a.click();
+        URL.revokeObjectURL(url);
+        toast({
+          title: "Success",
+          description: "Infographic exported as SVG",
+        });
+      },
+      importJSON: async (file: File) => {
+        if (!fabricRef.current) return;
+        try {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          if (typeof parsed !== "object" || parsed === null) {
+            throw new Error("Invalid JSON");
+          }
+          await fabricRef.current.loadFromJSON(parsed);
+          fabricRef.current.requestRenderAll();
+          toast({
+            title: "Imported",
+            description: "JSON design document loaded",
+          });
+        } catch {
+          toast({
+            title: "Import failed",
+            description: "Invalid or unsupported JSON file",
+            variant: "destructive",
+          });
+        }
+      },
+      importImage: async (file: File) => {
+        const canvas = fabricRef.current;
+        if (!canvas) return;
+        try {
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result));
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          });
+          const image = await fabric.FabricImage.fromURL(dataUrl);
+          const maxWidth = canvas.getWidth() * 0.8;
+          const maxHeight = canvas.getHeight() * 0.8;
+          const scale = Math.min(
+            1,
+            maxWidth / (image.width || maxWidth),
+            maxHeight / (image.height || maxHeight),
+          );
+          image.set({
+            left: (canvas.getWidth() - (image.width || 0) * scale) / 2,
+            top: (canvas.getHeight() - (image.height || 0) * scale) / 2,
+            scaleX: scale,
+            scaleY: scale,
+          });
+          canvas.add(image);
+          canvas.setActiveObject(image);
+          canvas.renderAll();
+          toast({ title: "Imported", description: "Image added to canvas" });
+        } catch {
+          toast({
+            title: "Import failed",
+            description: "Unsupported image file",
+            variant: "destructive",
+          });
+        }
+      },
+      importSVG: async (file: File) => {
+        const canvas = fabricRef.current;
+        if (!canvas) return;
+        try {
+          const text = await file.text();
+          const { objects } = await fabric.loadSVGFromString(text);
+          const valid = objects.filter(Boolean) as fabric.FabricObject[];
+          if (!valid.length) throw new Error("No SVG objects");
+          const group = fabric.util.groupSVGElements(valid);
+          group.set({
+            left: (canvas.getWidth() - (group.width || 0)) / 2,
+            top: (canvas.getHeight() - (group.height || 0)) / 2,
+          });
+          canvas.add(group);
+          canvas.setActiveObject(group);
+          canvas.renderAll();
+          toast({ title: "Imported", description: "SVG added to canvas" });
+        } catch {
+          toast({
+            title: "Import failed",
+            description: "Invalid or unsupported SVG file",
+            variant: "destructive",
+          });
+        }
+      },
       clearAll: () => {
         if (!fabricRef.current) return;
         fabricRef.current.clear();
@@ -271,18 +401,28 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
             position: "absolute",
             top: 0,
             left: 0,
-            boxShadow: "0 2px 8px rgba(11,11,12,0.3), 0 8px 40px rgba(11,11,12,0.5), 0 0 0 1px rgba(255,255,255,0.05)",
+            boxShadow: "0 2px 8px rgba(17,17,19,0.12), 0 8px 40px rgba(17,17,19,0.12), 0 0 0 1px rgba(16,17,19,0.05)",
           }}
         >
           <canvas ref={canvasRef} />
+          {snapToGrid && (
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, rgba(15,23,42,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.08) 1px, transparent 1px)",
+                backgroundSize: `${gridSize}px ${gridSize}px`,
+              }}
+            />
+          )}
         </div>
 
         {isLoading && (
           <div className="absolute inset-0 rounded-lg bg-[var(--scrim)]">
-            <div className="absolute inset-4 animate-pulse rounded-md border border-white/10 bg-[var(--surface-base)]/80" />
-            <div className="absolute left-1/2 top-1/2 flex w-[300px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-lg border border-white/10 bg-[var(--surface-base)] p-4">
-              <div className="h-3 w-full rounded bg-gradient-to-r from-white/5 via-white/15 to-white/5 [background-size:200%_100%] animate-[shimmer_1.3s_linear_infinite]" />
-              <div className="w-56 h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div className="absolute inset-4 animate-pulse rounded-md border border-[var(--line-default)] bg-[var(--surface-base)]/80" />
+            <div className="absolute left-1/2 top-1/2 flex w-[300px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-lg border border-[var(--line-default)] bg-[var(--surface-base)] p-4">
+              <div className="h-3 w-full rounded bg-gradient-to-r from-[var(--fill-strong)] via-[var(--line-default)] to-[var(--fill-strong)] [background-size:200%_100%] animate-[shimmer_1.3s_linear_infinite]" />
+              <div className="w-56 h-2 bg-[var(--line-default)] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[var(--accent)] transition-all duration-200"
                   style={{
@@ -290,7 +430,7 @@ const InfographicCanvas = forwardRef<CanvasRef, InfographicCanvasProps>(
                   }}
                 />
               </div>
-              <p className="text-sm text-white/80">
+              <p className="text-sm text-[var(--text-secondary)]">
                 Generating layout... {loadingProgress.current}/{loadingProgress.total} elements
               </p>
             </div>

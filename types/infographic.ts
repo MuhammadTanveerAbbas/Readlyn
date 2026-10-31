@@ -3,27 +3,26 @@ import { z } from 'zod'
 /**
  * Canvas font families.
  *
- * These must stay in sync with the self-hosted webfonts in `public/fonts`:
+ * These must stay in sync with the @font-face declarations in
+ * `app/globals.css` and the self-hosted webfonts in `public/fonts`.
  * Fabric.js renders into a <canvas>, which ignores CSS and only sees fonts the
  * browser has actually loaded. Webfont loading is forced before render/export
  * via `ensureCanvasFontsLoaded()` in `lib/canvas-fonts.ts`.
  *
  * Single source of truth the zod enum and the BrandKitModal options both
  * derive from this list, so they cannot drift apart.
- *
- * Keep in sync with: the webfont files in `public/fonts`.
  */
-export const FONT_FAMILIES = ['Open Sans', 'PT Sans'] as const
+export const FONT_FAMILIES = ['Bricolage Grotesque', 'Figtree'] as const
 export type FontFamily = (typeof FONT_FAMILIES)[number]
 
 /**
  * Font used for big stat/display numerals inside generated infographics.
- * Geist is a variable font with a real 900, so `fontWeight: '900'` renders as
- * genuine black rather than a synthesised faux-bold in the exported PNG.
+ * Bricolage Grotesque is a variable font with a real 800, so the display
+ * weight renders as a true bold instead of a synthesised faux-bold.
  */
-export const DISPLAY_FONT: FontFamily = 'Open Sans'
+export const DISPLAY_FONT: FontFamily = 'Bricolage Grotesque'
 /** Font used for body copy inside generated infographics. */
-export const BODY_FONT: FontFamily = 'Open Sans'
+export const BODY_FONT: FontFamily = 'Figtree'
 
 export const RectSchema = z.object({
   type: z.literal('rect'),

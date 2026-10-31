@@ -16,15 +16,8 @@ function scrollTo(id: string) {
 }
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     const ids = links.map((l) => l.section).filter(Boolean);
@@ -48,11 +41,9 @@ export default function Navbar() {
     <header
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
-          background: "rgba(6,6,6,0.97)",
-          backdropFilter: "blur(40px) saturate(220%)",
-          WebkitBackdropFilter: "blur(40px) saturate(220%)",
-          borderBottom: "1px solid rgba(245,197,24,0.10)",
-          boxShadow: "0 1px 0 0 rgba(245,197,24,0.06), 0 4px 24px rgba(0,0,0,0.5)",
+          background: "var(--surface-base)",
+          borderBottom: "1px solid var(--line-subtle)",
+          boxShadow: "0 1px 2px rgba(17,17,19,0.04)",
         }}
     >
       <div className="flex items-center justify-between h-[64px] px-6 md:px-[48px] max-w-[1400px] mx-auto">
@@ -68,10 +59,9 @@ export default function Navbar() {
               style={{ imageRendering: "pixelated" }}
             />
           </div>
-          <span className="font-sans text-[13px] font-bold text-white tracking-[2.5px]">
+          <span className="font-sans text-[13px] font-bold text-[var(--text-primary)] tracking-[2.5px]">
             READLYN
           </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_6px_rgba(245,197,24,0.8)]" />
         </a>
 
         {/* Desktop nav */}
@@ -83,15 +73,15 @@ export default function Navbar() {
                 key={label}
                 onClick={() => scrollTo(section)}
                 className="relative font-sans text-[11px] tracking-[1.5px] transition-colors duration-200 bg-transparent border-none cursor-pointer py-1"
-                style={{ color: isActive ? "var(--accent)" : "#aaaaaa" }}
+                style={{ color: isActive ? "var(--accent)" : "var(--text-body)" }}
                 onMouseEnter={(e) => {
                   if (!isActive)
-                    (e.currentTarget as HTMLButtonElement).style.color = "#ffffff";
+                    (e.currentTarget as HTMLButtonElement).style.color = "var(--text-primary)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.color = isActive
                     ? "var(--accent)"
-                    : "#aaaaaa";
+                    : "var(--text-body)";
                 }}
               >
                 {label}
@@ -108,11 +98,11 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-[16px]">
           <a
             href="/signup"
-            className="relative flex items-center gap-[7px] px-5 py-2 rounded-lg text-[12px] font-bold text-black
+            className="relative flex items-center gap-[7px] px-5 py-2 rounded-lg text-[12px] font-bold text-[var(--accent-ink)]
                        bg-[var(--accent)] hover:bg-[var(--accent-hover)]
                        transition-all duration-200
-                       shadow-[0_0_20px_rgba(245,197,24,0.3)]
-                       hover:shadow-[0_0_30px_rgba(245,197,24,0.5)]
+                      
+                      
                        hover:scale-[1.02] active:scale-[0.98] font-sans tracking-wide"
           >
             {/* Spark / bolt icon */}
@@ -130,17 +120,17 @@ export default function Navbar() {
           aria-label="Toggle menu"
         >
           <span
-            className="block w-[20px] h-[1.5px] bg-white transition-transform duration-200 origin-center"
+            className="block w-[20px] h-[1.5px] bg-[var(--text-primary)] transition-transform duration-200 origin-center"
             style={{
               transform: menuOpen ? "translateY(6.5px) rotate(45deg)" : "none",
             }}
           />
           <span
-            className="block w-[20px] h-[1.5px] bg-white transition-opacity duration-200"
+            className="block w-[20px] h-[1.5px] bg-[var(--text-primary)] transition-opacity duration-200"
             style={{ opacity: menuOpen ? 0 : 1 }}
           />
           <span
-            className="block w-[20px] h-[1.5px] bg-white transition-transform duration-200 origin-center"
+            className="block w-[20px] h-[1.5px] bg-[var(--text-primary)] transition-transform duration-200 origin-center"
             style={{
               transform: menuOpen
                 ? "translateY(-6.5px) rotate(-45deg)"
@@ -155,9 +145,8 @@ export default function Navbar() {
         className="md:hidden overflow-hidden transition-all duration-300"
         style={{
           maxHeight: menuOpen ? "400px" : "0px",
-          background: "rgba(6,6,6,0.97)",
-          backdropFilter: "blur(24px)",
-          borderBottom: menuOpen ? "1px solid rgba(255,255,255,0.06)" : "none",
+          background: "var(--surface-base)",
+          borderBottom: menuOpen ? "1px solid var(--line-subtle)" : "none",
         }}
       >
         <nav className="flex flex-col px-6 py-5 gap-0">
@@ -170,12 +159,12 @@ export default function Navbar() {
                   scrollTo(section);
                   setMenuOpen(false);
                 }}
-                className="flex items-center gap-3 w-full font-sans text-[12px] tracking-[1px] py-[14px] border-b border-white/[0.05] transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer"
-                style={{ color: isActive ? "var(--accent)" : "#aaaaaa" }}
+                className="flex items-center gap-3 w-full font-sans text-[12px] tracking-[1px] py-[14px] border-b border-[var(--line-subtle)] transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer"
+                style={{ color: isActive ? "var(--accent)" : "var(--text-body)" }}
               >
                 <span
                   className="w-[4px] h-[4px] rounded-full shrink-0 transition-colors"
-                  style={{ background: isActive ? "var(--accent)" : "#333" }}
+                  style={{ background: isActive ? "var(--accent)" : "var(--line-strong)" }}
                 />
                 {label}
               </button>
@@ -184,7 +173,7 @@ export default function Navbar() {
           <div className="flex flex-col gap-[10px] pt-5">
             <a
               href="/signup"
-              className="flex items-center justify-center gap-[7px] font-sans text-[12px] font-bold text-black bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
+              className="flex items-center justify-center gap-[7px] font-sans text-[12px] font-bold text-[var(--accent-ink)] bg-[var(--accent)] tracking-[1px] px-[18px] py-[11px] text-center rounded-lg hover:bg-[var(--accent-hover)] transition-colors"
             >
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M9 1L3 9h5.5L7 15l6-8H7.5L9 1z" fill="currentColor" stroke="currentColor" strokeWidth="0.5" strokeLinejoin="round"/>
