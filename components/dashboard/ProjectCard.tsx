@@ -268,7 +268,7 @@ export default function ProjectCard({
   // List View Mode
   if (viewMode === "list") {
     return (
-      <div className="relative group rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] transition-all hover:border-[var(--line-strong)] hover:bg-[var(--surface-raised)] p-3">
+      <div className="relative rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] p-3">
         <div className="flex items-center gap-4">
           <Link
             href={`/editor/${project.id}`}
@@ -300,7 +300,7 @@ export default function ProjectCard({
             {/* Title & metadata */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="truncate text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-text)] transition-colors">
+                <h3 className="truncate text-sm font-semibold text-[var(--text-primary)]">
                   {title}
                 </h3>
                 {project.is_pinned && (
@@ -330,13 +330,7 @@ export default function ProjectCard({
 
   // Grid View Mode (Default)
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)] transition-all duration-300 hover:scale-[1.02] hover:border-[var(--line-strong)]">
-      {/* Top accent line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
-        style={{ backgroundColor: themeColor }}
-      />
-
+    <div className="group relative overflow-hidden rounded-xl border border-[var(--line-default)] bg-[var(--surface-base)]">
       <Link href={`/editor/${project.id}`} className="block">
         {/* Thumbnail */}
         <div className="relative aspect-[4/3] bg-[var(--surface-raised)] overflow-hidden">
@@ -345,12 +339,12 @@ export default function ProjectCard({
               src={project.thumbnail_url}
               alt={title}
               onError={() => setImageError(true)}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover"
             />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-3 p-6">
               <div
-                className="flex h-16 w-16 items-center justify-center rounded-2xl border transition-all duration-300 group-hover:scale-110"
+                className="flex h-16 w-16 items-center justify-center rounded-2xl border"
                 style={{
                   borderColor: `${themeColor}40`,
                   background: `${themeColor}15`,
@@ -371,7 +365,7 @@ export default function ProjectCard({
           )}
 
           {/* Bottom left theme badge */}
-          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-[var(--surface-base)] border border-[var(--line-default)] opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-[var(--surface-base)] border border-[var(--line-default)]">
             <div
               className="h-2 w-2 rounded-full"
               style={{ background: themeColor }}
@@ -385,10 +379,10 @@ export default function ProjectCard({
         {/* Content */}
         <div className="p-3.5">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent-text)] transition-colors">
+            <h3 className="flex-1 truncate text-sm font-semibold tracking-tight text-[var(--text-primary)]">
               {title}
             </h3>
-            <Sparkles className="h-3.5 w-3.5 text-[var(--accent-text)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+            <Sparkles className="h-3.5 w-3.5 text-[var(--accent-text)] shrink-0" />
           </div>
 
           <div className="flex items-center justify-between gap-2">
