@@ -149,14 +149,14 @@ export default function Toolbar({
           </div>
         </div>
 
-        <div className="flex items-center gap-0.5 bg-[var(--surface-raised)] border border-[var(--line-default)] rounded-lg p-0.5 ml-1">
+        <div className="flex items-center gap-0.5 bg-[var(--surface-inset)] border border-[var(--line-default)] rounded-lg p-0.5 ml-1">
           <button
             onClick={() => onToolModeChange("select")}
             title="Select tool (V)"
             className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
               toolMode === "select"
-                ? "bg-[var(--accent)] text-[var(--text-primary)]"
-                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--fill-default)]"
+                ? "bg-[var(--accent)] text-[var(--accent-ink)] shadow-sm"
+                : "text-[var(--text-body)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)]"
             }`}
           >
             <MousePointer2 className="w-3.5 h-3.5" />
@@ -166,8 +166,8 @@ export default function Toolbar({
             title="Hand tool (H)"
             className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
               toolMode === "hand"
-                ? "bg-[var(--accent)] text-[var(--text-primary)]"
-                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--fill-default)]"
+                ? "bg-[var(--accent)] text-[var(--accent-ink)] shadow-sm"
+                : "text-[var(--text-body)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)]"
             }`}
           >
             <Hand className="w-3.5 h-3.5" />
