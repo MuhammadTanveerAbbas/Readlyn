@@ -144,33 +144,30 @@ export default function Toolbar({
           <h1 className="text-[13px] font-semibold text-[var(--text-primary)] tracking-[-0.01em] hidden sm:block">
             Readlyn
           </h1>
-          <div className="text-[9px] font-bold border border-[var(--accent)]/30 bg-[var(--accent)]/10 rounded px-1.5 py-0.5 text-[var(--accent-text)] font-sans hidden sm:block">
-            EARLY ACCESS
-          </div>
         </div>
 
-        <div className="flex items-center gap-0.5 bg-[var(--surface-inset)] border border-[var(--line-default)] rounded-lg p-0.5 ml-1">
+        <div className="flex items-center gap-0.5 bg-[var(--surface-inset)] border border-[var(--line-strong)] rounded-lg p-0.5">
           <button
             onClick={() => onToolModeChange("select")}
             title="Select tool (V)"
-            className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
+            className={`h-7 w-8 flex items-center justify-center rounded-md transition-all duration-150 ${
               toolMode === "select"
-                ? "bg-[var(--accent)] text-[var(--accent-ink)] shadow-sm"
-                : "text-[var(--text-body)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)]"
+                ? "bg-[#f5c518] text-[#111113] shadow-sm ring-1 ring-[#e0b400]"
+                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-overlay)]"
             }`}
           >
-            <MousePointer2 className="w-3.5 h-3.5" />
+            <MousePointer2 className="w-4 h-4" />
           </button>
           <button
             onClick={() => onToolModeChange("hand")}
             title="Hand tool (H)"
-            className={`h-6 w-7 flex items-center justify-center rounded transition-all duration-150 ${
+            className={`h-7 w-8 flex items-center justify-center rounded-md transition-all duration-150 ${
               toolMode === "hand"
-                ? "bg-[var(--accent)] text-[var(--accent-ink)] shadow-sm"
-                : "text-[var(--text-body)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)]"
+                ? "bg-[#111113] text-[#ffffff] shadow-sm ring-1 ring-[#111113]"
+                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-overlay)]"
             }`}
           >
-            <Hand className="w-3.5 h-3.5" />
+            <Hand className="w-4 h-4" />
           </button>
         </div>
 
