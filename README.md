@@ -380,13 +380,16 @@ MIT. See `LICENSE` for details.
 
 ---
 
-<div align="center">
+
+## 👨‍💻 Built by Muhammad Tanveer Abbas
+
+<div>
 
 **Muhammad Tanveer Abbas**
+Technical Product Partner for B2B SaaS & Internals Tools
 
-[![GitHub](https://img.shields.io/badge/GitHub-MuhammadTanveerAbbas-181717?style=for-the-badge&logo=github)](https://github.com/MuhammadTanveerAbbas)
+[![Twitter](https://img.shields.io/badge/Twitter-@m_tanveerabbas-1DA1F2?style=for-the-badge&logo=twitter)](https://x.com/m_tanveerabbas)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/muhammadtanveerabbas)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github)](https://github.com/MuhammadTanveerAbbas)
 
-**Repository:** [https://github.com/MuhammadTanveerAbbas/Readlyn](https://github.com/MuhammadTanveerAbbas/Readlyn)
-
-</div>
+If this project helped you, please consider giving it a ⭐
